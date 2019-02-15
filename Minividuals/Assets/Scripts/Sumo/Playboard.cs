@@ -3,17 +3,10 @@ using UnityEngine;
 
 public class Playboard : MonoBehaviour
 {
+#pragma warning disable 649
     [SerializeField] private GameObject[] spawnPoints;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
+    [SerializeField] private Color[] playerColors;
+#pragma warning restore 649
 
     /// <summary>
     /// Returns the spawn position for the given player number (1-4)
@@ -27,7 +20,7 @@ public class Playboard : MonoBehaviour
         const int maxPlayerNumber = 4;
         if (playerNumber >= minPlayerNumber && playerNumber <= maxPlayerNumber)
         {
-            return spawnPoints[playerNumber-1].transform.position;
+            return spawnPoints[playerNumber - 1].transform.position;
         }
         else
         {
@@ -37,5 +30,10 @@ public class Playboard : MonoBehaviour
                 "Returning zero vector");
             throw new ArgumentOutOfRangeException();
         }
+    }
+
+    public Color GetColorForPlayer(int playerNumber)
+    {
+        return playerColors[playerNumber-1];
     }
 }
