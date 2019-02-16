@@ -13,16 +13,20 @@ namespace MelodyMemory
       [SerializeField] private StartButtonScript startButton;
 #pragma warning restore 649
 
+        private const int minRiddleLength = 3;
+        
+        
+        private int riddleLength;
+        
         private void Start()
         {
             tiles.Setup();
+            tiles.RiddleSolved += OnRiddleSolved;
             
             startButton.activate();    // is inactive by default   
             startButton.ClickEvent += StartButtonOnClickEvent;
-            
-//            tempTest();
-//
-//            testBoard();
+
+            riddleLength = minRiddleLength;
 
         }
 
@@ -59,13 +63,30 @@ namespace MelodyMemory
 
         private void StartRiddle()
         {
-            Riddle riddle = new Riddle(3, Tiles.tileCount);
+            Riddle riddle = new Riddle(riddleLength, Tiles.tileCount);
             Debug.Log($"Riddle is {riddle}");
             
-            tiles.UpdateTilesRiddle(riddle);
-            
+            tiles.AddAndPlayRiddle(riddle);
+            startButton.activate();    // so the player can start a new game if he/she cannot solve it
 
         }
+
+        private void OnRiddleSolved()
+        {
+            // restart a game with a longer melody
+            riddleLength++;
+            StartCoroutine("NextRiddle");
+            
+        }
+        
+        IEnumerator NextRiddle() 
+        {
+            yield return new WaitForSeconds(3.0f);
+
+            StartRiddle();
+        }
+
+        
     }    
 }
 

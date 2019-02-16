@@ -7,7 +7,9 @@ using UnityEngine.Experimental.UIElements;
 namespace MelodyMemory
 {
     public class ColorSoundTile : MonoBehaviour
-    {           
+    {   
+        public event Action TileClickEvent;
+        
         [Tooltip("Renderer which allows to set the colour of the tile")]            
         public MeshRenderer colourRenderer;
 
@@ -21,8 +23,9 @@ namespace MelodyMemory
 
         private Note note;     // only set on some tiles  
 
-
         private String myName;
+
+        private bool listening;    // if false, it will not react to clicks TODO isn't there something built-in for that?   
 
         public int tileIndex { get; set; }
 
@@ -33,9 +36,9 @@ namespace MelodyMemory
             SetColor(defaultColor);
         }
 
-        public void setNote(Note note)
+        public void setNote(NoteWithPosition noteWPos)
         {
-            this.note = note;
+            this.note = noteWPos.Note;
 
             AudioClip clip = null;
             // AudioClip clip = load AudioSource from note.AudioSourceName
@@ -43,10 +46,17 @@ namespace MelodyMemory
                 sound.clip = clip;
             
         }
+
+        public void setListening(bool listening)
+        {
+            this.listening = listening;
+        }
         
         
         void Update()
         {
+            if (!listening)   return;
+            
             // no need to listen for mouse if this tile has no note!
             if (note != null && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
             {
@@ -58,26 +68,23 @@ namespace MelodyMemory
                         GameObject obj = hit.collider.gameObject;
                         if (obj.name.Equals(myName))
                         {
-                            Debug.Log($"Clicked tile {obj.name}, I am {myName}");
-                            
+                            // Debug.Log($"Clicked tile {obj.name}, I am {myName}");
                             StartCoroutine("BlinkColor");
                         }
-                        
-                        //showColor(Color.green);
-                    
-                    }
-                    else
-                    {
-                        Debug.Log("This isn't a Player");
                     }
                 }
             }
         
         }
-        
-        private void SetColor(Color color)
+
+        public void ResetColor()
         {
-            colourRenderer.material.color =  color;
+            colourRenderer.material.color = defaultColor;
+        }
+        
+        public void SetColor(Color color)
+        {
+            colourRenderer.material.color = color;
         }
     
         IEnumerator BlinkColor() 
@@ -88,7 +95,9 @@ namespace MelodyMemory
             // sound.Play();
             yield return new WaitForSeconds(1.0f);
 
-            SetColor(defaultColor);
+            ResetColor();
+            
+            TileClickEvent?.Invoke();
         }
 
 
