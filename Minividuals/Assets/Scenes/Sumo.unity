@@ -330,5 +330,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2776924816168800072, guid: fc52f50f31f5af34692534a81f386831,
+        type: 3}
+      propertyPath: countdownUiPrefab
+      value: 
+      objectReference: {fileID: 1011137108138668, guid: 9f1d4a019c849194c8cecb71e64a5b05,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc52f50f31f5af34692534a81f386831, type: 3}

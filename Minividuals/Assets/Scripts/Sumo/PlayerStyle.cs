@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Responsible for controlling the look of a player.
+/// </summary>
 public class PlayerStyle : MonoBehaviour
 {
     private Color playerColor;
