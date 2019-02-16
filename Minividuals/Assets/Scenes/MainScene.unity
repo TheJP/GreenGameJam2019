@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 170909338}
   - component: {fileID: 170909339}
   - component: {fileID: 170909340}
+  - component: {fileID: 170909341}
   m_Layer: 15
   m_Name: BoardController
   m_TagString: Untagged
@@ -157,6 +158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tiles: {fileID: 170909340}
+  players: {fileID: 170909341}
 --- !u!114 &170909340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,6 +175,18 @@ MonoBehaviour:
   tilePrefab: {fileID: 4817783516164121905, guid: ec7df5cf87aea6d49a38a648669eecd1,
     type: 3}
   tilesParent: {fileID: 1775403896}
+--- !u!114 &170909341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170909337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dcb3dea06a07754a9e1fa116427c3c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &620094225
 GameObject:
   m_ObjectHideFlags: 0

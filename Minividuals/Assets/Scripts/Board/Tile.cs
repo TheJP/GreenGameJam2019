@@ -22,6 +22,8 @@ namespace Assets.Scripts.Board
 
         public Player Owner { get; private set; }
 
+        public int TileIndex { get; set; }
+
         private void Start()
         {
             // Add random rotation and translation to clouds, so that they don't look that uniform

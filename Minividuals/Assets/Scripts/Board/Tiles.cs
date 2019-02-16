@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -19,6 +20,8 @@ namespace Assets.Scripts.Board
         [Tooltip("GameObject in which tiles are added")]
         public Transform tilesParent;
 
+        public event Action<Player> PlayerChangedLocation;
+
         private readonly Tile[] tiles = new Tile[TileCount];
 
         private int width;
@@ -29,6 +32,7 @@ namespace Assets.Scripts.Board
             for (int i = 0; i < TileCount; ++i)
             {
                 tiles[i] = Instantiate(tilePrefab, tilesParent);
+                tiles[i].TileIndex = i;
             }
             UpdateTilePositions();
         }
@@ -46,7 +50,10 @@ namespace Assets.Scripts.Board
             var spacing = TileCount / players.Count;
             for(int i = 0; i < players.Count; ++i)
             {
-                tiles[i * spacing].SetPlayerOwner(players[i]);
+                int index = i * spacing;
+                tiles[index].SetPlayerOwner(players[i]);
+                players[i].Location = tiles[index];
+                PlayerChangedLocation?.Invoke(players[i]);
             }
         }
 
