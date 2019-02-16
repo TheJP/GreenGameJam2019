@@ -14,6 +14,7 @@ namespace Assets.Scripts.Board
         public Tiles tiles;
         public PlayerController players;
         public MiniGamesController miniGames;
+        public Scoreboard scoreboard;
         public Die die;
 
         [Tooltip("Board GameObject that shall not die")]
@@ -111,7 +112,32 @@ namespace Assets.Scripts.Board
         public void FinishedMiniGame(IEnumerable<(Player player, int steps)> playerScores)
         {
             Debug.Assert(playerScores != null);
-            playerScores.OrderByDescending(score => score.steps);
+            StartCoroutine(ShowScoreBoard(playerScores));
+        }
+
+        private IEnumerator ShowScoreBoard(IEnumerable<(Player player, int steps)> playerScores)
+        {
+            scoreboard.gameObject.SetActive(true);
+            foreach (var score in playerScores.OrderByDescending(score => score.steps))
+            {
+                yield return scoreboard.AddScore(score.player, score.steps);
+            }
+            yield return new WaitUntil(AnyPlayerClicksA);
+            scoreboard.gameObject.SetActive(false);
+            SceneManager.LoadScene(SceneName);
+        }
+
+        /// <summary>
+        /// Checks if any player pressed A during the current frame.
+        /// </summary>
+        /// <returns></returns>
+        private bool AnyPlayerClicksA()
+        {
+            foreach (var player in players.Players)
+            {
+                if (Input.GetButtonDown($"{player.InputPrefix}{InputSuffix.A}")) { return true; }
+            }
+            return false;
         }
     }
 }
