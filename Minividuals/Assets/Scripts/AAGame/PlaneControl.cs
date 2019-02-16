@@ -27,6 +27,11 @@ namespace AAGame
         
         private Rigidbody planeRigidBody;
 
+        public void Hit()
+        {
+            Destroy(gameObject);
+        }
+
         private void Awake()
         {
             planeRigidBody = GetComponent<Rigidbody>();
