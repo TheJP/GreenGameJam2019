@@ -118,6 +118,7 @@ namespace Assets.Scripts.Board
         private IEnumerator ShowScoreBoard(IEnumerable<(Player player, int steps)> playerScores)
         {
             // Display achieved scores
+            scoreboard.Clear();
             scoreboard.title.text = players.ActivePlayer.Location.MiniGame.name;
             scoreboard.gameObject.SetActive(true);
             foreach (var (player, steps) in playerScores)
