@@ -8,6 +8,10 @@ namespace Assets.Scripts.Board
         public Tiles tiles;
         public PlayerController players;
 
-        private void Start() => tiles.Setup(players.Players); // TODO: Pass minigame information to tiles.Setup
+        private void Start()
+        {
+            players.Setup();
+            tiles.Setup(players.Players); // TODO: Pass minigame information to tiles.Setup
+        }
     }
 }

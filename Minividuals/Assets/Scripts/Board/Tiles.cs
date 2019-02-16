@@ -20,7 +20,15 @@ namespace Assets.Scripts.Board
         [Tooltip("GameObject in which tiles are added")]
         public Transform tilesParent;
 
+        /// <summary>
+        /// Event that gets fired after a player changed a tile location.
+        /// </summary>
         public event Action<Player> PlayerChangedLocation;
+
+        /// <summary>
+        /// Event that gets fired afer the tile positions update.
+        /// </summary>
+        public event Action TilePositionsUpdated;
 
         private readonly Tile[] tiles = new Tile[TileCount];
 
@@ -98,6 +106,8 @@ namespace Assets.Scripts.Board
                     SetPosition(i, new Vector3(0, boardCamera.pixelHeight, 0), TileCount - i);
                 }
             }
+
+            TilePositionsUpdated?.Invoke();
         }
     }
 }

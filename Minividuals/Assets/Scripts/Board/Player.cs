@@ -24,6 +24,11 @@ namespace Assets.Scripts.Board
         /// </summary>
         public Tile Location { get; set; }
 
+        /// <summary>
+        /// Figure associated with the player.
+        /// </summary>
+        public PlayerFigure Figure { get; set; }
+
         public Player(Color colour, string inputPrefix)
         {
             Colour = colour;
