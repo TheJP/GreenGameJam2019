@@ -9,11 +9,18 @@ namespace Snake
 #pragma warning disable 649
         
         [SerializeField]
+        [Tooltip("The amount of seconds a tail should survive")]
         private float survivalTime;
         
 #pragma warning restore 649
         
         public SnakePlayer Player { get; set; }
+
+        public float SurvivalTime
+        {
+            get => survivalTime;
+            set => survivalTime = value;
+        }
 
         private void Start()
         {
