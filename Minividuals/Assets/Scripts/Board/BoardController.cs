@@ -39,8 +39,8 @@ namespace Assets.Scripts.Board
 
             var gameStart = FindObjectOfType<GameStart>();
             var playersData = gameStart?.Players ?? new[] {
-                new Player(Color.green, "Player1"),
-                new Player(Color.blue, "Player2")
+                new Player(Color.green, "Player1_"),
+                new Player(Color.blue, "Player2_")
             };
 
             players.Setup(playersData);
@@ -60,10 +60,7 @@ namespace Assets.Scripts.Board
                 var player = players.ActivePlayer;
 
                 die.PrepareRoll(player);
-                do
-                {
-                    yield return null;
-                } while (!Input.GetMouseButtonUp(0)); // TODO: Player Input
+                yield return new WaitUntil(() => Input.GetButtonDown($"{player.InputPrefix}{InputSuffix.A}"));
                 yield return die.RollCoroutine();
 
                 yield return new WaitForSeconds(1f);

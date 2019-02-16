@@ -48,7 +48,7 @@ namespace Assets.Scripts.Menu
         {
             foreach (var prefix in playerPrefixes)
             {
-                if (Input.GetButtonDown($"{prefix}{AButtonSuffix}"))
+                if (Input.GetButtonDown($"{prefix}{InputSuffix.A}"))
                 {
                     // First a press to reserve a spot
                     var selector = playerSelectors.FirstOrDefault(s => s.IsFree);
@@ -67,13 +67,13 @@ namespace Assets.Scripts.Menu
                     }
 
                 }
-                else if (Input.GetButtonDown($"{prefix}{BButtonSuffix}"))
+                else if (Input.GetButtonDown($"{prefix}{InputSuffix.B}"))
                 {
                     // Release the reserved spot of this player
                     var spot = GetSpot(prefix);
                     if (spot != null) { spot.BPressed(); }
                 }
-                else if (Input.GetButtonDown($"{prefix}{YButtonSuffix}"))
+                else if (Input.GetButtonDown($"{prefix}{InputSuffix.Y}"))
                 {
                     // Start the game if the player has a reserved spot
                     if (GetSpot(prefix) != null)
