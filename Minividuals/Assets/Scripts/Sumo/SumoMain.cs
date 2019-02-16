@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Board;
 using UnityEngine;
 
@@ -137,17 +138,31 @@ public class SumoMain : MonoBehaviour
         {
             defeatedPlayers.Add(playersInGame[0]);
 
-            List<Tuple<int, int>> scores = new List<Tuple<int, int>>(4);
+            List<(Player player, int steps)> scores = new List<(Player player, int steps)>(4);
 
             for (int i = 0; i < defeatedPlayers.Count; i++)
             {
-                scores.Add(new Tuple<int, int>(defeatedPlayers[i], scoreList[i]));
+                if (boardController != null)
+                {
+                    scores.Add((boardController.players.Players[defeatedPlayers[i]], scoreList[i]));
+                }
+                else
+                {
+                    scores.Add((new Player(Color.red, ""), scoreList[i]));
+                }
             }
-            
+
             defeatedPlayers.Clear();
             playersInGame.Clear();
-            
-            //TODO: boardController.MinigameFinished(scores);
+
+            if (boardController != null)
+            {
+                boardController.FinishedMiniGame(scores);
+            }
+            else
+            {
+                Debug.Log("Local Game finished");
+            }
         }
     }
 }
