@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -23,12 +22,12 @@ namespace Assets.Scripts.Board
         /// <summary>
         /// Event that gets fired after a player changed a tile location.
         /// </summary>
-        public event Action<Player> PlayerChangedLocation;
+        public event System.Action<Player> PlayerChangedLocation;
 
         /// <summary>
         /// Event that gets fired afer the tile positions update.
         /// </summary>
-        public event Action TilePositionsUpdated;
+        public event System.Action TilePositionsUpdated;
 
         private readonly Tile[] tiles = new Tile[TileCount];
 
@@ -43,7 +42,7 @@ namespace Assets.Scripts.Board
             }
         }
 
-        public void Setup(IList<Player> players)
+        public void Setup(IList<Player> players, IList<MiniGame> miniGames)
         {
             // Create tiles
             for (int i = 0; i < TileCount; ++i)
@@ -61,6 +60,20 @@ namespace Assets.Scripts.Board
                 tiles[index].SetPlayerOwner(players[i]);
                 players[i].Location = tiles[index];
                 PlayerChangedLocation?.Invoke(players[i]);
+            }
+
+            // Add minigames to tiles
+            var freeTiles = tiles.Where(tile => tile.Owner == null).ToList();
+            foreach(var miniGame in miniGames)
+            {
+                var amount = Random.Range(miniGame.minPerGame, miniGame.maxPerGame + 1);
+                for(int i = 0; i < amount && freeTiles.Count > 0; ++i)
+                {
+                    var index = Random.Range(0, freeTiles.Count);
+                    var tile = freeTiles[index];
+                    freeTiles.RemoveAt(index);
+                    tile.SetMiniGame(miniGame); //TODO: Improve tile setup (i.e. reveal)
+                }
             }
         }
 

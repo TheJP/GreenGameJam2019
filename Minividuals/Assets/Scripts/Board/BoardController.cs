@@ -11,6 +11,7 @@ namespace Assets.Scripts.Board
 
         public Tiles tiles;
         public PlayerController players;
+        public MiniGamesController miniGames;
         public Die die;
 
         [Tooltip("Board GameObject that shall not die")]
@@ -43,7 +44,7 @@ namespace Assets.Scripts.Board
             };
 
             players.Setup(playersData);
-            tiles.Setup(players.Players); // TODO: Pass minigame information to tiles.Setup
+            tiles.Setup(players.Players, miniGames.miniGames);
             StartCoroutine(GameLoop());
         }
 
@@ -56,7 +57,9 @@ namespace Assets.Scripts.Board
         {
             while (true)
             {
-                die.PrepareRoll(players.ActivePlayer);
+                var player = players.ActivePlayer;
+
+                die.PrepareRoll(player);
                 do
                 {
                     yield return null;
@@ -64,16 +67,18 @@ namespace Assets.Scripts.Board
                 yield return die.RollCoroutine();
 
                 yield return new WaitForSeconds(1f);
-                yield return MovePlayerCoroutine(players.ActivePlayer, die.DieResult);
+                yield return MovePlayerCoroutine(player, die.DieResult);
 
                 die.HideDie();
 
-                yield return players.ActivePlayer.Location.HideCloudsCoroutine();
+                yield return player.Location.HideCloudsCoroutine();
 
-                // TODO: Start minigame
-                isBackInMainScene = false;
-                // SceneManager.LoadScene("TestScene");
-                yield return new WaitUntil(() => isBackInMainScene);
+                if (player.Location.MiniGame != null)
+                {
+                    isBackInMainScene = false;
+                    SceneManager.LoadScene(player.Location.MiniGame.sceneName);
+                    yield return new WaitUntil(() => isBackInMainScene);
+                }
                 yield return new WaitForSeconds(1f);
 
                 players.NextPlayer();

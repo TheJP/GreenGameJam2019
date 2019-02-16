@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 170909339}
   - component: {fileID: 170909341}
   - component: {fileID: 170909340}
+  - component: {fileID: 170909342}
   m_Layer: 15
   m_Name: BoardController
   m_TagString: Untagged
@@ -159,6 +160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tiles: {fileID: 170909340}
   players: {fileID: 170909341}
+  miniGames: {fileID: 170909342}
   die: {fileID: 889939831}
   board: {fileID: 1101704279}
 --- !u!114 &170909340
@@ -193,6 +195,24 @@ MonoBehaviour:
   playerFigurePrefab: {fileID: 4768458486505369175, guid: 6c16e737738eae346a9015306419b2d4,
     type: 3}
   playerFigureParent: {fileID: 1930710244}
+--- !u!114 &170909342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170909337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2611017106a633f4c8f3de84d6b83652, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  miniGames:
+  - name: Sumo Fight
+    sceneName: Sumo
+    icon: {fileID: 0}
+    minPerGame: 20
+    maxPerGame: 20
 --- !u!1 &620094225
 GameObject:
   m_ObjectHideFlags: 0

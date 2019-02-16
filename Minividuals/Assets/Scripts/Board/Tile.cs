@@ -18,9 +18,9 @@ namespace Assets.Scripts.Board
         [Tooltip("Distance that the clouds are moved while fading out")]
         public float cloudFadeOutDistance = 0.5f;
 
-        public bool IsPlayerHome => Owner != null;
-
         public Player Owner { get; private set; }
+
+        public MiniGame MiniGame { get; private set; }
 
         public int TileIndex { get; set; }
 
@@ -36,9 +36,16 @@ namespace Assets.Scripts.Board
 
         public void SetPlayerOwner(Player owner)
         {
+            Debug.Assert(Owner == null && MiniGame == null);
             Owner = owner;
             colourRenderer.material = new Material(colourRenderer.material) { color = owner.Colour };
             StartCoroutine(HideCloudsCoroutine());
+        }
+
+        public void SetMiniGame(MiniGame miniGame)
+        {
+            Debug.Assert(Owner == null && MiniGame == null);
+            MiniGame = miniGame;
         }
 
         public IEnumerator HideCloudsCoroutine()
