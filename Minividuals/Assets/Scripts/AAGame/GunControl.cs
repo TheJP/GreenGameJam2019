@@ -29,6 +29,9 @@ namespace AAGame
         [SerializeField]
         private Transform bulletSpawn;
 
+        [SerializeField]
+        private TargetControl targetPlatform;
+
 #pragma warning restore 649
         
         private Player player;
@@ -43,6 +46,8 @@ namespace AAGame
                 UpdateColors();
             }
         }
+
+        public bool IsTargetDestroyed => targetPlatform.IsDestroyed;
 
         private void UpdateColors()
         {

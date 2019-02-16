@@ -44,9 +44,12 @@ namespace AAGame
             get => flySpeed;
             set => flySpeed = value;
         }
+        
+        public bool IsDead { get; private set; }
 
         public void Hit()
         {
+            IsDead = true;
             Destroy(gameObject);
         }
 

@@ -3,6 +3,10 @@ using System.Linq;
 using Assets.Scripts.Board;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace AAGame
 {
     public class AaGameController
@@ -32,13 +36,15 @@ namespace AAGame
 
 #pragma warning restore 649
 
+        private BoardController boardController;
+        
         private PlaneControl plane;
         private GunControl[] guns;
         private LandscapeCluster[] clusters;
 
         private void Start()
         {
-            var boardController = FindObjectOfType<BoardController>();
+            boardController = FindObjectOfType<BoardController>();
             IList<Player> players;
             if(boardController != null)
             {
@@ -73,6 +79,21 @@ namespace AAGame
                 var landscapeClusterPrefab = clusterPrefabs[Random.Range(0, clusterPrefabs.Length)];
                 clusters[i] = Instantiate(landscapeClusterPrefab, FindClusterPosition(),
                     Quaternion.identity);
+            }
+        }
+
+        private void Update()
+        {
+            if(plane.IsDead || guns.All(g => g.IsTargetDestroyed))
+            {
+                if(ReferenceEquals(boardController, null))
+                {
+#if UNITY_EDITOR
+                    EditorApplication.isPlaying = false;
+#else
+                    Application.Quit();
+#endif
+                }
             }
         }
 

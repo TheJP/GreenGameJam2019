@@ -486,6 +486,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: 5376987555890917239, guid: 7ed8ec6314a8e7c41a91d77cb6bfbbf6,
     type: 3}
   bulletSpawn: {fileID: 496587077220543328}
+  targetPlatform: {fileID: 2466869801424413785}
 --- !u!1 &5023460298054793151
 GameObject:
   m_ObjectHideFlags: 0
