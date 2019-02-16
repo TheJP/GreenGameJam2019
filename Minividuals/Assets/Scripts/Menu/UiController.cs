@@ -1,0 +1,30 @@
+﻿using System.Linq;
+using UnityEngine;
+
+namespace Assets.Scripts.Menu
+{
+    public class UiController : MonoBehaviour
+    {
+        private const string AButtonSuffix = "A";
+
+        public PlayerSelector[] playerSelectors;
+
+        [Tooltip("Available player input prefixes (for each controller, keyboard, ... player one of those has to be added)")]
+        public string[] playerPrefixes;
+
+        private void Update()
+        {
+            foreach(var prefix in playerPrefixes)
+            {
+                if (Input.GetButtonDown($"{prefix}{AButtonSuffix}"))
+                {
+                    var selector = playerSelectors.FirstOrDefault(s => s.IsFree);
+                    if (selector != null)
+                    {
+                        selector.APressed(new Board.Player(Color.green, prefix)); // TODO: Give colour
+                    }
+                }
+            }
+        }
+    }
+}
