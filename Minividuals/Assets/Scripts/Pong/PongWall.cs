@@ -6,8 +6,6 @@ public class PongWall : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Wall {WallPosition} - OnTriggerEnter from: " + other);
-
         PongBallMovement pongBall = other.GetComponent<PongBallMovement>();
 
         if (WallPosition == 0)

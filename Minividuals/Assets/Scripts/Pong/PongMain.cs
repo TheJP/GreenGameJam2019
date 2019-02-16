@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Board;
 using UnityEngine;
 
@@ -11,10 +12,14 @@ public class PongMain : MonoBehaviour
     [SerializeField] private GameObject pongBoardWallPrefab;
     [SerializeField] private GameObject pongPlayerPrefab;
     [SerializeField] private GameObject countdownUiPrefab;
+    [SerializeField] private GameObject gameTitleCanvasPrefab;
 
     //Local Settings in case no main game is running.
     [SerializeField] private Color[] playerColors;
     [SerializeField] private string[] controlPrefixes;
+
+    [SerializeField] private GameObject ballContainer;
+    [SerializeField] private float gameTime;
 #pragma warning restore 649
 
     private const int TimeTillStart = 3;
@@ -22,10 +27,16 @@ public class PongMain : MonoBehaviour
 
     private PongPlayboard pongPlayboard;
     private BoardController boardController;
+    private Dictionary<int, int> scores = new Dictionary<int, int>(4);
 
     // Start is called before the first frame update
     void Start()
     {
+        var gameTitleCanvasObject = Instantiate(gameTitleCanvasPrefab);
+        MinigameTitleScreen minigameTitleScreen = gameTitleCanvasObject.GetComponentInChildren<MinigameTitleScreen>();
+        minigameTitleScreen.SetText("PONG!!!");
+        minigameTitleScreen.FadeOut();
+        
         var playBoardObject = Instantiate(pongPlayBoardPrefab, transform);
         pongPlayboard = playBoardObject.GetComponent<PongPlayboard>();
         pongPlayboard.MaxPlayerNumber = MaxPlayerNumber;
@@ -34,6 +45,33 @@ public class PongMain : MonoBehaviour
         InstantiatePlayers();
 
         StartCoroutine(CountDownForStart(TimeTillStart));
+    }
+
+    private void Update()
+    {
+        gameTime = gameTime - Time.deltaTime;
+
+        if (gameTime <= 0)
+        {
+            gameTime = 999;
+            if (boardController != null)
+            {
+                List<(Player player, int steps)> endScores = new List<(Player player, int steps)>(4);
+                foreach (var player in scores.Keys)
+                {
+                    scores.TryGetValue(player, out var score);
+                    endScores.Add((boardController.players.Players[player], score));
+                }
+            }
+            else
+            {
+                foreach (var player in scores.Keys)
+                {
+                    scores.TryGetValue(player, out var score);
+                    Debug.Log($"Score of player {player} is: {score}");
+                }
+            }
+        }
     }
 
     private void InstantiatePlayers()
@@ -113,7 +151,6 @@ public class PongMain : MonoBehaviour
         }
 
         EnableControls();
-
         ReleaseBall();
     }
 
@@ -129,7 +166,26 @@ public class PongMain : MonoBehaviour
 
     private void ReleaseBall()
     {
-        var pongBallObject = Instantiate(pongBallPrefab, transform);
+        var pongBallObject = Instantiate(pongBallPrefab, ballContainer.transform);
         //PongBallMovement pongBall = pongBallObject.GetComponent<PongBallMovement>();
+    }
+
+    public void PongBallDestroyed(int lastTouchedPlayer)
+    {
+        Debug.Log("PongBallDestroyed called with lastTouchedPlayer: " + lastTouchedPlayer);
+        if (lastTouchedPlayer != -1)
+        {
+            if (scores.TryGetValue(lastTouchedPlayer, out var currentScore))
+            {
+                scores.Remove(lastTouchedPlayer);
+                scores.Add(lastTouchedPlayer, ++currentScore);
+            }
+            else
+            {
+                scores.Add(lastTouchedPlayer, 1);
+            }
+        }
+
+        ReleaseBall();
     }
 }

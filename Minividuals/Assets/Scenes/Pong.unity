@@ -275,11 +275,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PongMain
       objectReference: {fileID: 0}
-    - target: {fileID: 2819174265137245862, guid: 3412d2bf9947a8c4ca55feb07f45724a,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2819174265137245861, guid: 3412d2bf9947a8c4ca55feb07f45724a,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -335,23 +330,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2819174265137245860, guid: 3412d2bf9947a8c4ca55feb07f45724a,
-        type: 3}
-      propertyPath: pongBallPrefab
-      value: 
-      objectReference: {fileID: 7358000959917497055, guid: 94a17479eac69fa4993a9406de9420dc,
-        type: 3}
-    - target: {fileID: 2819174265137245860, guid: 3412d2bf9947a8c4ca55feb07f45724a,
-        type: 3}
-      propertyPath: pongPlayBoardPrefab
-      value: 
-      objectReference: {fileID: 2989057438115663156, guid: f1789ce506e9cd541bb9aed5d6943a15,
-        type: 3}
-    - target: {fileID: 2819174265137245860, guid: 3412d2bf9947a8c4ca55feb07f45724a,
-        type: 3}
-      propertyPath: pongPlayerPrefab
-      value: 
-      objectReference: {fileID: 7769553177092669907, guid: d1df09933b0178b429aadf2f869a4fc9,
-        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3412d2bf9947a8c4ca55feb07f45724a, type: 3}

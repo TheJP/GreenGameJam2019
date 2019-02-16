@@ -23,8 +23,6 @@ public class PongPlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log($"Player {playerNumber} - OnTriggerEnter from: " + other);
-
         PongBallMovement pongBall = other.GetComponent<PongBallMovement>();
 
         pongBall.ChangeColor(playerColor);
