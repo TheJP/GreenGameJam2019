@@ -42,6 +42,8 @@ namespace AAGame
         private GunControl[] guns;
         private LandscapeCluster[] clusters;
 
+        private bool gameFinished;
+
         private void Start()
         {
             Player activePlayer;
@@ -95,6 +97,11 @@ namespace AAGame
 
         private void Update()
         {
+            if(gameFinished)
+            {
+                return;
+            }
+            
             if(plane.IsDead || guns.All(g => g.IsTargetDestroyed))
             {
                 if(ReferenceEquals(boardController, null))
@@ -127,6 +134,7 @@ namespace AAGame
                     scores.AddRange(guns.Select(gun => (gun.Player, gun.IsTargetDestroyed ? -1 : 0)));
 
                     boardController.FinishedMiniGame(scores);
+                    gameFinished = true;
                 }
             }
         }
