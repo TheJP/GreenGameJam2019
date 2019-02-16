@@ -5,6 +5,8 @@ namespace AAGame
     public class GunControl
         : MonoBehaviour
     {
+#pragma warning disable 649
+        
         [SerializeField]
         private float horizontalCursorSpeed = 10;
 
@@ -17,6 +19,8 @@ namespace AAGame
         [SerializeField]
         private Transform canon;
 
+#pragma warning restore 649
+        
         private Color color;
         
         public Color Color
