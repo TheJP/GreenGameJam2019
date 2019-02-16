@@ -20,6 +20,12 @@ namespace AAGame
 
         private void OnCollisionEnter(Collision other)
         {
+            var target = other.gameObject.GetComponent<TargetControl>();
+            if(target != null)
+            {
+                target.Hit();
+            }
+            
             Destroy(gameObject);
         }
     }

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Board;
+using UnityEngine;
 
 namespace AAGame
 {
@@ -30,38 +31,38 @@ namespace AAGame
 
 #pragma warning restore 649
         
-        private Color color;
+        private Player player;
         private float cooldown;
-        
-        public Color Color
+
+        public Player Player
         {
-            get => color;
+            get => player;
             set
             {
-                color = value;
-                foreach(var meshRenderer in GetComponentsInChildren<MeshRenderer>())
-                {
-                    meshRenderer.material.color = value;
-                }
+                player = value;
+                UpdateColors();
             }
         }
 
-        private void Awake()
+        private void UpdateColors()
         {
-            Color = Color.green;
+            foreach(var meshRenderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                meshRenderer.material.color = player.Colour;
+            }
         }
 
         private void Update()
         {
-            var x = Input.GetAxis("Horizontal") * horizontalCursorSpeed * Time.deltaTime;
-            var z = Input.GetAxis("Vertical") * horizontalCursorSpeed * Time.deltaTime;
+            var x = Input.GetAxis(player.InputPrefix + "Horizontal") * horizontalCursorSpeed * Time.deltaTime;
+            var z = Input.GetAxis(player.InputPrefix + "Vertical") * horizontalCursorSpeed * Time.deltaTime;
 
             float y = 0;
-            if(Input.GetButton("Fire2"))
+            if(Input.GetButton(player.InputPrefix + "Y"))
             {
                 y = verticalCursorSpeed * Time.deltaTime;
             }
-            else if(Input.GetButton("Fire3"))
+            else if(Input.GetButton(player.InputPrefix + "B"))
             {
                 y = -verticalCursorSpeed * Time.deltaTime;
             }
@@ -69,7 +70,7 @@ namespace AAGame
             cursor.transform.Translate(x, y, z);
             canon.LookAt(cursor);
 
-            if(Input.GetButton("Fire1") && cooldown <= 0)
+            if(Input.GetButton(player.InputPrefix + "A") && cooldown <= 0)
             {
                 var bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
                 bullet.GetComponent<Rigidbody>().AddForce(canon.forward * 100, ForceMode.Impulse);
