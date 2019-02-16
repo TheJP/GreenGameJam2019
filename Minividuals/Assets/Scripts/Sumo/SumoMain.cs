@@ -28,7 +28,7 @@ public class SumoMain : MonoBehaviour
     private BoardController boardController;
     private SumoPlayboard sumoPlayboard;
 
-    private readonly List<int> scoreList = new List<int> {-5, -3, 3, 5};
+    private readonly List<int> scoreList = new List<int> {5, 3, -3, -5};
     private readonly List<int> defeatedPlayers = new List<int>(4);
     private readonly List<int> playersInGame = new List<int>(4);
 
@@ -137,6 +137,7 @@ public class SumoMain : MonoBehaviour
         if (playersInGame.Count == 1)
         {
             defeatedPlayers.Add(playersInGame[0]);
+            defeatedPlayers.Reverse();
 
             List<(Player player, int steps)> scores = new List<(Player player, int steps)>(4);
 
@@ -144,7 +145,7 @@ public class SumoMain : MonoBehaviour
             {
                 if (boardController != null)
                 {
-                    scores.Add((boardController.players.Players[defeatedPlayers[i]], scoreList[i]));
+                    scores.Add((boardController.players.Players[defeatedPlayers[i]-1], scoreList[i]));
                 }
                 else
                 {
