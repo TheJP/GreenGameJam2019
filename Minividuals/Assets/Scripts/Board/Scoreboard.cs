@@ -42,7 +42,7 @@ namespace Assets.Scripts.Board
         {
             for(int i = scoreParent.childCount - 1; i >= 0; --i)
             {
-                Destroy(scoreParent.GetChild(i));
+                Destroy(scoreParent.GetChild(i).gameObject);
             }
             numberOfScores = 0;
         }
