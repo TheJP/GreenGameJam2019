@@ -25,6 +25,11 @@ namespace Assets.Scripts.Board
         /// </summary>
         public PlayerFigure Figure { get; set; }
 
+        /// <summary>
+        /// Sum of all forward and backward steps.
+        /// </summary>
+        public int StepsProgress { get; set; } = 0;
+
         private Vector3 GetFigureTarget()
         {
             var tileMiddle = Vector3.right * (Location.transform.localScale.x / 2f);

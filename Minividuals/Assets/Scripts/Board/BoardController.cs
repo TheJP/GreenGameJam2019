@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Menu;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,13 @@ namespace Assets.Scripts.Board
     public class BoardController : MonoBehaviour
     {
         private const string SceneName = "MainScene";
+        private const string MenuSceneName = "MenuScene";
 
         public Tiles tiles;
         public PlayerController players;
         public MiniGamesController miniGames;
         public Scoreboard scoreboard;
+        public GameOver gameOver;
         public Die die;
 
         [Tooltip("Board GameObject that shall not die")]
@@ -62,27 +65,51 @@ namespace Assets.Scripts.Board
             {
                 var player = players.ActivePlayer;
 
+                // Roll die
                 die.PrepareRoll(player);
                 yield return new WaitUntil(() => Input.GetButtonDown($"{player.InputPrefix}{InputSuffix.A}"));
                 yield return die.RollCoroutine();
 
+                // Move player
                 yield return new WaitForSeconds(1f);
                 yield return MovePlayerCoroutine(player, die.DieResult);
 
+                // Reveal tile
                 die.HideDie();
-
                 yield return player.Location.HideCloudsCoroutine();
 
+                //Play minigame
                 if (player.Location.MiniGame != null)
                 {
                     isBackInMainScene = false;
                     SceneManager.LoadScene(player.Location.MiniGame.sceneName);
                     yield return new WaitUntil(() => isBackInMainScene);
                 }
-                yield return new WaitForSeconds(1f);
+
+                // Check win condition
+                if (players.Players.Any(p => p.StepsProgress >= tiles.StepsToWin))
+                {
+                    yield return GameOver();
+                    yield break;
+                }
 
                 players.NextPlayer();
             }
+        }
+
+        /// <summary>
+        /// Game over logic.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator GameOver()
+        {
+            var winner = players.Players.OrderByDescending(p => p.StepsProgress).First();
+            gameOver.colourImage.color = winner.Colour;
+            gameOver.gameObject.SetActive(true);
+
+            yield return new WaitForSeconds(3f);
+            SceneManager.LoadScene(MenuSceneName);
+            Destroy(board);
         }
 
         /// <summary>
@@ -93,6 +120,7 @@ namespace Assets.Scripts.Board
         /// <returns></returns>
         public IEnumerator MovePlayerCoroutine(Player player, int steps)
         {
+            player.StepsProgress += steps;
             while (steps != 0)
             {
                 var target = steps < 0 ? tiles.TileBefore(player.Location) : tiles.TileAfter(player.Location);

@@ -10,6 +10,8 @@ namespace Assets.Scripts.Board
         private const int Height = 9;
         private const int TileCount = 2 * (Width + Height);
 
+        public int StepsToWin => TileCount;
+
         [Tooltip("Camera that shows the board")]
         public Camera boardCamera;
 
