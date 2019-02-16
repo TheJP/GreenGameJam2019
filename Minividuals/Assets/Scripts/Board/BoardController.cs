@@ -101,6 +101,10 @@ namespace Assets.Scripts.Board
                 yield return new WaitForSeconds(0.1f);
                 steps -= System.Math.Sign(steps);
             }
+
+            // Move other player on same tile 1 step back
+            var playerOnSameTile = players.Players.FirstOrDefault(p => p.Location == player.Location && p != player);
+            if (playerOnSameTile != null) { yield return MovePlayerCoroutine(playerOnSameTile, -1); }
         }
 
         /// <summary>
