@@ -19,6 +19,10 @@ namespace AAGame
         [Tooltip("The bomb prefab")]
         private BombControl bombPrefab;
 
+        [SerializeField]
+        [Tooltip("Vertical marker")]
+        private GameObject verticalMarker;
+
 #pragma warning restore 649
         
         private Rigidbody planeRigidBody;
@@ -42,24 +46,32 @@ namespace AAGame
         {
             var planeForwardVector = transform.forward;
             var angle = -Input.GetAxis("Horizontal") * Time.deltaTime * 45;
-            var currentTurnAngle = Vector3.SignedAngle(Vector3.up, transform.up, planeForwardVector);
+            var currentRollAngle = Vector3.SignedAngle(Vector3.up, transform.up, planeForwardVector);
+//            var currentPitchAngle = Vector3.SignedAngle(Vector3.forward, planeForwardVector, transform.right);
             
-            currentTurnAngle += angle;
+            currentRollAngle += angle;
 
-            if(currentTurnAngle > 90)
+            if(currentRollAngle > 90)
             {
-                angle -= currentTurnAngle - 90;
+                angle -= currentRollAngle - 90;
             }
-            else if(currentTurnAngle < -90)
+            else if(currentRollAngle < -90)
             {
-                angle -= currentTurnAngle + 90;
+                angle -= currentRollAngle + 90;
             }
+            
+//            verticalMarker.transform.RotateAround(transform.position, planeForwardVector, -angle);
+
+            var pitchAngle = Input.GetAxis("Vertical") * Time.deltaTime * 45;
 
             transform.Rotate(Vector3.forward, angle);
-            transform.Rotate(Vector3.up, Time.deltaTime * -currentTurnAngle / 10);
-            transform.Rotate(Vector3.right, Input.GetAxis("Vertical") * Time.deltaTime * 45);
+            transform.Rotate(Vector3.up, Time.deltaTime * -currentRollAngle / 10);
+            transform.Rotate(Vector3.right, pitchAngle);
 
             planeRigidBody.velocity = planeForwardVector * flySpeed;
+            
+            verticalMarker.transform.rotation = Quaternion.identity;
+            verticalMarker.transform.position = new Vector3(transform.position.x, transform.position.y - 100, transform.position.z);
         }
     }
 }
