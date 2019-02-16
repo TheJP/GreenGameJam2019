@@ -160,6 +160,7 @@ MonoBehaviour:
   tiles: {fileID: 170909340}
   players: {fileID: 170909341}
   die: {fileID: 889939831}
+  board: {fileID: 1101704279}
 --- !u!114 &170909340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -908,7 +909,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1982308085}
   - component: {fileID: 1982308084}
-  - component: {fileID: 1982308083}
   m_Layer: 15
   m_Name: BoardCamera
   m_TagString: Untagged
@@ -916,14 +916,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1982308083
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1982308082}
-  m_Enabled: 1
 --- !u!20 &1982308084
 Camera:
   m_ObjectHideFlags: 0

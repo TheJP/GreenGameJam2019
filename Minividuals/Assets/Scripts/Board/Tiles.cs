@@ -35,16 +35,6 @@ namespace Assets.Scripts.Board
         private int width;
         private int height;
 
-        private void Start()
-        {
-            for (int i = 0; i < TileCount; ++i)
-            {
-                tiles[i] = Instantiate(tilePrefab, tilesParent);
-                tiles[i].TileIndex = i;
-            }
-            UpdateTilePositions();
-        }
-
         private void Update()
         {
             if (width != Screen.width || height != Screen.height)
@@ -55,6 +45,15 @@ namespace Assets.Scripts.Board
 
         public void Setup(IList<Player> players)
         {
+            // Create tiles
+            for (int i = 0; i < TileCount; ++i)
+            {
+                tiles[i] = Instantiate(tilePrefab, tilesParent);
+                tiles[i].TileIndex = i;
+            }
+            UpdateTilePositions();
+
+            // Setip players
             var spacing = TileCount / players.Count;
             for(int i = 0; i < players.Count; ++i)
             {
