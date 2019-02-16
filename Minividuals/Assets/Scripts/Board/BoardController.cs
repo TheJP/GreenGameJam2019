@@ -112,18 +112,28 @@ namespace Assets.Scripts.Board
         public void FinishedMiniGame(IEnumerable<(Player player, int steps)> playerScores)
         {
             Debug.Assert(playerScores != null);
-            StartCoroutine(ShowScoreBoard(playerScores));
+            StartCoroutine(ShowScoreBoard(playerScores.OrderByDescending(score => score.steps)));
         }
 
         private IEnumerator ShowScoreBoard(IEnumerable<(Player player, int steps)> playerScores)
         {
+            // Display achieved scores
+            scoreboard.title.text = players.ActivePlayer.Location.MiniGame.name;
             scoreboard.gameObject.SetActive(true);
-            foreach (var score in playerScores.OrderByDescending(score => score.steps))
+            foreach (var (player, steps) in playerScores)
             {
-                yield return scoreboard.AddScore(score.player, score.steps);
+                yield return scoreboard.AddScore(player, steps);
             }
             yield return new WaitUntil(AnyPlayerClicksA);
             scoreboard.gameObject.SetActive(false);
+
+            // Move tiles according to achieved scores
+            foreach (var (player, steps) in playerScores.Where(score => score.steps != 0))
+            {
+                yield return MovePlayerCoroutine(player, steps);
+                yield return player.Location.HideCloudsCoroutine();
+            }
+
             SceneManager.LoadScene(SceneName);
         }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Board
 {
@@ -13,6 +14,9 @@ namespace Assets.Scripts.Board
 
         [Tooltip("Parent GameObject that contains all scores")]
         public Transform scoreParent;
+
+        [Tooltip("Title displayed at the top of the scoreboard")]
+        public Text title;
 
         private int numberOfScores = 0;
 
