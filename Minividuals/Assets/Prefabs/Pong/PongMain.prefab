@@ -47,6 +47,8 @@ MonoBehaviour:
     type: 3}
   pongPlayBoardPrefab: {fileID: 2989057438115663156, guid: f1789ce506e9cd541bb9aed5d6943a15,
     type: 3}
+  pongBoardWallPrefab: {fileID: 1779830096736043314, guid: abf01cf06dead084183b71b65c2502ff,
+    type: 3}
   pongPlayerPrefab: {fileID: 7769553177092669907, guid: d1df09933b0178b429aadf2f869a4fc9,
     type: 3}
   countdownUiPrefab: {fileID: 1011137108138668, guid: 9f1d4a019c849194c8cecb71e64a5b05,

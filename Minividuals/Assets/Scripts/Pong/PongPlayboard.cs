@@ -14,22 +14,10 @@ public class PongPlayboard : MonoBehaviour
     /// <summary>
     /// Returns the spawn position for the given player number.
     /// </summary>
-    /// <param name="playerNumber">Number of the Player.</param>
-    /// <returns>Spawn point of player with given number.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If playerNumber is not valid</exception>
-    public Transform GetSpawnPointForPlayer(int playerIndex)
+    /// <param name="position">Position on the Filed. (Starts down left with 0 CCW till 3</param>
+    /// <returns></returns>
+    public Transform GetSpawnPointForPosition(int position)
     {
-        if (playerIndex >= 0 && playerIndex <= MaxPlayerNumber)
-        {
-            return spawnPoints[playerIndex].transform;
-        }
-        else
-        {
-            Debug.LogError(
-                $"The given playerNumber is not between 0 and {MaxPlayerNumber}. " +
-                $"Given playerNumber was {playerIndex}. " +
-                "Returning zero vector");
-            throw new ArgumentOutOfRangeException();
-        }
+            return spawnPoints[position].transform;
     }
 }

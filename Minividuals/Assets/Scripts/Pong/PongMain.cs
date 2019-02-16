@@ -8,16 +8,17 @@ public class PongMain : MonoBehaviour
 #pragma warning disable 649
     [SerializeField] private GameObject pongBallPrefab;
     [SerializeField] private GameObject pongPlayBoardPrefab;
+    [SerializeField] private GameObject pongBoardWallPrefab;
     [SerializeField] private GameObject pongPlayerPrefab;
     [SerializeField] private GameObject countdownUiPrefab;
 
     //Local Settings in case no main game is running.
     [SerializeField] private Color[] playerColors;
-    [SerializeField] private String[] controlPrefixes;
+    [SerializeField] private string[] controlPrefixes;
 #pragma warning restore 649
 
     private const int TimeTillStart = 3;
-    private const int MaxPlayerNumber = 4;
+    private const int MaxPlayerNumber = 2;
 
     private PongPlayboard pongPlayboard;
     private BoardController boardController;
@@ -38,21 +39,44 @@ public class PongMain : MonoBehaviour
     private void InstantiatePlayers()
     {
         int maxPlayerNumber = boardController != null ? boardController.players.Players.Count : MaxPlayerNumber;
-        for (int playerIndex = 0; playerIndex < maxPlayerNumber; playerIndex++)
+
+        if (maxPlayerNumber == 1)
         {
-            InstantiatePlayer(playerIndex);
+            Debug.Log("You started a Pong with one player? Doesn't really make sense, huh?");
+            //TODO: Handle single player properly
+        }
+        else if (maxPlayerNumber == 2)
+        {
+            InstantiatePlayer(0, 1);
+            InstantiatePlayer(1, 3);
+            InstantiateWall(0);
+            InstantiateWall(2);
+        }
+        else if (maxPlayerNumber == 3)
+        {
+            InstantiatePlayer(0, 0);
+            InstantiatePlayer(1, 1);
+            InstantiatePlayer(2, 3);
+            InstantiateWall(2);
+        }
+        else if (maxPlayerNumber == 4)
+        {
+            for (int playerIndex = 0; playerIndex < maxPlayerNumber; playerIndex++)
+            {
+                InstantiatePlayer(playerIndex, playerIndex);
+            }
         }
     }
 
-    private void InstantiatePlayer(int playerIndex)
+    private void InstantiatePlayer(int playerIndex, int positionOnField)
     {
-        var spawnTransform = pongPlayboard.GetSpawnPointForPlayer(playerIndex);
+        var spawnTransform = pongPlayboard.GetSpawnPointForPosition(positionOnField);
         GameObject playerObject = Instantiate(pongPlayerPrefab, spawnTransform.position,
             spawnTransform.rotation, transform);
 
         PongPlayer player = playerObject.GetComponent<PongPlayer>();
         player.SetPlayerNumber(playerIndex + 1);
-        player.playPosition = playerIndex + 1;
+        player.PlayPosition = positionOnField;
         player.SetColor(boardController != null
             ? boardController.players.Players[playerIndex].Colour
             : playerColors[playerIndex]);
@@ -63,6 +87,15 @@ public class PongMain : MonoBehaviour
             : controlPrefixes[playerIndex];
 
         playerControl.enabled = false;
+    }
+
+    private void InstantiateWall(int position)
+    {
+        var spawnTransform = pongPlayboard.GetSpawnPointForPosition(position);
+        GameObject wallObject =
+            Instantiate(pongBoardWallPrefab, spawnTransform.position, spawnTransform.rotation, transform);
+        PongWall pongWall = wallObject.GetComponent<PongWall>();
+        pongWall.WallPosition = position;
     }
 
     private IEnumerator CountDownForStart(float startTime)

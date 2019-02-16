@@ -15,7 +15,7 @@ public class PongBallMovement : MonoBehaviour
     void Start()
     {
         //TODO: Random start direction
-        horizontalDirection = 0.5F;
+        horizontalDirection = 1.0F;
         verticalDirection = 1.0F;
     }
 

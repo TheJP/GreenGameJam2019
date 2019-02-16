@@ -4,7 +4,7 @@ public class PongPlayer : MonoBehaviour
 {
     private int playerNumber;
     private Color playerColor;
-    public int playPosition { private get; set; }
+    public int PlayPosition { private get; set; }
 
     private void Start()
     {
@@ -30,19 +30,19 @@ public class PongPlayer : MonoBehaviour
         pongBall.ChangeColor(playerColor);
         pongBall.LastTouchedByPlayer = playerNumber;
 
-        if (playPosition == 1)
+        if (PlayPosition == 0)
         {
             pongBall.ChangeVerticalDirection();
         }
-        else if (playPosition == 2)
+        else if (PlayPosition == 1)
         {
             pongBall.ChangeHorizontalDirection();
         }
-        else if (playPosition == 3)
+        else if (PlayPosition == 2)
         {
             pongBall.ChangeVerticalDirection();
         }
-        else if (playPosition == 4)
+        else if (PlayPosition == 3)
         {
             pongBall.ChangeHorizontalDirection();
         }
