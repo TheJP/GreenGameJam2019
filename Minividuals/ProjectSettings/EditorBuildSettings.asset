@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/AAScene.unity
     guid: 9d2d5632f042cbb48b83ecc8ab8da4a9
+  - enabled: 1
+    path: Assets/Scenes/Snake.unity
+    guid: ff5bda47a4c3dab459b952f1f3020157
   m_configObjects: {}
