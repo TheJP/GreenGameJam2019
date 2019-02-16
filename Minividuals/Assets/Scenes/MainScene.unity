@@ -211,8 +211,13 @@ MonoBehaviour:
   - name: Sumo Fight
     sceneName: Sumo
     icon: {fileID: 0}
-    minPerGame: 20
-    maxPerGame: 20
+    minPerGame: 1
+    maxPerGame: 3
+  - name: Air Strike
+    sceneName: AAScene
+    icon: {fileID: 0}
+    minPerGame: 1
+    maxPerGame: 3
 --- !u!1 &345458341
 GameObject:
   m_ObjectHideFlags: 0

@@ -107,7 +107,7 @@ namespace Assets.Scripts.Board
         /// Player scores contains pairs of players with their score. If no player scored an empty collection can be passed.
         /// </summary>
         /// <remarks>Example: FinishedMiniGame(new[]{ (player1, 4), (player2, -1) });</remarks>
-        /// <param name="playerScores"></param>
+        /// <param name="playerScores">Scores of the players.</param>
         public void FinishedMiniGame(IEnumerable<(Player player, int steps)> playerScores)
         {
             Debug.Assert(playerScores != null);
