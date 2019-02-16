@@ -9,11 +9,28 @@ namespace AAGame
         [Tooltip("The speed the plane is flying forward")]
         private float flySpeed = 10;
 
+        [SerializeField]
+        [Tooltip("The position where a bomb will spawn")]
+        private GameObject bombBay;
+
+        [SerializeField]
+        [Tooltip("The bomb prefab")]
+        private GameObject bombPrefab;
+
         private Rigidbody planeRigidBody;
 
         private void Awake()
         {
             planeRigidBody = GetComponent<Rigidbody>();
+        }
+
+        private void Update()
+        {
+            if(Input.GetButtonDown("Fire1"))
+            {
+                var bomb = Instantiate(bombPrefab, bombBay.transform.position, Quaternion.identity);
+                bomb.GetComponent<Rigidbody>().velocity = planeRigidBody.velocity;
+            }
         }
 
         private void FixedUpdate()
