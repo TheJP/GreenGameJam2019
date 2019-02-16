@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Assets.Scripts.Board;
 using UnityEngine;
 
@@ -145,7 +144,7 @@ public class SumoMain : MonoBehaviour
             {
                 if (boardController != null)
                 {
-                    scores.Add((boardController.players.Players[defeatedPlayers[i]-1], scoreList[i]));
+                    scores.Add((boardController.players.Players[defeatedPlayers[i] - 1], scoreList[i]));
                 }
                 else
                 {

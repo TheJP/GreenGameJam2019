@@ -7,10 +7,12 @@ public class SumoPlayerControl : MonoBehaviour
 {
 #pragma warning disable 649
     [SerializeField] private float speed;
+    [SerializeField] private int boostCooldownSeconds;
 #pragma warning restore 649
 
-    public string ControlPrefix { get; set; }
+    public string ControlPrefix { private get; set; }
     private Rigidbody playerRigidbody;
+    private float timeSinceLastBoost = 0;
 
     private void Start()
     {
@@ -21,7 +23,18 @@ public class SumoPlayerControl : MonoBehaviour
     {
         float moveHorizontal = Input.GetAxis($"{ControlPrefix}Horizontal");
         float moveVertical = Input.GetAxis($"{ControlPrefix}Vertical");
-        Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
+        float moveY = 0.0F;
+
+        if (Input.GetButtonDown($"{ControlPrefix}A") && timeSinceLastBoost < boostCooldownSeconds)
+        {
+            Debug.Log("BOOOST!!!");
+            timeSinceLastBoost = 0;
+            moveHorizontal *= 1.5F;
+            moveVertical *= 1.5F;
+            moveY += 7.0F;
+        }
+
+        Vector3 movement = new Vector3(moveHorizontal, moveY, moveVertical);
         playerRigidbody.AddForce(movement * speed);
     }
 }

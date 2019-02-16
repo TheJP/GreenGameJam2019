@@ -60,7 +60,7 @@ Transform:
   m_GameObject: {fileID: 1062662698563298071}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 0.02, z: 10}
+  m_LocalScale: {x: 12, y: 0.02, z: 12}
   m_Children:
   - {fileID: 1062662698893532943}
   - {fileID: 1062662699114065266}
@@ -161,11 +161,6 @@ MonoBehaviour:
   - {fileID: 1062662699114065267}
   - {fileID: 1062662698369789669}
   - {fileID: 1062662699727079103}
-  playerColors:
-  - {r: 0, g: 0.15721345, b: 1, a: 1}
-  - {r: 1, g: 0, b: 0, a: 1}
-  - {r: 0.05724919, g: 1, b: 0, a: 1}
-  - {r: 0.98765564, g: 1, b: 0, a: 1}
 --- !u!1 &1062662698893532936
 GameObject:
   m_ObjectHideFlags: 0
