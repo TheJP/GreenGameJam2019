@@ -105,6 +105,29 @@ namespace AAGame
                     Application.Quit();
 #endif
                 }
+                else
+                {
+                    var scores = new List<(Player player, int steps)>();
+
+                    int planeScore;
+                    if(plane.IsDead)
+                    {
+                        planeScore = -guns.Length + guns.Count(g => g.IsTargetDestroyed);
+                    }
+                    else
+                    {
+                        planeScore = guns.Count(g => g.IsTargetDestroyed);
+                        if(planeScore == guns.Length)
+                        {
+                            ++planeScore;
+                        }
+                    }
+                    
+                    scores.Add((plane.Player, planeScore));
+                    scores.AddRange(guns.Select(gun => (gun.Player, gun.IsTargetDestroyed ? -1 : 0)));
+
+                    boardController.FinishedMiniGame(scores);
+                }
             }
         }
 
