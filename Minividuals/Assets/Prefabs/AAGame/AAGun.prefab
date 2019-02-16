@@ -483,7 +483,7 @@ MonoBehaviour:
   fireCooldown: 1
   cursor: {fileID: 496587076601196743}
   canon: {fileID: 496587076019234881}
-  bulletPrefab: {fileID: 5376987555890917239, guid: 7ed8ec6314a8e7c41a91d77cb6bfbbf6,
+  bulletPrefab: {fileID: 7329041520061919110, guid: 7ed8ec6314a8e7c41a91d77cb6bfbbf6,
     type: 3}
   bulletSpawn: {fileID: 496587077220543328}
   targetPlatform: {fileID: 2466869801424413785}
