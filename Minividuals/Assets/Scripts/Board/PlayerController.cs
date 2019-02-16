@@ -13,6 +13,11 @@ namespace Assets.Scripts.Board
         [Tooltip("GameObject in which figures are added")]
         public Transform playerFigureParent;
 
+
+        private int activePlayer = 0;
+
+        public Player ActivePlayer => Players[activePlayer];
+
         // TODO: Add players by menu instead of hardcoded
         public IList<Player> Players { get; } = new[] {
             new Player(Color.green, "Player1"),
@@ -29,25 +34,24 @@ namespace Assets.Scripts.Board
 
         public void Setup()
         {
-            foreach(var player in Players)
+            foreach (var player in Players)
             {
                 var figure = Instantiate(playerFigurePrefab, playerFigureParent);
                 player.Figure = figure;
                 figure.SetOwner(player);
             }
+            activePlayer = Random.Range(0, Players.Count);
         }
 
-        private void PlayerChangedLocation(Player player)
-        {
-            var tileMiddle = Vector3.right * (player.Location.transform.localScale.x / 2f);
-            player.Figure.transform.position = player.Location.transform.position + tileMiddle;
-        }
+        public void NextPlayer() => activePlayer = (activePlayer + 1) % Players.Count;
+
+        private void PlayerChangedLocation(Player player) => player.TeleportToPlayerLocation();
 
         private void TilePositionsUpdated()
         {
-            foreach(var player in Players)
+            foreach (var player in Players)
             {
-                if(player.Location != null && player.Figure != null) { PlayerChangedLocation(player); }
+                if (player.Location != null && player.Figure != null) { PlayerChangedLocation(player); }
             }
         }
     }

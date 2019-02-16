@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colourRenderer: {fileID: 4768458487176637773}
+  figureWalkDuration: 0.3
 --- !u!1 &4768458487176637771
 GameObject:
   m_ObjectHideFlags: 0

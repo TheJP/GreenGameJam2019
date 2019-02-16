@@ -32,7 +32,7 @@ namespace Assets.Scripts.Board
         /// <summary>
         /// Result that the dice rolled. Make sure to wait until the <see cref="RollCoroutine"/> coroutine finished before reading the result.
         /// </summary>
-        public int DiceResult { get; private set; }
+        public int DieResult { get; private set; }
 
         public void PrepareRoll(Player player)
         {
@@ -56,12 +56,14 @@ namespace Assets.Scripts.Board
                 waitPerRotation *= rollSlowdownFactor;
             } while (Time.time - start < rollDuration);
             finishedRollingParticles.SetActive(true);
-            DiceResult = currentIndex + 1;
+            DieResult = currentIndex + 1;
         }
 
         public void HideDie()
         {
             spriteRenderer.gameObject.SetActive(false);
+            rollHint.SetActive(false);
+            finishedRollingParticles.SetActive(false);
         }
     }
 }

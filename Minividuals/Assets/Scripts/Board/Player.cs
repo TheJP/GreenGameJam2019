@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Assets.Scripts.Board
@@ -29,10 +25,29 @@ namespace Assets.Scripts.Board
         /// </summary>
         public PlayerFigure Figure { get; set; }
 
+        private Vector3 GetFigureTarget()
+        {
+            var tileMiddle = Vector3.right * (Location.transform.localScale.x / 2f);
+            return Location.transform.position + tileMiddle;
+        }
+
         public Player(Color colour, string inputPrefix)
         {
             Colour = colour;
             InputPrefix = inputPrefix;
+        }
+
+        public void TeleportToPlayerLocation() => Figure.transform.position = GetFigureTarget();
+
+        public IEnumerator MoveToPlayerLocation()
+        {
+            var start = Time.time;
+            var startPosition = Figure.transform.position;
+            while (Time.time - start < Figure.figureWalkDuration)
+            {
+                Figure.transform.position = Vector3.Lerp(startPosition, GetFigureTarget(), (Time.time - start) / Figure.figureWalkDuration);
+                yield return null;
+            }
         }
     }
 }

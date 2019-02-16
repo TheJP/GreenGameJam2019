@@ -109,5 +109,9 @@ namespace Assets.Scripts.Board
 
             TilePositionsUpdated?.Invoke();
         }
+
+        public Tile TileAfter(Tile tile) => tiles[(tile.TileIndex + 1) % TileCount];
+
+        public Tile TileBefore(Tile tile) => tiles[(tile.TileIndex - 1 + TileCount) % TileCount];
     }
 }
