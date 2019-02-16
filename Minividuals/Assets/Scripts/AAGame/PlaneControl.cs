@@ -17,7 +17,7 @@ namespace AAGame
 
         [SerializeField]
         [Tooltip("The bomb prefab")]
-        private GameObject bombPrefab;
+        private BombControl bombPrefab;
 
 #pragma warning restore 649
         
@@ -34,6 +34,7 @@ namespace AAGame
             {
                 var bomb = Instantiate(bombPrefab, bombBay.transform.position, Quaternion.identity);
                 bomb.GetComponent<Rigidbody>().velocity = planeRigidBody.velocity;
+                bomb.Color = Color.cyan;
             }
         }
 
