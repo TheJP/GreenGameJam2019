@@ -21,7 +21,7 @@ namespace MelodyMemory
         
         void Update()
         {
-            if (Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
+            if (active && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
             {            
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hit))
