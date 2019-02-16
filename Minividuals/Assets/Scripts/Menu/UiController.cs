@@ -14,18 +14,46 @@ namespace Assets.Scripts.Menu
         [Tooltip("Available player input prefixes (for each controller, keyboard, ... player one of those has to be added)")]
         public string[] playerPrefixes;
 
+        [Tooltip("Colours that can be selected by the players")]
+        public Color[] playerColours;
+
+        private Color NextFreeColour(int index)
+        {
+            int i = 0;
+            while (playerSelectors.FirstOrDefault(s => s?.Owner?.Colour == playerColours[index]) != null)
+            {
+                index = (index + 1) % playerColours.Length;
+                ++i;
+                if (i > 1000)
+                {
+                    Debug.LogError("Too few colours");
+                    return playerColours[0];
+                }
+            }
+            return playerColours[index];
+        }
+
         private void Update()
         {
             foreach (var prefix in playerPrefixes)
             {
                 if (Input.GetButtonDown($"{prefix}{AButtonSuffix}"))
                 {
+                    Debug.Log($"{prefix}{AButtonSuffix}");
                     var selector = playerSelectors.FirstOrDefault(s => s.IsFree);
-                    var hasNoSpotYet = playerSelectors.FirstOrDefault(s => s?.Owner?.InputPrefix == prefix) == null;
-                    if (selector != null && hasNoSpotYet)
+                    var spot = playerSelectors.FirstOrDefault(s => s?.Owner?.InputPrefix == prefix);
+                    if (selector != null && spot == null)
                     {
-                        selector.APressed(new Board.Player(Color.green, prefix)); // TODO: Give colour
+                        selector.APressed(new Board.Player(NextFreeColour(0), prefix)); // TODO: Give colour
                     }
+                    else if (spot != null)
+                    {
+                        var index = System.Array.IndexOf(playerColours, spot.Owner.Colour);
+                        var colour = NextFreeColour(index);
+                        spot.BPressed();
+                        spot.APressed(new Board.Player(colour, prefix));
+                    }
+
                 }
                 else if (Input.GetButtonDown($"{prefix}{BButtonSuffix}"))
                 {
