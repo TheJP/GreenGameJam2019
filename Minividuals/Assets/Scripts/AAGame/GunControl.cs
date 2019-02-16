@@ -14,14 +14,24 @@ namespace AAGame
         private float verticalCursorSpeed = 10;
 
         [SerializeField]
+        private float fireCooldown = 4;
+
+        [SerializeField]
         private Transform cursor;
 
         [SerializeField]
         private Transform canon;
 
+        [SerializeField]
+        private Transform bulletPrefab;
+
+        [SerializeField]
+        private Transform bulletSpawn;
+
 #pragma warning restore 649
         
         private Color color;
+        private float cooldown;
         
         public Color Color
         {
@@ -58,6 +68,16 @@ namespace AAGame
             
             cursor.transform.Translate(x, y, z);
             canon.LookAt(cursor);
+
+            if(Input.GetButton("Fire1") && cooldown <= 0)
+            {
+                var bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+                bullet.GetComponent<Rigidbody>().AddForce(canon.forward * 100, ForceMode.Impulse);
+                cooldown = fireCooldown;
+            }
+
+            cooldown -= Time.deltaTime;
+            cooldown = Mathf.Max(0, cooldown);
         }
     }
 }
