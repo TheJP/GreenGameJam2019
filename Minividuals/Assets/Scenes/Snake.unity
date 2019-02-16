@@ -124,6 +124,7 @@ GameObject:
   - component: {fileID: 54519424}
   - component: {fileID: 54519423}
   - component: {fileID: 54519422}
+  - component: {fileID: 54519426}
   m_Layer: 0
   m_Name: BorderXMinus
   m_TagString: Untagged
@@ -203,6 +204,18 @@ Transform:
   m_Father: {fileID: 184337609}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &54519426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54519421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3067f9c54c6949119d6c87ab02f4ed85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &184337608
 GameObject:
   m_ObjectHideFlags: 0
@@ -382,6 +395,7 @@ GameObject:
   - component: {fileID: 946453645}
   - component: {fileID: 946453644}
   - component: {fileID: 946453643}
+  - component: {fileID: 946453647}
   m_Layer: 0
   m_Name: BorderZMinus
   m_TagString: Untagged
@@ -461,6 +475,18 @@ Transform:
   m_Father: {fileID: 184337609}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &946453647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 946453642}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3067f9c54c6949119d6c87ab02f4ed85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &949108763
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,6 +499,7 @@ GameObject:
   - component: {fileID: 949108766}
   - component: {fileID: 949108765}
   - component: {fileID: 949108764}
+  - component: {fileID: 949108768}
   m_Layer: 0
   m_Name: BorderXPlus
   m_TagString: Untagged
@@ -552,6 +579,18 @@ Transform:
   m_Father: {fileID: 184337609}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &949108768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 949108763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3067f9c54c6949119d6c87ab02f4ed85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1085679917
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,6 +765,7 @@ GameObject:
   - component: {fileID: 1626958623}
   - component: {fileID: 1626958622}
   - component: {fileID: 1626958621}
+  - component: {fileID: 1626958625}
   m_Layer: 0
   m_Name: BorderZPlus
   m_TagString: Untagged
@@ -805,6 +845,18 @@ Transform:
   m_Father: {fileID: 184337609}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1626958625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1626958620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3067f9c54c6949119d6c87ab02f4ed85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2091633417
 GameObject:
   m_ObjectHideFlags: 0

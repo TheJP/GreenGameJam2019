@@ -1,5 +1,3 @@
-using System.Collections;
-using Assets.Scripts.Board;
 using UnityEngine;
 
 namespace Snake
@@ -58,13 +56,25 @@ namespace Snake
         private void OnCollisionEnter(Collision other)
         {
             var tail = other.gameObject.GetComponent<SnakeTail>();
-            if(ReferenceEquals(tail, null) || ReferenceEquals(tail.Player, Player))
+            if(!ReferenceEquals(tail, null) && ReferenceEquals(tail.Player, Player))
             {
                 return;
             }
 
+            if(!ReferenceEquals(tail, null))
+            {
+                ++tail.Player.Score;
+            }
+            else if(!ReferenceEquals(other.gameObject.GetComponent<TheEvilBorder>(), null))
+            {
+                --Player.Score;
+            }
+            else
+            {
+                return;
+            }
+            
             Player.IsDead = true;
-            ++tail.Player.Score;
             Destroy(gameObject);
         }
     }
