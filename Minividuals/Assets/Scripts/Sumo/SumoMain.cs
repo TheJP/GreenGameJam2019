@@ -70,12 +70,12 @@ public class SumoMain : MonoBehaviour
         SumoPlayerControl playerControl = playerObject.GetComponent<SumoPlayerControl>();
         playerControl.SetPlayerNumber(playerNumber);
         playerControl.ControlPrefix = boardController != null
-            ? boardController.players.Players[playerNumber].InputPrefix
+            ? boardController.players.Players[playerNumber - 1].InputPrefix
             : controlPrefixes[playerNumber - 1];
 
         SumoPlayerStyle playerStyle = playerObject.GetComponent<SumoPlayerStyle>();
         playerStyle.SetColor(boardController != null
-            ? boardController.players.Players[playerNumber].Colour
+            ? boardController.players.Players[playerNumber - 1].Colour
             : playerColors[playerNumber - 1]);
 
         playerControl.enabled = false;
