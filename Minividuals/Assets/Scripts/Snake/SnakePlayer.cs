@@ -6,14 +6,26 @@ namespace Snake
 {
     public class SnakePlayer
     {
+        private bool isDead;
+        
         public Player Player { get; }
 
         public Color Color => Player.Colour;
         public String InputPrefix => Player.InputPrefix;
         
         public int Score { get; set; }
+
+        public bool IsDead
+        {
+            get => isDead;
+            set
+            {
+                isDead = value;
+                TimeOfDeath = Time.time;
+            }
+        }
         
-        public bool IsDead { get; set; }
+        public float TimeOfDeath { get; private set; }
 
         public SnakePlayer(Player player)
         {
