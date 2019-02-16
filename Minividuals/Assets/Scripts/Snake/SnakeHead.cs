@@ -74,14 +74,16 @@ namespace Snake
         private void OnCollisionEnter(Collision other)
         {
             var tail = other.gameObject.GetComponent<SnakeTail>();
-            if(!ReferenceEquals(tail, null) && ReferenceEquals(tail.Player, Player))
-            {
-                return;
-            }
-
             if(!ReferenceEquals(tail, null))
             {
-                ++tail.Player.Score;
+                if(ReferenceEquals(tail.Player, Player))
+                {
+                    --Player.Score;
+                }
+                else
+                {
+                    ++tail.Player.Score;
+                }
             }
             else if(!ReferenceEquals(other.gameObject.GetComponent<TheEvilBorder>(), null))
             {
