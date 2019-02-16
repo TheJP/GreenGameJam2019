@@ -237,7 +237,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 311
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -274,6 +274,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PongMain
+      objectReference: {fileID: 0}
+    - target: {fileID: 2819174265137245862, guid: 3412d2bf9947a8c4ca55feb07f45724a,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2819174265137245861, guid: 3412d2bf9947a8c4ca55feb07f45724a,
         type: 3}

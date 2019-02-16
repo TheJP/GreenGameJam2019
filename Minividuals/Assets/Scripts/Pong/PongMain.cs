@@ -17,7 +17,6 @@ public class PongMain : MonoBehaviour
 #pragma warning restore 649
 
     private const int TimeTillStart = 3;
-    private const int MinPlayerNumber = 1;
     private const int MaxPlayerNumber = 4;
 
     private PongPlayboard pongPlayboard;
@@ -28,11 +27,7 @@ public class PongMain : MonoBehaviour
     {
         var playBoardObject = Instantiate(pongPlayBoardPrefab, transform);
         pongPlayboard = playBoardObject.GetComponent<PongPlayboard>();
-        pongPlayboard.MinPlayerNumber = MinPlayerNumber;
         pongPlayboard.MaxPlayerNumber = MaxPlayerNumber;
-
-        var pongBallObject = Instantiate(pongBallPrefab, transform);
-        PongBall pongBall = pongBallObject.GetComponent<PongBall>();
 
         boardController = GameObject.Find("BoardController")?.GetComponent<BoardController>();
         InstantiatePlayers();
@@ -43,32 +38,31 @@ public class PongMain : MonoBehaviour
     private void InstantiatePlayers()
     {
         int maxPlayerNumber = boardController != null ? boardController.players.Players.Count : MaxPlayerNumber;
-        for (int playerNumber = 1; playerNumber <= maxPlayerNumber; playerNumber++)
+        for (int playerIndex = 0; playerIndex < maxPlayerNumber; playerIndex++)
         {
-            InstantiatePlayer(playerNumber);
+            InstantiatePlayer(playerIndex);
         }
     }
 
-    private void InstantiatePlayer(int playerNumber)
+    private void InstantiatePlayer(int playerIndex)
     {
-        var spawnTransform = pongPlayboard.GetSpawnPointForPlayer(playerNumber);
+        var spawnTransform = pongPlayboard.GetSpawnPointForPlayer(playerIndex);
         GameObject playerObject = Instantiate(pongPlayerPrefab, spawnTransform.position,
             spawnTransform.rotation, transform);
 
         PongPlayer player = playerObject.GetComponent<PongPlayer>();
-        player.SetPlayerNumber(playerNumber);
+        player.SetPlayerNumber(playerIndex + 1);
+        player.playPosition = playerIndex + 1;
+        player.SetColor(boardController != null
+            ? boardController.players.Players[playerIndex].Colour
+            : playerColors[playerIndex]);
 
         PongPlayerControl playerControl = playerObject.GetComponent<PongPlayerControl>();
-        playerControl.SetPlayerNumber(playerNumber);
         playerControl.ControlPrefix = boardController != null
-            ? boardController.players.Players[playerNumber].InputPrefix
-            : controlPrefixes[playerNumber - 1];
-        playerControl.enabled = false;
+            ? boardController.players.Players[playerIndex].InputPrefix
+            : controlPrefixes[playerIndex];
 
-        PongPlayerStyle playerStyle = playerObject.GetComponent<PongPlayerStyle>();
-        playerStyle.SetColor(boardController != null
-            ? boardController.players.Players[playerNumber].Colour
-            : playerColors[playerNumber - 1]);
+        playerControl.enabled = false;
     }
 
     private IEnumerator CountDownForStart(float startTime)
@@ -86,6 +80,8 @@ public class PongMain : MonoBehaviour
         }
 
         EnableControls();
+
+        ReleaseBall();
     }
 
     private void EnableControls()
@@ -96,5 +92,11 @@ public class PongMain : MonoBehaviour
         {
             player.GetComponent<PongPlayerControl>().enabled = true;
         }
+    }
+
+    private void ReleaseBall()
+    {
+        var pongBallObject = Instantiate(pongBallPrefab, transform);
+        //PongBallMovement pongBall = pongBallObject.GetComponent<PongBallMovement>();
     }
 }

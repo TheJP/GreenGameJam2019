@@ -9,37 +9,25 @@ public class PongPlayboard : MonoBehaviour
     [SerializeField] private GameObject[] spawnPoints;
 #pragma warning restore 649
     
-    public int MinPlayerNumber { private get; set; }
     public int MaxPlayerNumber { private get; set; }
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     /// <summary>
-    /// Returns the spawn position for the given player number (1-4)
+    /// Returns the spawn position for the given player number.
     /// </summary>
-    /// <param name="playerNumber">Number of the Player (1-4).</param>
+    /// <param name="playerNumber">Number of the Player.</param>
     /// <returns>Spawn point of player with given number.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If playerNumber is not between 1 and 4</exception>
-    public Transform GetSpawnPointForPlayer(int playerNumber)
+    /// <exception cref="ArgumentOutOfRangeException">If playerNumber is not valid</exception>
+    public Transform GetSpawnPointForPlayer(int playerIndex)
     {
-        if (playerNumber >= MinPlayerNumber && playerNumber <= MaxPlayerNumber)
+        if (playerIndex >= 0 && playerIndex <= MaxPlayerNumber)
         {
-            return spawnPoints[playerNumber - 1].transform;
+            return spawnPoints[playerIndex].transform;
         }
         else
         {
             Debug.LogError(
-                $"The given playerNumber is not between {MinPlayerNumber} and {MaxPlayerNumber}. " +
-                $"Given playerNumber was {playerNumber}. " +
+                $"The given playerNumber is not between 0 and {MaxPlayerNumber}. " +
+                $"Given playerNumber was {playerIndex}. " +
                 "Returning zero vector");
             throw new ArgumentOutOfRangeException();
         }

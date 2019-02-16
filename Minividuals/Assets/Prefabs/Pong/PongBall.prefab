@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7358000959917497026}
   - component: {fileID: 7358000959917497053}
   - component: {fileID: 7358000959917497052}
-  - component: {fileID: 7358000959917497025}
+  - component: {fileID: 3821581678985061429}
   m_Layer: 0
   m_Name: PongBall
   m_TagString: Untagged
@@ -109,7 +109,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7358000959917497025
+--- !u!114 &3821581678985061429
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -121,3 +121,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04b78454658d31744810cf98f954b865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 2
