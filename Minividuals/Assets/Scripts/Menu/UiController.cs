@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Steam controller button mappings: https://answers.unity.com/questions/1097208/is-it-possible-to-implement-the-steam-controller-i.html
 namespace Assets.Scripts.Menu
@@ -8,6 +9,8 @@ namespace Assets.Scripts.Menu
     {
         private const string AButtonSuffix = "A";
         private const string BButtonSuffix = "B";
+        private const string YButtonSuffix = "Y";
+        private const string MainSceneName = "MainScene";
 
         public PlayerSelector[] playerSelectors;
 
@@ -16,6 +19,9 @@ namespace Assets.Scripts.Menu
 
         [Tooltip("Colours that can be selected by the players")]
         public Color[] playerColours;
+
+        [Tooltip("Data carrier that is used get data from menu to main scene")]
+        public GameStart gameStart;
 
         private Color NextFreeColour(int index)
         {
@@ -33,21 +39,24 @@ namespace Assets.Scripts.Menu
             return playerColours[index];
         }
 
+        private PlayerSelector GetSpot(string playerPrefix) => playerSelectors.FirstOrDefault(s => s?.Owner?.InputPrefix == playerPrefix);
+
         private void Update()
         {
             foreach (var prefix in playerPrefixes)
             {
                 if (Input.GetButtonDown($"{prefix}{AButtonSuffix}"))
                 {
-                    Debug.Log($"{prefix}{AButtonSuffix}");
+                    // First a press to reserve a spot
                     var selector = playerSelectors.FirstOrDefault(s => s.IsFree);
-                    var spot = playerSelectors.FirstOrDefault(s => s?.Owner?.InputPrefix == prefix);
+                    var spot = GetSpot(prefix);
                     if (selector != null && spot == null)
                     {
-                        selector.APressed(new Board.Player(NextFreeColour(0), prefix)); // TODO: Give colour
+                        selector.APressed(new Board.Player(NextFreeColour(0), prefix));
                     }
                     else if (spot != null)
                     {
+                        // Select colour by pressing a after getting a spot
                         var index = System.Array.IndexOf(playerColours, spot.Owner.Colour);
                         var colour = NextFreeColour(index);
                         spot.BPressed();
@@ -57,10 +66,31 @@ namespace Assets.Scripts.Menu
                 }
                 else if (Input.GetButtonDown($"{prefix}{BButtonSuffix}"))
                 {
-                    var spot = playerSelectors.FirstOrDefault(s => s?.Owner?.InputPrefix == prefix);
+                    // Release the reserved spot of this player
+                    var spot = GetSpot(prefix);
                     if (spot != null) { spot.BPressed(); }
+                }
+                else if (Input.GetButtonDown($"{prefix}{YButtonSuffix}"))
+                {
+                    // Start the game if the player has a reserved spot
+                    if (GetSpot(prefix) != null)
+                    {
+                        SceneManager.LoadScene(MainSceneName);
+                        gameStart.Players = playerSelectors
+                            .Select(s => s.Owner)
+                            .Where(player => player != null)
+                            .ToArray();
+                    }
                 }
             }
         }
+
+        // Find button mappings
+        // private void OnGUI()
+        // {
+        //     Event e = Event.current;
+        //     if (e.isKey){ Debug.Log("Detected a keyboard event!" + e.modifiers + " + " + e.keyCode + " "); }
+        //     if (e.isMouse){ Debug.Log("Detected a Mouse event!" + e.type); }
+        // }
     }
 }

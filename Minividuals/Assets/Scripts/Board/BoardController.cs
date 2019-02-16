@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Menu;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -17,7 +18,7 @@ namespace Assets.Scripts.Board
 
         private bool isBackInMainScene = false;
 
-        private void Start()
+        private void Awake()
         {
             // Destroy this board if there already exsits one
             if (FindObjectsOfType<BoardController>().Length > 1)
@@ -25,14 +26,23 @@ namespace Assets.Scripts.Board
                 Destroy(board);
                 return;
             }
+        }
 
+        private void Start()
+        {
             // Keep board for all scenes
             // TODO: Destroy when going back to main menu
             DontDestroyOnLoad(board);
 
             SceneManager.sceneLoaded += SceneLoaded;
 
-            players.Setup();
+            var gameStart = FindObjectOfType<GameStart>();
+            var playersData = gameStart?.Players ?? new[] {
+                new Player(Color.green, "Player1"),
+                new Player(Color.blue, "Player2")
+            };
+
+            players.Setup(playersData);
             tiles.Setup(players.Players); // TODO: Pass minigame information to tiles.Setup
             StartCoroutine(GameLoop());
         }

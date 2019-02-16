@@ -18,13 +18,7 @@ namespace Assets.Scripts.Board
 
         public Player ActivePlayer => Players[activePlayer];
 
-        // TODO: Add players by menu instead of hardcoded
-        public IList<Player> Players { get; } = new[] {
-            new Player(Color.green, "Player1"),
-            new Player(Color.blue, "Player2"),
-            new Player(Color.red, "Player3"),
-            new Player(Color.yellow, "Player4")
-        };
+        public IList<Player> Players { get; private set; }
 
         private void Awake()
         {
@@ -32,8 +26,9 @@ namespace Assets.Scripts.Board
             tiles.TilePositionsUpdated += TilePositionsUpdated;
         }
 
-        public void Setup()
+        public void Setup(Player[] playerArray)
         {
+            Players = playerArray;
             foreach (var player in Players)
             {
                 var figure = Instantiate(playerFigurePrefab, playerFigureParent);
