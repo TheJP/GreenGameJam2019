@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Assets.Scripts.Board;
 using UnityEngine;
 
@@ -13,6 +14,7 @@ public class SumoMain : MonoBehaviour
     [SerializeField] private GameObject playboardPrefab;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject countdownUiPrefab;
+    [SerializeField] private GameObject gameTitleCanvasPrefab;
 
     //Local Settings in case no main game is running.
     [SerializeField] private Color[] playerColors;
@@ -20,64 +22,63 @@ public class SumoMain : MonoBehaviour
 #pragma warning restore 649
 
     private const int TimeTillStart = 3;
-    private const int MinPlayerNumber = 1;
     private const int MaxPlayerNumber = 4;
 
     private BoardController boardController;
     private SumoPlayboard sumoPlayboard;
+
+    private readonly List<int> scoreList = new List<int> {-5, -3, 3, 5};
+    private readonly List<int> defeatedPlayers = new List<int>(4);
+    private readonly List<int> playersInGame = new List<int>(4);
 
     // Start is called before the first frame update
     private void Start()
     {
         GameObject playboardObject = Instantiate(playboardPrefab, transform);
         sumoPlayboard = playboardObject.GetComponent<SumoPlayboard>();
-        sumoPlayboard.MinPlayerNumber = MinPlayerNumber;
         sumoPlayboard.MaxPlayerNumber = MaxPlayerNumber;
 
         boardController = GameObject.Find("BoardController")?.GetComponent<BoardController>();
         InstantiatePlayers();
 
-        StartCoroutine(CountDownForStart(TimeTillStart));
-    }
+        var gameTitleCanvasObject = Instantiate(gameTitleCanvasPrefab);
+        MinigameTitleScreen minigameTitleScreen = gameTitleCanvasObject.GetComponentInChildren<MinigameTitleScreen>();
+        minigameTitleScreen.SetText("SUMO!!!");
+        minigameTitleScreen.FadeOut();
 
-    private void Update()
-    {
-        var players = GetComponentsInChildren<SumoPlayer>();
-        if (players.Length <= 1)
-        {
-            Debug.Log("Game finished");
-            //TODO: End the game.
-        }
+        StartCoroutine(CountDownForStart(TimeTillStart));
+
+        defeatedPlayers.Clear();
     }
 
     private void InstantiatePlayers()
     {
         int maxPlayerNumber = boardController != null ? boardController.players.Players.Count : MaxPlayerNumber;
-        for (int playerNumber = 1; playerNumber <= maxPlayerNumber; playerNumber++)
+        for (int playerIndex = 0; playerIndex < maxPlayerNumber; playerIndex++)
         {
-            InstantiatePlayer(playerNumber);
+            InstantiatePlayer(playerIndex);
         }
     }
 
-    private void InstantiatePlayer(int playerNumber)
+    private void InstantiatePlayer(int playerIndex)
     {
-        GameObject playerObject = Instantiate(playerPrefab, sumoPlayboard.GetSpawnPointForPlayer(playerNumber),
+        GameObject playerObject = Instantiate(playerPrefab, sumoPlayboard.GetSpawnPointForPlayer(playerIndex),
             Quaternion.identity, transform);
 
         SumoPlayer player = playerObject.GetComponent<SumoPlayer>();
-        player.SetPlayerNumber(playerNumber);
+        player.SetPlayerNumber(playerIndex + 1);
 
         SumoPlayerControl playerControl = playerObject.GetComponent<SumoPlayerControl>();
-        playerControl.SetPlayerNumber(playerNumber);
         playerControl.ControlPrefix = boardController != null
-            ? boardController.players.Players[playerNumber - 1].InputPrefix
-            : controlPrefixes[playerNumber - 1];
+            ? boardController.players.Players[playerIndex].InputPrefix
+            : controlPrefixes[playerIndex];
 
         SumoPlayerStyle playerStyle = playerObject.GetComponent<SumoPlayerStyle>();
         playerStyle.SetColor(boardController != null
-            ? boardController.players.Players[playerNumber - 1].Colour
-            : playerColors[playerNumber - 1]);
+            ? boardController.players.Players[playerIndex].Colour
+            : playerColors[playerIndex]);
 
+        playersInGame.Add(playerIndex + 1);
         playerControl.enabled = false;
     }
 
@@ -88,7 +89,16 @@ public class SumoMain : MonoBehaviour
         {
             var fadeoutObject = Instantiate(countdownUiPrefab);
             var countdownScript = fadeoutObject.GetComponent<Countdown>();
-            countdownScript.TextMesh.text = Math.Ceiling(currentTime).ToString();
+            var nextDigit = Math.Ceiling(currentTime);
+            if (Math.Abs(nextDigit) < 0.5)
+            {
+                countdownScript.TextMesh.text = "GO!!!";
+            }
+            else
+            {
+                countdownScript.TextMesh.text = nextDigit.ToString();
+            }
+
             countdownScript.TextMesh.color = new Color(0.6392157F, 0.5019608F, 0.3892157F, 1.0F);
 
             currentTime -= 1;
@@ -105,6 +115,39 @@ public class SumoMain : MonoBehaviour
         foreach (var player in players)
         {
             player.GetComponent<SumoPlayerControl>().enabled = true;
+        }
+    }
+
+    /// <summary>
+    /// This Method is called through the Unity messaging system every time a player is defeated. 
+    /// </summary>
+    /// <param name="playerNumber"></param>
+    private void PlayerDefeated(int playerNumber)
+    {
+        defeatedPlayers.Add(playerNumber);
+        playersInGame.Remove(playerNumber);
+
+        CheckEndGame();
+    }
+
+    private void CheckEndGame()
+    {
+        //If there is only one player left in the game, the gam is finished.
+        if (playersInGame.Count == 1)
+        {
+            defeatedPlayers.Add(playersInGame[0]);
+
+            List<Tuple<int, int>> scores = new List<Tuple<int, int>>(4);
+
+            for (int i = 0; i < defeatedPlayers.Count; i++)
+            {
+                scores.Add(new Tuple<int, int>(defeatedPlayers[i], scoreList[i]));
+            }
+            
+            defeatedPlayers.Clear();
+            playersInGame.Clear();
+            
+            //TODO: boardController.MinigameFinished(scores);
         }
     }
 }

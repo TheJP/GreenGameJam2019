@@ -49,6 +49,8 @@ MonoBehaviour:
     type: 3}
   countdownUiPrefab: {fileID: 1011137108138668, guid: 9f1d4a019c849194c8cecb71e64a5b05,
     type: 3}
+  gameTitleCanvasPrefab: {fileID: 6960778326980830941, guid: 102d86ebd9d824a4f9a53c5bbe9113a1,
+    type: 3}
   playerColors:
   - {r: 0, g: 0.019954205, b: 1, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
