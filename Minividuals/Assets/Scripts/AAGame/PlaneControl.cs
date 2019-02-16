@@ -79,23 +79,23 @@ namespace AAGame
         private void FixedUpdate()
         {
             var planeForwardVector = transform.forward;
-            var angle = -Input.GetAxis(player.InputPrefix + "Horizontal") * Time.deltaTime * 45;
+            var rollAngle = -Input.GetAxis(player.InputPrefix + "Horizontal") * Time.deltaTime * 45;
             var currentRollAngle = Vector3.SignedAngle(Vector3.up, transform.up, planeForwardVector);
             
-            currentRollAngle += angle;
+            currentRollAngle += rollAngle;
 
             if(currentRollAngle > 90)
             {
-                angle -= currentRollAngle - 90;
+                rollAngle -= currentRollAngle - 90;
             }
             else if(currentRollAngle < -90)
             {
-                angle -= currentRollAngle + 90;
+                rollAngle -= currentRollAngle + 90;
             }
 
             var pitchAngle = Input.GetAxis(player.InputPrefix + "Vertical") * Time.deltaTime * 45;
 
-            transform.Rotate(Vector3.forward, angle);
+            transform.Rotate(Vector3.forward, rollAngle);
             transform.Rotate(Vector3.up, Time.deltaTime * -currentRollAngle / 10);
             transform.Rotate(Vector3.right, pitchAngle);
 
