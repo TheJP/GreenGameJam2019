@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Board;
+using UnityEngine;
 
 namespace AAGame
 {
@@ -26,10 +27,35 @@ namespace AAGame
 #pragma warning restore 649
         
         private Rigidbody planeRigidBody;
+        private Player player;
+
+        public Player Player
+        {
+            get => player;
+            set
+            {
+                player = value;
+                UpdateColor(player.Colour);
+            }
+        }
+
+        public float FlySpeed
+        {
+            get => flySpeed;
+            set => flySpeed = value;
+        }
 
         public void Hit()
         {
             Destroy(gameObject);
+        }
+
+        private void UpdateColor(Color color)
+        {
+            foreach(var meshRenderer in GetComponentsInChildren<MeshRenderer>())
+            {
+                meshRenderer.material.color = color;
+            }
         }
 
         private void Awake()
@@ -39,18 +65,18 @@ namespace AAGame
 
         private void Update()
         {
-            if(Input.GetButtonDown("Fire1"))
+            if(Input.GetButtonDown(player.InputPrefix + "A"))
             {
                 var bomb = Instantiate(bombPrefab, bombBay.transform.position, Quaternion.identity);
                 bomb.GetComponent<Rigidbody>().velocity = planeRigidBody.velocity;
-                bomb.Color = Color.cyan;
+                bomb.Color = player.Colour;
             }
         }
 
         private void FixedUpdate()
         {
             var planeForwardVector = transform.forward;
-            var angle = -Input.GetAxis("Horizontal") * Time.deltaTime * 45;
+            var angle = -Input.GetAxis(player.InputPrefix + "Horizontal") * Time.deltaTime * 45;
             var currentRollAngle = Vector3.SignedAngle(Vector3.up, transform.up, planeForwardVector);
 //            var currentPitchAngle = Vector3.SignedAngle(Vector3.forward, planeForwardVector, transform.right);
             
@@ -67,7 +93,7 @@ namespace AAGame
             
 //            verticalMarker.transform.RotateAround(transform.position, planeForwardVector, -angle);
 
-            var pitchAngle = Input.GetAxis("Vertical") * Time.deltaTime * 45;
+            var pitchAngle = Input.GetAxis(player.InputPrefix + "Vertical") * Time.deltaTime * 45;
 
             transform.Rotate(Vector3.forward, angle);
             transform.Rotate(Vector3.up, Time.deltaTime * -currentRollAngle / 10);
