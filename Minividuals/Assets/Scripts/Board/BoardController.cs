@@ -7,6 +7,7 @@ namespace Assets.Scripts.Board
     {
         public Tiles tiles;
         public PlayerController players;
+        public Die die;
 
         private void Start()
         {
