@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Snake.unity
     guid: ff5bda47a4c3dab459b952f1f3020157
+  - enabled: 1
+    path: Assets/Scenes/Pong.unity
+    guid: 7836776eb403ca440acf1178447d53ed
   m_configObjects: {}

@@ -297,13 +297,13 @@ MonoBehaviour:
   - name: Snake
     sceneName: Snake
     icon: {fileID: 0}
-    minPerGame: 20
-    maxPerGame: 20
+    minPerGame: 10
+    maxPerGame: 10
   - name: Pong
     sceneName: Pong
     icon: {fileID: 0}
-    minPerGame: 20
-    maxPerGame: 20
+    minPerGame: 10
+    maxPerGame: 10
 --- !u!1 &345458341
 GameObject:
   m_ObjectHideFlags: 0
