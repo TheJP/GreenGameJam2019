@@ -3,6 +3,10 @@ using System.Linq;
 using Assets.Scripts.Board;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace AAGame
 {
     public class AaGameController
@@ -32,17 +36,22 @@ namespace AAGame
 
 #pragma warning restore 649
 
+        private BoardController boardController;
+        
         private PlaneControl plane;
         private GunControl[] guns;
         private LandscapeCluster[] clusters;
 
         private void Start()
         {
-            var boardController = FindObjectOfType<BoardController>();
+            Player activePlayer;
             IList<Player> players;
-            if(boardController != null)
+            
+            boardController = FindObjectOfType<BoardController>();
+            if(!ReferenceEquals(boardController, null))
             {
                 players = boardController.players.Players;
+                activePlayer = boardController.players.ActivePlayer;
             }
             else
             {
@@ -53,18 +62,26 @@ namespace AAGame
                     new Player(Color.cyan, "Player1_"),
                     new Player(Color.magenta, "Player2_")
                 };
+
+                activePlayer = players[0];
             }
 
-            var planePlayer = players[0];
-            plane = Instantiate(planePrefab, new Vector3(50, 50, -100), Quaternion.identity);
-            plane.Player = planePlayer;
-            plane.FlySpeed = 10;
-
+            var g = 0;
             guns = new GunControl[players.Count - 1];
-            for(var i = 0; i < players.Count - 1; ++i)
+            foreach(var player in players)
             {
-                guns[i] = Instantiate(gunPrefab, FindGunPosition(), Quaternion.identity);
-                guns[i].Player = players[i + 1];
+                if(player == activePlayer)
+                {
+                    plane = Instantiate(planePrefab, new Vector3(50, 50, -100), Quaternion.identity);
+                    plane.Player = player;
+                    plane.FlySpeed = 10;
+                }
+                else
+                {
+                    guns[g] = Instantiate(gunPrefab, FindGunPosition(), Quaternion.identity);
+                    guns[g].Player = player;
+                    ++g;
+                }
             }
             
             clusters = new LandscapeCluster[Random.Range(minLandscapeClusters, maxLandscapeClusters + 1)];
@@ -73,6 +90,21 @@ namespace AAGame
                 var landscapeClusterPrefab = clusterPrefabs[Random.Range(0, clusterPrefabs.Length)];
                 clusters[i] = Instantiate(landscapeClusterPrefab, FindClusterPosition(),
                     Quaternion.identity);
+            }
+        }
+
+        private void Update()
+        {
+            if(plane.IsDead || guns.All(g => g.IsTargetDestroyed))
+            {
+                if(ReferenceEquals(boardController, null))
+                {
+#if UNITY_EDITOR
+                    EditorApplication.isPlaying = false;
+#else
+                    Application.Quit();
+#endif
+                }
             }
         }
 
