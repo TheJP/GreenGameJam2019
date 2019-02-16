@@ -5,6 +5,8 @@ namespace AAGame
     public class PlaneControl
         : MonoBehaviour
     {
+#pragma warning disable 649
+        
         [SerializeField]
         [Tooltip("The speed the plane is flying forward")]
         private float flySpeed = 10;
@@ -17,6 +19,8 @@ namespace AAGame
         [Tooltip("The bomb prefab")]
         private GameObject bombPrefab;
 
+#pragma warning restore 649
+        
         private Rigidbody planeRigidBody;
 
         private void Awake()
