@@ -49,8 +49,15 @@ MonoBehaviour:
     type: 3}
   pongPlayerPrefab: {fileID: 7769553177092669907, guid: d1df09933b0178b429aadf2f869a4fc9,
     type: 3}
+  countdownUiPrefab: {fileID: 1011137108138668, guid: 9f1d4a019c849194c8cecb71e64a5b05,
+    type: 3}
   playerColors:
   - {r: 0, g: 0.030314207, b: 1, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0.00965035, g: 1, b: 0, a: 1}
   - {r: 0.9733331, g: 1, b: 0, a: 1}
+  controlPrefixes:
+  - Player1_
+  - Player2_
+  - Joystick1_
+  - Joystick2_
