@@ -7,6 +7,7 @@ namespace Assets.Scripts.Menu
     public class UiController : MonoBehaviour
     {
         private const string AButtonSuffix = "A";
+        private const string BButtonSuffix = "B";
 
         public PlayerSelector[] playerSelectors;
 
@@ -15,15 +16,21 @@ namespace Assets.Scripts.Menu
 
         private void Update()
         {
-            foreach(var prefix in playerPrefixes)
+            foreach (var prefix in playerPrefixes)
             {
                 if (Input.GetButtonDown($"{prefix}{AButtonSuffix}"))
                 {
                     var selector = playerSelectors.FirstOrDefault(s => s.IsFree);
-                    if (selector != null)
+                    var hasNoSpotYet = playerSelectors.FirstOrDefault(s => s?.Owner?.InputPrefix == prefix) == null;
+                    if (selector != null && hasNoSpotYet)
                     {
                         selector.APressed(new Board.Player(Color.green, prefix)); // TODO: Give colour
                     }
+                }
+                else if (Input.GetButtonDown($"{prefix}{BButtonSuffix}"))
+                {
+                    var spot = playerSelectors.FirstOrDefault(s => s?.Owner?.InputPrefix == prefix);
+                    if (spot != null) { spot.BPressed(); }
                 }
             }
         }
