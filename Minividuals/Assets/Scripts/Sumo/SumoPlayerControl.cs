@@ -3,7 +3,7 @@
 /// <summary>
 /// Class for the Sumo player controls.
 /// </summary>
-public class PlayerControl : MonoBehaviour
+public class SumoPlayerControl : MonoBehaviour
 {
 #pragma warning disable 649
     [SerializeField] private float speed;

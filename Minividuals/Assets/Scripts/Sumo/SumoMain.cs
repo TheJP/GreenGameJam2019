@@ -24,7 +24,7 @@ public class SumoMain : MonoBehaviour
     private void Start()
     {
         GameObject playboardObject = Instantiate(playboardPrefab, transform);
-        Playboard playboard = playboardObject.GetComponent<Playboard>();
+        SumoPlayboard playboard = playboardObject.GetComponent<SumoPlayboard>();
         playboard.MinPlayerNumber = MinPlayerNumber;
         playboard.MaxPlayerNumber = MaxPlayerNumber;
 
@@ -38,7 +38,7 @@ public class SumoMain : MonoBehaviour
 
     private void Update()
     {
-        var players = GetComponentsInChildren<Player>();
+        var players = GetComponentsInChildren<SumoPlayer>();
         if (players.Length <= 1)
         {
             Debug.Log("Game finished");
@@ -46,20 +46,20 @@ public class SumoMain : MonoBehaviour
         }
     }
 
-    private void InstantiatePlayer(Playboard playBoard, int playerNumber)
+    private void InstantiatePlayer(SumoPlayboard playBoard, int playerNumber)
     {
         GameObject playerObject = Instantiate(playerPrefab, playBoard.GetSpawnPointForPlayer(playerNumber),
             Quaternion.identity, transform);
 
-        Player player = playerObject.GetComponent<Player>();
+        SumoPlayer player = playerObject.GetComponent<SumoPlayer>();
         player.SetPlayerNumber(playerNumber);
 
-        PlayerControl playerControl = playerObject.GetComponent<PlayerControl>();
+        SumoPlayerControl playerControl = playerObject.GetComponent<SumoPlayerControl>();
         playerControl.SetPlayerNumber(playerNumber);
         playerControl.enabled = false;
 
-        PlayerStyle playerStyle = playerObject.GetComponent<PlayerStyle>();
-        playerStyle.SetColor(playerColors[playerNumber-1]);
+        SumoPlayerStyle playerStyle = playerObject.GetComponent<SumoPlayerStyle>();
+        playerStyle.SetColor(playerColors[playerNumber - 1]);
     }
 
     private IEnumerator CountDownForStart(float startTime)
@@ -81,11 +81,11 @@ public class SumoMain : MonoBehaviour
 
     private void EnableControls()
     {
-        var players = GetComponentsInChildren<Player>();
+        var players = GetComponentsInChildren<SumoPlayer>();
 
         foreach (var player in players)
         {
-            player.GetComponent<PlayerControl>().enabled = true;
+            player.GetComponent<SumoPlayerControl>().enabled = true;
         }
     }
 }

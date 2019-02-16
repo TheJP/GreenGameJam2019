@@ -3,7 +3,7 @@
 /// <summary>
 /// Responsible for controlling the look of a player.
 /// </summary>
-public class PlayerStyle : MonoBehaviour
+public class SumoPlayerStyle : MonoBehaviour
 {
     private Color playerColor;
 

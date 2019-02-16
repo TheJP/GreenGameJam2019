@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// Class to control the current play board.
 /// </summary>
-public class Playboard : MonoBehaviour
+public class SumoPlayboard : MonoBehaviour
 {
 #pragma warning disable 649
     [SerializeField] private GameObject[] spawnPoints;

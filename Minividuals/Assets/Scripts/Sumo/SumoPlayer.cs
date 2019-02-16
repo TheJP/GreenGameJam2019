@@ -3,7 +3,7 @@
 /// <summary>
 /// This class contains infos about the players state. If the player fells from the platform, he dies.
 /// </summary>
-public class Player : MonoBehaviour
+public class SumoPlayer : MonoBehaviour
 {
     private int playerNumber;
     private const int DepthToDie = -20;
