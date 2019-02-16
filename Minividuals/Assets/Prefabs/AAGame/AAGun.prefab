@@ -478,8 +478,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b94199507129e64fbe95a7b059ce393, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalCursorSpeed: 10
-  verticalCursorSpeed: 10
+  horizontalCursorSpeed: 20
+  verticalCursorSpeed: 20
   fireCooldown: 1
   cursor: {fileID: 496587076601196743}
   canon: {fileID: 496587076019234881}
