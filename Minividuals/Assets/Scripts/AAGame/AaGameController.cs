@@ -133,7 +133,8 @@ namespace AAGame
                     }
                     
                     scores.Add((plane.Player, planeScore));
-                    scores.AddRange(guns.Select(gun => (gun.Player, gun.IsTargetDestroyed ? -1 : 0)));
+                    scores.AddRange(guns.Select(gun =>
+                        (gun.Player, (gun.HasHitThePlane ? 5 : 0) + (gun.IsTargetDestroyed ? -1 : 0))));
 
                     boardController.FinishedMiniGame(scores);
                     gameFinished = true;

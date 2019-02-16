@@ -13,6 +13,8 @@ namespace AAGame
 #pragma warning restore 649
 
         private float lifetimeLeft;
+        
+        public GunControl Gun { get; set; }
 
         private void Awake()
         {
@@ -34,6 +36,7 @@ namespace AAGame
             var plane = other.gameObject.GetComponent<PlaneControl>();
             if(plane != null)
             {
+                Gun.HasHitThePlane = true;
                 plane.Hit();
             }
 

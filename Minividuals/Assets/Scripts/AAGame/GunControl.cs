@@ -24,7 +24,7 @@ namespace AAGame
         private Transform canon;
 
         [SerializeField]
-        private Transform bulletPrefab;
+        private BulletControl bulletPrefab;
 
         [SerializeField]
         private Transform bulletSpawn;
@@ -46,6 +46,8 @@ namespace AAGame
                 UpdateColors();
             }
         }
+        
+        public bool HasHitThePlane { get; set; }
 
         public bool IsTargetDestroyed => targetPlatform.IsDestroyed;
 
@@ -79,6 +81,7 @@ namespace AAGame
             {
                 var bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
                 bullet.GetComponent<Rigidbody>().AddForce(canon.forward * 100, ForceMode.Impulse);
+                bullet.Gun = this;
                 cooldown = fireCooldown;
             }
 
