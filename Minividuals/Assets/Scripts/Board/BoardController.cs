@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Board
 {
@@ -6,9 +7,14 @@ namespace Assets.Scripts.Board
     {
         public Tiles tiles;
 
-        private void Start()
-        {
-            tiles.Setup(new[] { new Player(Color.green, ""), new Player(Color.blue, ""), new Player(Color.red, ""), new Player(Color.yellow, "") });
-        }
+        // TODO: Add players by menu instead of hardcoded
+        public IList<Player> Players { get; } = new[] {
+            new Player(Color.green, "Player1"),
+            new Player(Color.blue, "Player2"),
+            new Player(Color.red, "Player3"),
+            new Player(Color.yellow, "Player4")
+        };
+
+        private void Start() => tiles.Setup(Players);
     }
 }

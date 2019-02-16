@@ -46,7 +46,7 @@ namespace Assets.Scripts.Board
             var spacing = TileCount / players.Count;
             for(int i = 0; i < players.Count; ++i)
             {
-                tiles[i * spacing].SetColour(players[i].Colour);
+                tiles[i * spacing].SetPlayerOwner(players[i]);
             }
         }
 
