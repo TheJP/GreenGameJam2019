@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
+// Steam controller button mappings: https://answers.unity.com/questions/1097208/is-it-possible-to-implement-the-steam-controller-i.html
 namespace Assets.Scripts.Menu
 {
     public class UiController : MonoBehaviour
