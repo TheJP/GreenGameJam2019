@@ -1,5 +1,3 @@
-using System.Collections;
-using Assets.Scripts.Board;
 using UnityEngine;
 
 namespace Snake
@@ -14,12 +12,22 @@ namespace Snake
 
         [SerializeField]
         private SnakeTail snakeTailPrefab;
+        
+        [SerializeField]
+        [Tooltip("The amount of seconds the tail survival time should increase per seconds")]
+        private float tailSurvivalTimeGain;
+        
+        [SerializeField]
+        [Tooltip("The amount of seconds to wait before the tail gain will start to take effect")]
+        private float tailSurvivalTimeGainWait;
 
 #pragma warning restore 649
 
         private Rigidbody snakeRigidBody;
 
         private Vector3 previousTailPosition;
+
+        private float elapsedTime;
         
         public SnakePlayer Player { get; set; }
         
@@ -37,6 +45,8 @@ namespace Snake
 
         private void Update()
         {
+            elapsedTime += Time.deltaTime;
+            
             var horizontalSpeedForce = Input.GetAxis(Player.InputPrefix + "Horizontal") * speed;
             var verticalSpeedForce = Input.GetAxis(Player.InputPrefix + "Vertical") * speed;
             
@@ -51,6 +61,12 @@ namespace Snake
                 var tail = Instantiate(snakeTailPrefab, new Vector3(position.x, 0, position.z), Quaternion.identity);
                 tail.Player = Player;
                 tail.transform.LookAt(new Vector3(transform.position.x, 0, transform.position.z));
+
+                if(elapsedTime >= tailSurvivalTimeGainWait)
+                {
+                    tail.SurvivalTime += (elapsedTime - tailSurvivalTimeGainWait) * tailSurvivalTimeGain;
+                }
+                
                 previousTailPosition = position;
             }
         }
@@ -58,13 +74,27 @@ namespace Snake
         private void OnCollisionEnter(Collision other)
         {
             var tail = other.gameObject.GetComponent<SnakeTail>();
-            if(ReferenceEquals(tail, null) || ReferenceEquals(tail.Player, Player))
+            if(!ReferenceEquals(tail, null))
+            {
+                if(ReferenceEquals(tail.Player, Player))
+                {
+                    --Player.Score;
+                }
+                else
+                {
+                    ++tail.Player.Score;
+                }
+            }
+            else if(!ReferenceEquals(other.gameObject.GetComponent<TheEvilBorder>(), null))
+            {
+                --Player.Score;
+            }
+            else
             {
                 return;
             }
-
+            
             Player.IsDead = true;
-            ++tail.Player.Score;
             Destroy(gameObject);
         }
     }

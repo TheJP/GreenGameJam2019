@@ -81,7 +81,6 @@ namespace AAGame
             var planeForwardVector = transform.forward;
             var angle = -Input.GetAxis(player.InputPrefix + "Horizontal") * Time.deltaTime * 45;
             var currentRollAngle = Vector3.SignedAngle(Vector3.up, transform.up, planeForwardVector);
-//            var currentPitchAngle = Vector3.SignedAngle(Vector3.forward, planeForwardVector, transform.right);
             
             currentRollAngle += angle;
 
@@ -93,8 +92,6 @@ namespace AAGame
             {
                 angle -= currentRollAngle + 90;
             }
-            
-//            verticalMarker.transform.RotateAround(transform.position, planeForwardVector, -angle);
 
             var pitchAngle = Input.GetAxis(player.InputPrefix + "Vertical") * Time.deltaTime * 45;
 

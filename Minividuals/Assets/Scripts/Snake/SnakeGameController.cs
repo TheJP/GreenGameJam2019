@@ -65,6 +65,12 @@ namespace Snake
 
             if(!ReferenceEquals(boardController, null))
             {
+                var scoreGain = 0;
+                foreach(var snakePlayer in snakePlayers.OrderBy(p => p.TimeOfDeath))
+                {
+                    snakePlayer.Score += scoreGain++;
+                }
+                
                 boardController.FinishedMiniGame(snakePlayers.Select(s => (s.Player, s.Score)));
             }
             else
@@ -72,7 +78,7 @@ namespace Snake
 #if UNITY_EDITOR
                 EditorApplication.isPlaying = false;
 #else
-                    Application.Quit();
+                Application.Quit();
 #endif
             }
 

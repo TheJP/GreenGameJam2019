@@ -78,6 +78,8 @@ MonoBehaviour:
   speed: 7
   snakeTailPrefab: {fileID: 47441608666532030, guid: 9e5dc677003eae348af198423d152839,
     type: 3}
+  tailSurvivalTimeGain: 0.05
+  tailSurvivalTimeGainWait: 60
 --- !u!1 &5138955316151105286
 GameObject:
   m_ObjectHideFlags: 0
