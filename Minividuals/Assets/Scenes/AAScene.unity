@@ -303,6 +303,36 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 10, y: 20, z: 20}
+--- !u!1 &1335163466
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1335163467}
+  m_Layer: 0
+  m_Name: CountdownLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1335163467
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1335163466}
+  m_LocalRotation: {x: 0, y: -0.38268343, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 140, y: 55, z: -140}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
 --- !u!1 &1617264810
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,3 +436,7 @@ MonoBehaviour:
   - {fileID: 1072686376160666213, guid: 8ced2a78969f9e64da001925ccb80712, type: 3}
   maxLandscapeClusters: 10
   minLandscapeClusters: 4
+  maxGameTime: 120
+  countdownPrefab: {fileID: 114141913701440386, guid: 9f1d4a019c849194c8cecb71e64a5b05,
+    type: 3}
+  countdownLocation: {fileID: 1335163467}

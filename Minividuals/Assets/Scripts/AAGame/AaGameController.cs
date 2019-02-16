@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Board;
@@ -34,6 +35,16 @@ namespace AAGame
         [Tooltip("The minimum of landscape clusters that will be generated")]
         private int minLandscapeClusters;
 
+        [SerializeField]
+        [Tooltip("The maximum time a game should take before it is aborted in seconds")]
+        private int maxGameTime;
+
+        [SerializeField]
+        private Countdown countdownPrefab;
+        
+        [SerializeField]
+        private Transform countdownLocation;
+
 #pragma warning restore 649
 
         private BoardController boardController;
@@ -43,6 +54,8 @@ namespace AAGame
         private LandscapeCluster[] clusters;
 
         private bool gameFinished;
+        private float gameTime;
+        private IEnumerator countdownCoroutine;
 
         private void Start()
         {
@@ -103,7 +116,17 @@ namespace AAGame
             {
                 return;
             }
-            
+
+            if(countdownCoroutine == null)
+            {
+                gameTime += Time.deltaTime;
+
+                if(maxGameTime - gameTime <= 10)
+                {
+                    StartCoroutine(countdownCoroutine = StartCountdown());
+                }
+            }
+
             if(plane.IsDead || guns.All(g => g.IsTargetDestroyed))
             {
                 if(ReferenceEquals(boardController, null))
@@ -138,6 +161,7 @@ namespace AAGame
 
                     boardController.FinishedMiniGame(scores);
                     gameFinished = true;
+                    StopCoroutine(countdownCoroutine);
                 }
             }
         }
@@ -177,6 +201,18 @@ namespace AAGame
             
             Debug.Log("Couldn't find valid cluster position!");
             return Vector3.zero;
+        }
+
+        private IEnumerator StartCountdown()
+        {
+            for(var i = 10; i > 0; --i)
+            {
+                var countdown = Instantiate(countdownPrefab, countdownLocation);
+                countdown.TextMesh.text = $"{i:00}";
+                yield return new WaitForSeconds(1);
+            }
+            
+            plane.Hit();
         }
     }
 }
