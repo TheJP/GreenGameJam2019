@@ -154,3 +154,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLifetime: 2
+  explosionPrefab: {fileID: 2910381440284151060, guid: 117015b3ea50e0f42991d8301bf50db4,
+    type: 3}

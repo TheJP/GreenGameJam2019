@@ -9,6 +9,9 @@ namespace AAGame
 
         [SerializeField]
         private float maxLifetime;
+        
+        [SerializeField]
+        private GameObject explosionPrefab;
 
 #pragma warning restore 649
 
@@ -27,6 +30,7 @@ namespace AAGame
 
             if(lifetimeLeft <= 0)
             {
+                Destroy(Instantiate(explosionPrefab, transform.position, Quaternion.identity), 1.0f);
                 Destroy(gameObject);
             }
         }
