@@ -32,7 +32,9 @@ namespace Assets.Scripts.Board
 
                 die.HideDie();
 
-                // TODO: Reveal map and start minigame
+                yield return players.ActivePlayer.Location.HideCloudsCoroutine();
+
+                // TODO: Start minigame
 
                 players.NextPlayer();
             }
@@ -46,6 +48,7 @@ namespace Assets.Scripts.Board
                 var target = steps < 0 ? tiles.TileBefore(player.Location) : tiles.TileAfter(player.Location);
                 player.Location = target;
                 yield return player.MoveToPlayerLocation();
+                yield return new WaitForSeconds(0.1f);
                 steps -= System.Math.Sign(steps);
             }
         }

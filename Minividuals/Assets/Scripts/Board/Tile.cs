@@ -38,12 +38,10 @@ namespace Assets.Scripts.Board
         {
             Owner = owner;
             colourRenderer.material = new Material(colourRenderer.material) { color = owner.Colour };
-            HideClouds();
+            StartCoroutine(HideCloudsCoroutine());
         }
 
-        public void HideClouds() => StartCoroutine(HideCloudsCoroutine());
-
-        private IEnumerator HideCloudsCoroutine()
+        public IEnumerator HideCloudsCoroutine()
         {
             if (clouds.Length <= 0) { yield break; }
 
