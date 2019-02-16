@@ -28,6 +28,9 @@ namespace AAGame
         
         private Rigidbody planeRigidBody;
         private Player player;
+        
+        public Vector3 MaxFence { get; set; }
+        public Vector3 MinFence { get; set; }
 
         public Player Player
         {
@@ -80,7 +83,38 @@ namespace AAGame
         {
             var planeTransform = transform;
             var currentPosition = planeTransform.position;
+
+            var translateX = 0.0f;
+            if(currentPosition.x < MinFence.x)
+            {
+                translateX = MaxFence.x - MinFence.x;
+            }
+            else if(currentPosition.x > MaxFence.x)
+            {
+                translateX = MinFence.x - MaxFence.x;
+            }
+
+            var translateZ = 0.0f;
+            if(currentPosition.z < MinFence.z)
+            {
+                translateZ = MaxFence.z - MinFence.z;
+            }
+            else if(currentPosition.z > MaxFence.z)
+            {
+                translateZ = MinFence.z - MaxFence.z;
+            }
+
+            var translateY = 0.0f;
+            if(currentPosition.y < MinFence.y)
+            {
+                Hit();
+            }
+            else if(currentPosition.y > MaxFence.y)
+            {
+                translateY = MaxFence.y - currentPosition.y;
+            }
             
+            planeTransform.Translate(translateX, translateY, translateZ, Space.World);
             
             var planeForwardVector = planeTransform.forward;
             var rollAngle = -Input.GetAxis(player.InputPrefix + "Horizontal") * Time.deltaTime * 45;

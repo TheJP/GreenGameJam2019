@@ -77,6 +77,8 @@ namespace AAGame
                     plane = Instantiate(planePrefab, new Vector3(50, 50, -100), Quaternion.identity);
                     plane.Player = player;
                     plane.FlySpeed = 10;
+                    plane.MinFence = new Vector3(-50, 0, -130);
+                    plane.MaxFence = new Vector3(130, 50, 20);
                 }
                 else
                 {
