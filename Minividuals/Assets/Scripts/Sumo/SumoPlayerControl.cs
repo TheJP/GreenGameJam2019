@@ -12,7 +12,7 @@ public class SumoPlayerControl : MonoBehaviour
 
     public string ControlPrefix { private get; set; }
     private Rigidbody playerRigidbody;
-    private float timeSinceLastBoost = 0;
+    private float timeSinceLastBoost;
 
     private void Start()
     {
