@@ -78,9 +78,13 @@ namespace AAGame
 
         private void FixedUpdate()
         {
-            var planeForwardVector = transform.forward;
+            var planeTransform = transform;
+            var currentPosition = planeTransform.position;
+            
+            
+            var planeForwardVector = planeTransform.forward;
             var rollAngle = -Input.GetAxis(player.InputPrefix + "Horizontal") * Time.deltaTime * 45;
-            var currentRollAngle = Vector3.SignedAngle(Vector3.up, transform.up, planeForwardVector);
+            var currentRollAngle = Vector3.SignedAngle(Vector3.up, planeTransform.up, planeForwardVector);
             
             currentRollAngle += rollAngle;
 
@@ -95,14 +99,15 @@ namespace AAGame
 
             var pitchAngle = Input.GetAxis(player.InputPrefix + "Vertical") * Time.deltaTime * 45;
 
-            transform.Rotate(Vector3.forward, rollAngle);
-            transform.Rotate(Vector3.up, Time.deltaTime * -currentRollAngle / 10);
-            transform.Rotate(Vector3.right, pitchAngle);
+            planeTransform.Rotate(Vector3.forward, rollAngle);
+            planeTransform.Rotate(Vector3.up, Time.deltaTime * -currentRollAngle / 10);
+            planeTransform.Rotate(Vector3.right, pitchAngle);
 
             planeRigidBody.velocity = planeForwardVector * flySpeed;
             
             verticalMarker.transform.rotation = Quaternion.identity;
-            verticalMarker.transform.position = new Vector3(transform.position.x, transform.position.y - 100, transform.position.z);
+            verticalMarker.transform.position = new Vector3(planeTransform.position.x, currentPosition.y - 100,
+                currentPosition.z);
         }
     }
 }
