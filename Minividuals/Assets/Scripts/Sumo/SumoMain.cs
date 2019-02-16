@@ -12,6 +12,8 @@ public class SumoMain : MonoBehaviour
     [SerializeField] private GameObject playboardPrefab;
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject countdownUiPrefab;
+
+    [SerializeField] private Color[] playerColors;
 #pragma warning restore 649
 
     private const int TimeTillStart = 3;
@@ -57,7 +59,7 @@ public class SumoMain : MonoBehaviour
         playerControl.enabled = false;
 
         PlayerStyle playerStyle = playerObject.GetComponent<PlayerStyle>();
-        playerStyle.SetColor(playBoard.GetColorForPlayer(playerNumber));
+        playerStyle.SetColor(playerColors[playerNumber-1]);
     }
 
     private IEnumerator CountDownForStart(float startTime)

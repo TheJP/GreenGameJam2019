@@ -8,7 +8,6 @@ public class Playboard : MonoBehaviour
 {
 #pragma warning disable 649
     [SerializeField] private GameObject[] spawnPoints;
-    [SerializeField] private Color[] playerColors;
 #pragma warning restore 649
 
     public int MinPlayerNumber { private get; set; }
@@ -40,10 +39,5 @@ public class Playboard : MonoBehaviour
                 "Returning zero vector");
             throw new ArgumentOutOfRangeException();
         }
-    }
-
-    public Color GetColorForPlayer(int playerNumber)
-    {
-        return playerColors[playerNumber - 1];
     }
 }
