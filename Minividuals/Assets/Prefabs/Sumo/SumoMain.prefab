@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01ad4edeabc3cb54888602cd6c1aaa1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playboardPrefab: {fileID: 1062662698563298071, guid: 0b0dc33ed6f4105499a8e3e0c10060bd,
+  playboardPrefab: {fileID: 3896906844574982793, guid: 96a10c6b9bf06e84d9406491aa91a36d,
     type: 3}
   playerPrefab: {fileID: 3526581186451703583, guid: 96d4b0ff4e99ff9449180db17fea0e58,
     type: 3}
