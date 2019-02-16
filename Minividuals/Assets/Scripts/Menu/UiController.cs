@@ -23,6 +23,9 @@ namespace Assets.Scripts.Menu
         [Tooltip("Data carrier that is used get data from menu to main scene")]
         public GameStart gameStart;
 
+        public GameObject bHint;
+        public GameObject yHint;
+
         private Color NextFreeColour(int index)
         {
             int i = 0;
@@ -83,6 +86,11 @@ namespace Assets.Scripts.Menu
                     }
                 }
             }
+
+            // Show or hide hints
+            var visible = playerSelectors.Any(s => s.Owner != null);
+            bHint.SetActive(visible);
+            yHint.SetActive(visible);
         }
 
         // Find button mappings
