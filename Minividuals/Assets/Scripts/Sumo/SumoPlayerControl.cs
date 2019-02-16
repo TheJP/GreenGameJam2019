@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class PlayerControls : MonoBehaviour
+/// <summary>
+/// Class for the Sumo player controls.
+/// </summary>
+public class SumoPlayerControl : MonoBehaviour
 {
 #pragma warning disable 649
     [SerializeField] private float speed;
@@ -16,8 +19,8 @@ public class PlayerControls : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxis($"Horizontal_{playerNumber}");
-        float moveVertical = Input.GetAxis($"Vertical_{playerNumber}");
+        float moveHorizontal = Input.GetAxis($"Player{playerNumber}_Horizontal");
+        float moveVertical = Input.GetAxis($"Player{playerNumber}_Vertical");
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 
@@ -26,6 +29,7 @@ public class PlayerControls : MonoBehaviour
 
     public void SetPlayerNumber(int playerNumber)
     {
+        //TODO: Check if player number is in Range of MinPlayerNumber and MaxPlayerNumber, which has also have to been Set First.
         this.playerNumber = playerNumber;
     }
 }

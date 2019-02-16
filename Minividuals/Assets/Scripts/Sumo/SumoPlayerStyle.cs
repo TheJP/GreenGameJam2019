@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public class PlayerStyle : MonoBehaviour
+/// <summary>
+/// Responsible for controlling the look of a player.
+/// </summary>
+public class SumoPlayerStyle : MonoBehaviour
 {
     private Color playerColor;
 
