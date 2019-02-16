@@ -10,6 +10,7 @@ public class SumoPlayerControl : MonoBehaviour
     [SerializeField] private int playerNumber;
 #pragma warning restore 649
 
+    public string ControlPrefix { get; set; }
     private Rigidbody playerRigidbody;
 
     private void Start()
@@ -19,8 +20,8 @@ public class SumoPlayerControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxis($"Player{playerNumber}_Horizontal");
-        float moveVertical = Input.GetAxis($"Player{playerNumber}_Vertical");
+        float moveHorizontal = Input.GetAxis($"{ControlPrefix}Horizontal");
+        float moveVertical = Input.GetAxis($"{ControlPrefix}Vertical");
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
 

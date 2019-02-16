@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Assets.Scripts.Board;
 using UnityEngine;
 
 /// <summary>
@@ -13,25 +14,28 @@ public class SumoMain : MonoBehaviour
     [SerializeField] private GameObject playerPrefab;
     [SerializeField] private GameObject countdownUiPrefab;
 
+    //Local Settings in case no main game is running.
     [SerializeField] private Color[] playerColors;
+    [SerializeField] private String[] controlPrefixes;
 #pragma warning restore 649
 
     private const int TimeTillStart = 3;
     private const int MinPlayerNumber = 1;
     private const int MaxPlayerNumber = 4;
 
+    private BoardController boardController;
+    private SumoPlayboard sumoPlayboard;
+
     // Start is called before the first frame update
     private void Start()
     {
         GameObject playboardObject = Instantiate(playboardPrefab, transform);
-        SumoPlayboard playboard = playboardObject.GetComponent<SumoPlayboard>();
-        playboard.MinPlayerNumber = MinPlayerNumber;
-        playboard.MaxPlayerNumber = MaxPlayerNumber;
+        sumoPlayboard = playboardObject.GetComponent<SumoPlayboard>();
+        sumoPlayboard.MinPlayerNumber = MinPlayerNumber;
+        sumoPlayboard.MaxPlayerNumber = MaxPlayerNumber;
 
-        for (int playerNumber = MinPlayerNumber; playerNumber <= MaxPlayerNumber; playerNumber++)
-        {
-            InstantiatePlayer(playboard, playerNumber);
-        }
+        boardController = GameObject.Find("BoardController")?.GetComponent<BoardController>();
+        InstantiatePlayers();
 
         StartCoroutine(CountDownForStart(TimeTillStart));
     }
@@ -46,9 +50,18 @@ public class SumoMain : MonoBehaviour
         }
     }
 
-    private void InstantiatePlayer(SumoPlayboard playBoard, int playerNumber)
+    private void InstantiatePlayers()
     {
-        GameObject playerObject = Instantiate(playerPrefab, playBoard.GetSpawnPointForPlayer(playerNumber),
+        int maxPlayerNumber = boardController != null ? boardController.players.Players.Count : MaxPlayerNumber;
+        for (int playerNumber = 1; playerNumber <= maxPlayerNumber; playerNumber++)
+        {
+            InstantiatePlayer(playerNumber);
+        }
+    }
+
+    private void InstantiatePlayer(int playerNumber)
+    {
+        GameObject playerObject = Instantiate(playerPrefab, sumoPlayboard.GetSpawnPointForPlayer(playerNumber),
             Quaternion.identity, transform);
 
         SumoPlayer player = playerObject.GetComponent<SumoPlayer>();
@@ -56,10 +69,16 @@ public class SumoMain : MonoBehaviour
 
         SumoPlayerControl playerControl = playerObject.GetComponent<SumoPlayerControl>();
         playerControl.SetPlayerNumber(playerNumber);
-        playerControl.enabled = false;
+        playerControl.ControlPrefix = boardController != null
+            ? boardController.players.Players[playerNumber].InputPrefix
+            : controlPrefixes[playerNumber - 1];
 
         SumoPlayerStyle playerStyle = playerObject.GetComponent<SumoPlayerStyle>();
-        playerStyle.SetColor(playerColors[playerNumber - 1]);
+        playerStyle.SetColor(boardController != null
+            ? boardController.players.Players[playerNumber].Colour
+            : playerColors[playerNumber - 1]);
+
+        playerControl.enabled = false;
     }
 
     private IEnumerator CountDownForStart(float startTime)

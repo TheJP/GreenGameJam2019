@@ -54,3 +54,8 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0, g: 1, b: 0.0022239685, a: 1}
   - {r: 0.92080235, g: 1, b: 0, a: 1}
+  controlPrefixes:
+  - Player1_
+  - Player2_
+  - Joystick1_
+  - Joystick2_
