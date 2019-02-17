@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Board;
 using UnityEngine;
 
@@ -23,11 +24,12 @@ public class PongMain : MonoBehaviour
 #pragma warning restore 649
 
     private const int TimeTillStart = 3;
-    private const int MaxPlayerNumber = 2;
+    private const int MaxPlayerNumber = 3;
 
     private PongPlayboard pongPlayboard;
     private BoardController boardController;
-    private Dictionary<int, int> scores = new Dictionary<int, int>(4);
+    private int[] scores;
+    private readonly List<int> scoreList = new List<int> {5, 3, -3, -5};
 
     private float timeSinceLastBall;
     private const float ballRespawnTime = 20;
@@ -62,34 +64,13 @@ public class PongMain : MonoBehaviour
             timeSinceLastBall = 0;
         }
 
-        if (gameTime <= 0)
-        {
-            gameTime = 999;
-            if (boardController != null)
-            {
-                List<(Player player, int steps)> endScores = new List<(Player player, int steps)>(4);
-                foreach (var player in scores.Keys)
-                {
-                    scores.TryGetValue(player, out var score);
-                    endScores.Add((boardController.players.Players[player - 1], score));
-                }
-
-                boardController.FinishedMiniGame(endScores);
-            }
-            else
-            {
-                foreach (var player in scores.Keys)
-                {
-                    scores.TryGetValue(player, out var score);
-                    Debug.Log($"Score of player {player} is: {score}");
-                }
-            }
-        }
+        CheckGameOver();
     }
 
     private void InstantiatePlayers()
     {
         int maxPlayerNumber = boardController != null ? boardController.players.Players.Count : MaxPlayerNumber;
+        scores = new int[maxPlayerNumber];
 
         if (maxPlayerNumber == 1)
         {
@@ -198,17 +179,45 @@ public class PongMain : MonoBehaviour
 //        Debug.Log("PongBallDestroyed called with lastTouchedPlayer: " + lastTouchedPlayer);
         if (lastTouchedPlayer != -1)
         {
-            if (scores.TryGetValue(lastTouchedPlayer, out var currentScore))
-            {
-                scores.Remove(lastTouchedPlayer);
-                scores.Add(lastTouchedPlayer, ++currentScore);
-            }
-            else
-            {
-                scores.Add(lastTouchedPlayer, 1);
-            }
+            scores[lastTouchedPlayer - 1]++;
         }
 
         ReleaseBall();
+    }
+
+    private void CheckGameOver()
+    {
+        if (gameTime <= 0)
+        {
+            gameTime = 999;
+
+            if (boardController != null)
+            {
+                var endScores = new List<(Player player, int steps)>(4);
+
+
+                var scoresList = scores.ToList();
+                var sortedByScores = scoresList
+                    .Select((x, i) => new KeyValuePair<int, int>(x, i))
+                    .OrderBy(x => x.Key)
+                    .Reverse()
+                    .ToList();
+                var ranks = sortedByScores.Select(x => x.Value).ToList();
+
+                for (int index = 0; index < scores.Length; index++)
+                {
+                    endScores.Add((boardController.players.Players[ranks[index]], scoreList[index]));
+                }
+
+                boardController.FinishedMiniGame(endScores);
+            }
+            else
+            {
+                for (int index = 0; index < scores.Length; index++)
+                {
+                    Debug.Log($"Score of player {index + 1} is: {scores[index]}");
+                }
+            }
+        }
     }
 }

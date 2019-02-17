@@ -43,9 +43,6 @@ public class PongBallMovement : MonoBehaviour
             SendMessageUpwards("PongBallDestroyed", LastTouchedByPlayer);
             Destroy(gameObject);
         }
-
-        currentSpeed += Time.deltaTime;
-        currentSpeed = Math.Min(currentSpeed, maxSpeed);
     }
 
     public void ChangeVerticalDirection()
@@ -63,5 +60,11 @@ public class PongBallMovement : MonoBehaviour
     public void ChangeColor(Color color)
     {
         GetComponent<Renderer>().material.color = color;
+    }
+
+    public void IncreaseSpeed()
+    {
+        currentSpeed += 0.5F;
+        currentSpeed = Math.Min(currentSpeed, maxSpeed);
     }
 }
