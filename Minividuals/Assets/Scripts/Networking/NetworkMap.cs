@@ -22,15 +22,14 @@ namespace Networking
 
         private NetworkTile[,] tiles;
         private (NetworkLine top, NetworkLine left)[,] lines;
-        
-        public Vector3 TopLeft { get; private set; }
+
+        public Vector3 TopLeft => new Vector3(-Width / 2.0f, Height / 2.0f, 0);
         public Vector3 BottomLeft => TopLeft + Vector3.down * Height;
         public Vector3 TopRight => TopLeft + Vector3.right * Width;
         public Vector3 BottomRight => BottomLeft + Vector3.right * Width;
 
         private void Start()
         {
-            TopLeft = new Vector3(-Width / 2.0f, Height / 2.0f, 0);
             var startPos = TopLeft + Vector3.down / 2 + Vector3.right / 2;
 
             tiles = new NetworkTile[Height, Width];
