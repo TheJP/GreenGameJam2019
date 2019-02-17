@@ -30,6 +30,7 @@ namespace Snake
         public SnakePlayer(Player player)
         {
             Player = player;
+            TimeOfDeath = Single.MaxValue;
         }
     }
 }
