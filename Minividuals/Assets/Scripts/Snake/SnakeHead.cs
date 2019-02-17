@@ -57,7 +57,7 @@ namespace Snake
             Debug.DrawRay(transform.position, -direction * 10);
             if(direction.magnitude > 2)
             {
-                var position = transform.position + -direction.normalized * 1.2f;
+                var position = transform.position + -direction.normalized * 1.3f;
                 var tail = Instantiate(snakeTailPrefab, new Vector3(position.x, 0, position.z), Quaternion.identity);
                 tail.Player = Player;
                 tail.transform.LookAt(new Vector3(transform.position.x, 0, transform.position.z));
