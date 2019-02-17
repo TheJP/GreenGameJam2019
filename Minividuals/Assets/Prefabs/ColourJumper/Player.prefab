@@ -49,8 +49,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   colourRenderer: {fileID: 1825925364454667742}
-  acceleration: 100
-  maxVelocity: {x: 5, y: 50}
+  acceleration: 50
+  deacceleration: 4
+  maxVelocity: {x: 7, y: 50}
   jumpForce: 8
 --- !u!50 &1825925363401610914
 Rigidbody2D:

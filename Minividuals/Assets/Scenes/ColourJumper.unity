@@ -394,8 +394,9 @@ MonoBehaviour:
   displayText: {fileID: 740801254}
   colourShuffleTime: 3
   shuffleWait: 0.2
-  initialRoundTime: 8
+  initialRoundTime: 15
   roundTimeCutoff: 2
+  playerScores: 0500000003000000fffffffffdffffff
 --- !u!1 &225437757
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,6 +13,9 @@ namespace Assets.Scripts.ColourJumper
         [Tooltip("Acceleration of player")]
         public float acceleration = 1f;
 
+        [Tooltip("Breaking acceleration of player")]
+        public float deacceleration = 1f;
+
         [Tooltip("Maximal speed in distance per second")]
         public Vector2 maxVelocity = new Vector2(20f, 20f);
 
@@ -50,8 +53,16 @@ namespace Assets.Scripts.ColourJumper
         private void FixedUpdate()
         {
             var velocity = rigidbody2d.velocity;
+            
             var xMovement = Input.GetAxis($"{Player.InputPrefix}{InputSuffix.Horizontal}");
-            velocity += (Vector2.right * xMovement) * (acceleration * Time.deltaTime);
+            if (Mathf.Abs(xMovement) < 0.001)
+            {
+                var breakVelocity = Mathf.Max(0f, (Mathf.Abs(velocity.x) * deacceleration * Time.deltaTime));
+                if (Mathf.Abs(velocity.x) < Mathf.Abs(breakVelocity)) { velocity.x = 0f; }
+                else { velocity += (Vector2.left * Mathf.Sign(velocity.x)) * breakVelocity; }
+            }
+            else { velocity += (Vector2.right * xMovement) * (acceleration * Time.deltaTime); }
+
             velocity.x = Mathf.Clamp(velocity.x, -maxVelocity.x, maxVelocity.x);
             velocity.y = Mathf.Clamp(velocity.y, -maxVelocity.y, maxVelocity.y);
 

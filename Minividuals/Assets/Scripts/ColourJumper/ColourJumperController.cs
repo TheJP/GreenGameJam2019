@@ -128,7 +128,7 @@ namespace Assets.Scripts.ColourJumper
 
                 // Let players search colours
                 yield return LetPlayersPlay(roundTime);
-                roundTime = Mathf.Min(1f, roundTime - roundTimeCutoff);
+                roundTime = Mathf.Max(1f, roundTime - roundTimeCutoff);
 
                 // Remove players that lost
                 RemoveLoosers();
