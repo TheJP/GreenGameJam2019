@@ -37,7 +37,7 @@ namespace MelodyMemory
 
         public String AudioSourceName
         {
-            get { return $"flute-{name.ToString()}{NotesUtils.OctaveToString(oct)}_short" ; }
+            get { return $"flute-{name.ToString()}{NotesUtils.OctaveToString(oct)}_1sec" ; }
         }
     
         public override string ToString()

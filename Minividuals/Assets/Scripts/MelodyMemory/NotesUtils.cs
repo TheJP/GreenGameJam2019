@@ -41,8 +41,8 @@ namespace MelodyMemory
             noteTable.Add(12, new Note(Octave.O5, NoteName.A));
             noteTable.Add(13, new Note(Octave.O5, NoteName.H));
     
-            // first note of third octave - would be nice...
-            // mixTable.Add(14, new Note(Octave.O6, NoteName.C));
+            // first note of third octave - gives nicer melodies...
+            noteTable.Add(14, new Note(Octave.O6, NoteName.C));
     
         }
 

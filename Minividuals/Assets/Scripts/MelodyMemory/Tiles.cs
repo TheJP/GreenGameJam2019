@@ -110,13 +110,13 @@ namespace MelodyMemory
 
         private void UpdateTilesFromRiddle(Riddle riddle)
         {
-            for (int i = 0; i < tileCount; ++i)
+            for (int i = 0; i < tileCount; i++)
             {
                 NoteWithPosition note = riddle.GetNoteAtPosition(i);
                 if (note != null)
                 {
                     Debug.Log($"position {i}: note is {note}");
-                    tiles[i].setNote(note);
+                    tiles[i].SetNote(note);                    
                 }
             }
         }

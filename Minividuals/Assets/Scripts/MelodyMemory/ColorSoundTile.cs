@@ -17,7 +17,7 @@ namespace MelodyMemory
         [Tooltip("Color for tiles that are inactive")]
         [SerializeField] private Color defaultColor;
 
-        [Tooltip("Default soundclip, maybe not used")]
+        [Tooltip("Default soundclip, will by dynamically replaced")]
         [SerializeField] private AudioSource sound;
 #pragma warning restore 649
 
@@ -32,18 +32,32 @@ namespace MelodyMemory
         private void Start()
         {
             myName = GetComponent<Renderer>().name;
+
+            sound = GetComponent<AudioSource>();
             
             SetColor(defaultColor);
         }
 
-        public void setNote(NoteWithPosition noteWPos)
-        {
-            this.note = noteWPos.Note;
+        public void SetNote(NoteWithPosition noteWPos)
+        {            
+            if (noteWPos == null)
+            {
+                sound.clip = null;
+            }
+            else
+            {
+                note = noteWPos.Note;
 
-            AudioClip clip = null;
-            // AudioClip clip = load AudioSource from note.AudioSourceName
-            if (clip != null)
-                sound.clip = clip;
+                Debug.Log($"old clip is {sound.clip}");
+                String audioPath = $"Sounds/MelodyMemory/{note.AudioSourceName}";
+
+                AudioClip newClip = (AudioClip)Resources.Load(audioPath, typeof(AudioClip));
+                // AudioClip newClip = Resources.Load<AudioClip>(audioPath);
+                
+                Debug.Log((newClip == null) ? "newClip is null" : $"newClip is {newClip}");
+                sound.clip = newClip;
+            }
+
             
         }
 
@@ -92,7 +106,7 @@ namespace MelodyMemory
             SetColor(note.Color);
 
             // TODO enable sound again
-            // sound.Play();
+            sound.Play();
             yield return new WaitForSeconds(1.0f);
 
             ResetColor();
