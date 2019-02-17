@@ -25,23 +25,48 @@ namespace Networking
 
         private NetworkMap map;
 
-        private IList<Player> players;
+        private IList<NetworkPlayer> players;
+
+        private BoardController boardController;
         
         private void Start()
         {
             map = Instantiate(mapPrefab);
             map.Width = width;
             map.Height = height;
+            
+            boardController = FindObjectOfType<BoardController>();
 
-            players = new[]
+            IList<Player> boardPlayers;
+            if(ReferenceEquals(boardController, null))
             {
-                new Player(Color.green, "Joystick1_")
+                boardPlayers = new[]
+                {
+                    new Player(Color.green, "Joystick1_")
+                };
+            }
+            else
+            {
+                boardPlayers = boardController.players.Players;
+            }
+
+            var startPositions = new (Vector3 pos, Vector3 dir)[]
+            {
+                (map.TopLeft, Vector3.right),
+                (map.BottomRight, Vector3.left),
+                (map.BottomLeft, Vector3.right),
+                (map.TopRight, Vector3.left)
             };
 
-            var player = Instantiate(playerPrefab, map.TopLeft, Quaternion.identity);
-            player.Player = players[0];
-            player.NetworkMap = map;
-            player.Direction = Vector3.right;
+            players = new NetworkPlayer[4];
+            
+            for(var i = 0; i < boardPlayers.Count; ++i)
+            {
+                var player = Instantiate(playerPrefab, startPositions[i].pos, Quaternion.identity);
+                player.Player = boardPlayers[i];
+                player.NetworkMap = map;
+                player.Direction = startPositions[i].dir;
+            }
         }
     }
 }
