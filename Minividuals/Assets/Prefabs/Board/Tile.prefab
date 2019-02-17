@@ -68,7 +68,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -2
-  m_Sprite: {fileID: 21300000, guid: 31da83db40e427c49b973975304b95b9, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &2552248727704987466
@@ -223,7 +223,7 @@ MonoBehaviour:
   - {fileID: 7180604806706562642}
   - {fileID: 4317717792209541608}
   - {fileID: 8137269134279957080}
-  icon: {fileID: 0}
+  iconRenderer: {fileID: 2919226459480291388}
   cloudFadeOutDuration: 2
   cloudFadeOutDistance: 0.75
 --- !u!1 &5513176164648919168

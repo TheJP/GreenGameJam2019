@@ -13,7 +13,7 @@ namespace Assets.Scripts.Board
         public SpriteRenderer[] clouds;
 
         [Tooltip("Icon for the minigame on the tile")]
-        public SpriteRenderer icon;
+        public SpriteRenderer iconRenderer;
 
         [Tooltip("Time in seconds until clouds disappear")]
         public float cloudFadeOutDuration = 3f;
@@ -49,7 +49,7 @@ namespace Assets.Scripts.Board
         {
             Debug.Assert(Owner == null && MiniGame == null);
             MiniGame = miniGame;
-            Debug.Log($"minigame {miniGame.name} set to tile {name}");
+            iconRenderer.sprite = miniGame.icon;
         }
 
         public IEnumerator HideCloudsCoroutine()
