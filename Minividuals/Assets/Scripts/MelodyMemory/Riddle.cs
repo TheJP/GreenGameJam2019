@@ -122,14 +122,13 @@ namespace MelodyMemory
             if (heardNote.Equals(expectedNote))
             {
                 waitingForPosition++;
-                Debug.Log($"correctly heard note {heardNote}, this is number {waitingForPosition} of melody");
+                Debug.Log($"correctly heard note {heardNote}, number {waitingForPosition} of melody");
             }
             else
             {
-                Debug.Log($"that was a wrong note {heardNote}, resetting expected position to 0");
+                Debug.Log($"that was a wrong note {heardNote}, resetting expected pos to 0");
                 waitingForPosition = 0;
             }
-
             return (waitingForPosition == length);
         }
         

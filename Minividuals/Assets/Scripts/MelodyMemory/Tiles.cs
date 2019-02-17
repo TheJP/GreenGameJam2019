@@ -12,6 +12,7 @@ namespace MelodyMemory
         private const int width = 8;
         private const int height = 4;
         public const int tileCount = width * height;
+        // scaling and positions see Start()
 
 #pragma warning disable 649
         [Tooltip("Prefab for creating tiles")] [SerializeField]
@@ -49,6 +50,9 @@ namespace MelodyMemory
             SetListening(false);
 
             UpdateTilePositions();
+            tilesParent.localScale += new Vector3(0.5f, 0.5f, 0);
+            tilesParent.position += (1.0f * Vector3.right - 1.0f * Vector3.up - 0.4f * Vector3.forward);
+
         }
 
 
@@ -100,7 +104,6 @@ namespace MelodyMemory
         public void AddAndPlayRiddle(Riddle riddle)
         {
             this.riddle = riddle;
-
             ResetTileColors();
             UpdateTilesFromRiddle(riddle);
 
@@ -124,6 +127,8 @@ namespace MelodyMemory
 
         IEnumerator PlayMelody()
         {
+            SetListening(false);
+            Debug.Log("Playing melody");
             foreach (var noteWithPosition in melody)
             {
                 ColorSoundTile tile = tiles[noteWithPosition.Position];
@@ -132,8 +137,7 @@ namespace MelodyMemory
                 //yield return null;
                 yield return new WaitForSeconds(1.0f);
             }
-
-            Debug.Log($"finished blinking");
+            Debug.Log("finished melody");
             SetListening(true);
         }
 
