@@ -38,7 +38,7 @@ namespace Snake
             {
                 players = new[]
                 {
-                    new Player(Color.green, "Joystick1_"),
+                    new Player(Color.white, "Joystick1_"),
                     new Player(Color.red, "Joystick2_"),
                     new Player(Color.cyan, "Player1_"),
                     new Player(Color.magenta, "Player2_")
