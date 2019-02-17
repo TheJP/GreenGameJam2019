@@ -111,7 +111,7 @@ namespace Assets.Scripts.ColourJumper
 
         private void RemoveLoosers(int round)
         {
-            var wrongColour = blobs.Where(blob => blob?.CurrentPlatform?.Colour != blob.Player.Colour).ToArray();
+            var wrongColour = blobs.Where(blob => blob?.CurrentPlatform?.Colour != blob.Player.Colour || !blob.CurrentPlatform.PlatformActive).ToArray();
             foreach (var blob in wrongColour)
             {
                 blobs.Remove(blob);
