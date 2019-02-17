@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Board;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,9 @@ namespace Assets.Scripts.ColourJumper
         [Tooltip("Force with which the player jumps vertically")]
         public float jumpForce = 20f;
 
+        [Tooltip("GameObject with particle system that is shown when player dies")]
+        public ParticleSystem deathAnimation;
+
         public Platform CurrentPlatform { get; set; }
 
         public Player Player { get; private set; }
@@ -31,12 +35,16 @@ namespace Assets.Scripts.ColourJumper
 
         private bool OnGround => groundCollisions.Count > 0;
 
+        private bool isDead = false;
+
         private void Awake() => rigidbody2d = GetComponent<Rigidbody2D>();
 
         public void Setup(Player player)
         {
             Player = player;
             colourRenderer.color = player.Colour;
+            var particleMain = deathAnimation.main;
+            particleMain.startColor = player.Colour;
         }
 
         private void Start()
@@ -52,8 +60,10 @@ namespace Assets.Scripts.ColourJumper
 
         private void FixedUpdate()
         {
+            if (isDead) { return; }
+
             var velocity = rigidbody2d.velocity;
-            
+
             var xMovement = Input.GetAxis($"{Player.InputPrefix}{InputSuffix.Horizontal}");
             if (Mathf.Abs(xMovement) < 0.001)
             {
@@ -73,6 +83,32 @@ namespace Assets.Scripts.ColourJumper
                 rigidbody2d.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
             }
 
+        }
+
+        public void KillPlayer()
+        {
+            if (isDead) { return; }
+            isDead = true;
+            StartCoroutine(KillingPlayer());
+        }
+
+        private IEnumerator KillingPlayer()
+        {
+            deathAnimation.gameObject.SetActive(true);
+            var sprites = GetComponentsInChildren<SpriteRenderer>();
+            var start = Time.time;
+            var duration = 1.5f;
+            while (Time.time - start < duration)
+            {
+                foreach (var sprite in sprites)
+                {
+                    sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, 1f - (Time.time - start) / duration);
+                }
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(1f);
+            Destroy(gameObject);
         }
     }
 }

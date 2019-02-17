@@ -97,7 +97,7 @@ namespace Assets.Scripts.ColourJumper
             {
                 blobs.Remove(blob);
                 lostOrder.Add(blob.Player);
-                Destroy(blob.gameObject);
+                blob.KillPlayer();
             }
         }
 
