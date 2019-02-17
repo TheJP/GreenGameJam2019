@@ -18,7 +18,7 @@ public class SumoMain : MonoBehaviour
 
     //Local Settings in case no main game is running.
     [SerializeField] private Color[] playerColors;
-    [SerializeField] private String[] controlPrefixes;
+    [SerializeField] private string[] controlPrefixes;
 #pragma warning restore 649
 
     private const int TimeTillStart = 3;
@@ -36,7 +36,6 @@ public class SumoMain : MonoBehaviour
     {
         GameObject playboardObject = Instantiate(playboardPrefab, transform);
         sumoPlayboard = playboardObject.GetComponent<SumoPlayboard>();
-        sumoPlayboard.MaxPlayerNumber = MaxPlayerNumber;
 
         boardController = GameObject.Find("BoardController")?.GetComponent<BoardController>();
         InstantiatePlayers();
@@ -75,7 +74,7 @@ public class SumoMain : MonoBehaviour
 
     private void InstantiatePlayer(int playerIndex)
     {
-        GameObject playerObject = Instantiate(playerPrefab, sumoPlayboard.GetSpawnPointForPlayer(playerIndex),
+        GameObject playerObject = Instantiate(playerPrefab, sumoPlayboard.GetSpawnPoint(playerIndex),
             Quaternion.identity, transform);
 
         SumoPlayer player = playerObject.GetComponent<SumoPlayer>();
@@ -103,15 +102,7 @@ public class SumoMain : MonoBehaviour
             var fadeoutObject = Instantiate(countdownUiPrefab);
             var countdownScript = fadeoutObject.GetComponent<Countdown>();
             var nextDigit = Math.Ceiling(currentTime);
-            if (Math.Abs(nextDigit) < 0.5)
-            {
-                countdownScript.TextMesh.text = "GO!!!";
-            }
-            else
-            {
-                countdownScript.TextMesh.text = nextDigit.ToString();
-            }
-
+            countdownScript.TextMesh.text = Math.Abs(nextDigit) < 0.5 ? "GO!!!" : nextDigit.ToString();
             countdownScript.TextMesh.color = new Color(0.6392157F, 0.5019608F, 0.3892157F, 1.0F);
 
             currentTime -= 1;
@@ -151,18 +142,13 @@ public class SumoMain : MonoBehaviour
             defeatedPlayers.Add(playersInGame[0]);
             defeatedPlayers.Reverse();
 
-            List<(Player player, int steps)> scores = new List<(Player player, int steps)>(4);
+            var scores = new List<(Player player, int steps)>(4);
 
             for (int i = 0; i < defeatedPlayers.Count; i++)
             {
-                if (boardController != null)
-                {
-                    scores.Add((boardController.players.Players[defeatedPlayers[i] - 1], scoreList[i]));
-                }
-                else
-                {
-                    scores.Add((new Player(Color.red, ""), scoreList[i]));
-                }
+                scores.Add(boardController != null
+                    ? (boardController.players.Players[defeatedPlayers[i] - 1], scoreList[i])
+                    : (new Player(Color.red, ""), scoreList[i]));
             }
 
             defeatedPlayers.Clear();

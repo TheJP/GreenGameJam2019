@@ -27,7 +27,6 @@ public class SumoPlayerControl : MonoBehaviour
 
         if (Input.GetButtonDown($"{ControlPrefix + InputSuffix.A}") && timeSinceLastBoost < boostCooldownSeconds)
         {
-            //Debug.Log("BOOOST!!!");
             timeSinceLastBoost = 0;
             moveHorizontal *= 1.5F;
             moveVertical *= 1.5F;

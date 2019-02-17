@@ -2,7 +2,7 @@
 using UnityEngine;
 
 /// <summary>
-/// Class to control the current play board.
+/// Class to control the sumo play board.
 /// </summary>
 public class SumoPlayboard : MonoBehaviour
 {
@@ -10,32 +10,23 @@ public class SumoPlayboard : MonoBehaviour
     [SerializeField] private GameObject[] spawnPoints;
 #pragma warning restore 649
 
-    public int MaxPlayerNumber { private get; set; }
-
-    private void Awake()
-    {
-        MaxPlayerNumber = 4;
-    }
-
     /// <summary>
-    /// Returns the spawn position for the given player number (1-4)
+    /// Returns the spawn position for the given number. (1 to 4)
+    /// The 4 spawn points are predefined within the Prefab.
     /// </summary>
-    /// <param name="playerIndex">Number of the Player (1-4).</param>
-    /// <returns>Spawn point of player with given number.</returns>
-    /// <exception cref="ArgumentOutOfRangeException">If playerNumber is not between 1 and 4</exception>
-    public Vector3 GetSpawnPointForPlayer(int playerIndex)
+    /// <param name="positionNumber">Number of the Position (zero based)(0-3).</param>
+    /// <returns>Position of the spawn point with the given number.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">If position number is not between 0 and 3</exception>
+    public Vector3 GetSpawnPoint(int positionNumber)
     {
-        if (playerIndex >= 0 && playerIndex < MaxPlayerNumber)
+        if (positionNumber < 0 || positionNumber > 3)
         {
-            return spawnPoints[playerIndex].transform.position;
-        }
-        else
-        {
-            Debug.LogError(
-                $"The given playerIndex is not between 0 and {MaxPlayerNumber-1}. " +
-                $"Given playerNumber was {playerIndex}. " +
+            throw new ArgumentOutOfRangeException(
+                $"The given positionindex is not between 0 and {spawnPoints.Length - 1}. " +
+                $"Given playerNumber was {positionNumber}. " +
                 "Returning zero vector");
-            throw new ArgumentOutOfRangeException();
         }
+
+        return spawnPoints[positionNumber].transform.position;
     }
 }
