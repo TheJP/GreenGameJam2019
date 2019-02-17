@@ -38,7 +38,7 @@ public class PongMain : MonoBehaviour
     private PongUi pongUi;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         var gameTitleCanvasObject = Instantiate(gameTitleCanvasPrefab);
         MinigameTitleScreen minigameTitleScreen = gameTitleCanvasObject.GetComponentInChildren<MinigameTitleScreen>();
@@ -47,7 +47,6 @@ public class PongMain : MonoBehaviour
 
         var playBoardObject = Instantiate(pongPlayBoardPrefab, transform);
         pongPlayboard = playBoardObject.GetComponent<PongPlayboard>();
-        pongPlayboard.MaxPlayerNumber = MaxPlayerNumber;
 
         var pongUiObject = Instantiate(pongUiPrefab, transform);
         pongUi = pongUiObject.GetComponent<PongUi>();
