@@ -22,8 +22,8 @@ public class PongBallMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        horizontalDirection = Random.Range(0.0F, 1.0F);
-        verticalDirection = Random.Range(0.0F, 1.0F);
+        horizontalDirection = Random.Range(-1.0F, 1.0F);
+        verticalDirection = Random.Range(-1.0F, 1.0F);
 
         LastTouchedByPlayer = -1;
         currentSpeed = initialSpeed;
