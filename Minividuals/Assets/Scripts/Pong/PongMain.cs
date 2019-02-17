@@ -29,6 +29,9 @@ public class PongMain : MonoBehaviour
     private BoardController boardController;
     private Dictionary<int, int> scores = new Dictionary<int, int>(4);
 
+    private float timeSinceLastBall;
+    private const float ballRespawnTime = 20;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +53,14 @@ public class PongMain : MonoBehaviour
     private void Update()
     {
         gameTime = gameTime - Time.deltaTime;
+
+
+        timeSinceLastBall = timeSinceLastBall + Time.deltaTime;
+        if (timeSinceLastBall > ballRespawnTime)
+        {
+            ReleaseBall();
+            timeSinceLastBall = 0;
+        }
 
         if (gameTime <= 0)
         {
@@ -83,7 +94,17 @@ public class PongMain : MonoBehaviour
         if (maxPlayerNumber == 1)
         {
             Debug.Log("You started a Pong with one player? Doesn't really make sense, huh?");
-            //TODO: Handle single player properly
+            if (boardController != null)
+            {
+                boardController.FinishedMiniGame(new[] {(boardController.players.Players[0], 1)});
+            }
+            else
+            {
+                InstantiatePlayer(0, 0);
+                InstantiateWall(1);
+                InstantiateWall(2);
+                InstantiateWall(3);
+            }
         }
         else if (maxPlayerNumber == 2)
         {
@@ -174,7 +195,7 @@ public class PongMain : MonoBehaviour
 
     public void PongBallDestroyed(int lastTouchedPlayer)
     {
-        Debug.Log("PongBallDestroyed called with lastTouchedPlayer: " + lastTouchedPlayer);
+//        Debug.Log("PongBallDestroyed called with lastTouchedPlayer: " + lastTouchedPlayer);
         if (lastTouchedPlayer != -1)
         {
             if (scores.TryGetValue(lastTouchedPlayer, out var currentScore))

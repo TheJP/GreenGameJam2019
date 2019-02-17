@@ -54,6 +54,19 @@ public class SumoMain : MonoBehaviour
     private void InstantiatePlayers()
     {
         int maxPlayerNumber = boardController != null ? boardController.players.Players.Count : MaxPlayerNumber;
+
+        if (maxPlayerNumber <= 1)
+        {
+            if (boardController != null)
+            {
+                boardController.FinishedMiniGame(new[] {(boardController.players.Players[0], 1)});
+            }
+            else
+            {
+                Debug.Log("Local player game with only one Player? What am i supossed to do now, eh?");
+            }
+        }
+
         for (int playerIndex = 0; playerIndex < maxPlayerNumber; playerIndex++)
         {
             InstantiatePlayer(playerIndex);
