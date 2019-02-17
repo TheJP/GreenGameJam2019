@@ -11,11 +11,12 @@ public class PongPlayerControl : MonoBehaviour
 
     private void Update()
     {
-        float moveHorizontal = Input.GetAxis($"{ControlPrefix + InputSuffix.Horizontal}");
+        float moveHorizontal = Input.GetAxis(ControlPrefix + InputSuffix.Horizontal);
         if (InvertControls)
         {
             moveHorizontal *= -1;
         }
+
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, 0.0f);
         transform.Translate(movement * Time.deltaTime * speed);
     }
