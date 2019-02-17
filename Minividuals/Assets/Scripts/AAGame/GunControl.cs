@@ -36,6 +36,7 @@ namespace AAGame
         
         private Player player;
         private float cooldown;
+        private AudioSource audioSource;
 
         public Player Player
         {
@@ -50,6 +51,11 @@ namespace AAGame
         public bool HasHitThePlane { get; set; }
 
         public bool IsTargetDestroyed => targetPlatform.IsDestroyed;
+
+        private void Start()
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
 
         private void UpdateColors()
         {
@@ -83,6 +89,9 @@ namespace AAGame
                 bullet.GetComponent<Rigidbody>().AddForce(canon.forward * 100, ForceMode.Impulse);
                 bullet.Gun = this;
                 cooldown = fireCooldown;
+
+                audioSource.pitch = Random.Range(0.97f, 1.03f);
+                audioSource.Play();
             }
 
             cooldown -= Time.deltaTime;
