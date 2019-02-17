@@ -31,15 +31,22 @@ namespace Networking
         [Tooltip("The maximum time a game should take in seconds")]
         private float maxGameTime = 120;
         
+        [SerializeField]
+        private Countdown countdownPrefab;
+
+        [SerializeField]
+        [Tooltip("The position of the game countdown")]
+        private Transform countdownPosition;
+        
         #pragma warning restore 649
 
         private NetworkMap map;
 
         private IList<NetworkPlayer> players;
 
-        private float elapsedGameTime;
-
         private BoardController boardController;
+
+        private float elapsedGameTime;
         
         private void Start()
         {
@@ -90,12 +97,19 @@ namespace Networking
             StartCoroutine(StartCountdown());
         }
 
+        private void Update()
+        {
+            elapsedGameTime += Time.deltaTime;
+        }
+
         private IEnumerator StartCountdown()
         {
-            yield return new WaitForSeconds(maxGameTime - 10);
-
-            for(var i = 10; i > 0; --i)
+            while(elapsedGameTime < maxGameTime)
             {
+                var countdown = Instantiate(countdownPrefab, countdownPosition);
+                countdown.TextMesh.color = Color.black;
+                countdown.fadeoutDuration = 0.8f;
+                countdown.TextMesh.text = $"{Mathf.RoundToInt(maxGameTime - elapsedGameTime)}";
                 yield return new WaitForSeconds(1);
             }
 
