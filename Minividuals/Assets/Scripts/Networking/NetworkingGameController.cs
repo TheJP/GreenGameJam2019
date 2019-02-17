@@ -73,7 +73,7 @@ namespace Networking
                 (map.TopRight, Vector3.left, map.Width, 0)
             };
 
-            players = new NetworkPlayer[4];
+            players = new List<NetworkPlayer>();
             
             for(var i = 0; i < boardPlayers.Count; ++i)
             {
@@ -84,7 +84,7 @@ namespace Networking
                 player.Direction = dir;
                 player.Location = (x, y);
 
-                players[i] = player;
+                players.Add(player);
             }
 
             StartCoroutine(StartCountdown());
