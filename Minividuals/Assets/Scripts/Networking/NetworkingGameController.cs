@@ -98,10 +98,27 @@ namespace Networking
             {
                 yield return new WaitForSeconds(1);
             }
+
+            foreach(var player in players)
+            {
+                player.Stop = true;
+            }
+            
+            var scores = players
+                .Select(p => (p.Player, Score: map.CountTilesOwnedBy(p.Player)))
+                .OrderByDescending(s => s.Score);
+
+            var maxSteps = 7;
+            var steps = scores.Select(s => (s.Player, maxSteps -= 2));
             
             if(ReferenceEquals(boardController, null))
             {
 #if UNITY_EDITOR
+                foreach(var step in steps)
+                {
+                    Debug.Log($"Player: {step.Player.InputPrefix} / Score: {step.Item2}");
+                }
+                
                 EditorApplication.isPlaying = false;
 #else
                 Application.Quit();
@@ -109,8 +126,7 @@ namespace Networking
             }
             else
             {
-                // TODO Add scores
-                boardController.FinishedMiniGame(players.Select(p => (p.Player, 0)));
+                boardController.FinishedMiniGame(steps);
             }
         }
     }
