@@ -48,6 +48,7 @@ namespace Assets.Scripts.Board
                 new Player(Color.green, "Player1_"),
                 new Player(Color.blue, "Player2_")
             };
+            Destroy(gameStart.gameObject);
 
             players.Setup(playersData);
             tiles.Setup(players.Players, miniGames.miniGames);
