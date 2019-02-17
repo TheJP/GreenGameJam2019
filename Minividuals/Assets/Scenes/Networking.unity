@@ -243,7 +243,7 @@ MonoBehaviour:
     type: 3}
   width: 10
   height: 7
-  maxGameTime: 120
+  maxGameTime: 90
   countdownPrefab: {fileID: 114141913701440386, guid: 9f1d4a019c849194c8cecb71e64a5b05,
     type: 3}
   countdownPosition: {fileID: 351378141}
