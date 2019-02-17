@@ -29,6 +29,9 @@ public class PongMain : MonoBehaviour
     private BoardController boardController;
     private Dictionary<int, int> scores = new Dictionary<int, int>(4);
 
+    private float timeSinceLastBall;
+    private const float ballRespawnTime = 20;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +53,14 @@ public class PongMain : MonoBehaviour
     private void Update()
     {
         gameTime = gameTime - Time.deltaTime;
+
+
+        timeSinceLastBall = timeSinceLastBall + Time.deltaTime;
+        if (timeSinceLastBall > ballRespawnTime)
+        {
+            ReleaseBall();
+            timeSinceLastBall = 0;
+        }
 
         if (gameTime <= 0)
         {
