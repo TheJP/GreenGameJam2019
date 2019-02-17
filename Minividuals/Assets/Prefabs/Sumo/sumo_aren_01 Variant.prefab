@@ -176,7 +176,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 100000, guid: 05049a1cb7de4244a96e4fc3142f74c0, type: 3}
       propertyPath: m_Name
-      value: sumo_aren_01
+      value: sumo_aren_01 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 05049a1cb7de4244a96e4fc3142f74c0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -221,6 +221,14 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 05049a1cb7de4244a96e4fc3142f74c0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 05049a1cb7de4244a96e4fc3142f74c0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: 05049a1cb7de4244a96e4fc3142f74c0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 05049a1cb7de4244a96e4fc3142f74c0, type: 3}
       propertyPath: m_LocalScale.z
