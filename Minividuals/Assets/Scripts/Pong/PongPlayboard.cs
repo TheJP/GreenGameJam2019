@@ -8,8 +8,6 @@ public class PongPlayboard : MonoBehaviour
 #pragma warning disable 649
     [SerializeField] private GameObject[] spawnPoints;
 #pragma warning restore 649
-    
-    public int MaxPlayerNumber { private get; set; }
 
     /// <summary>
     /// Returns the spawn position for the given player number.

@@ -21,11 +21,11 @@ public class SumoPlayerControl : MonoBehaviour
 
     private void FixedUpdate()
     {
-        float moveHorizontal = Input.GetAxis($"{ControlPrefix + InputSuffix.Horizontal}");
-        float moveVertical = Input.GetAxis($"{ControlPrefix + InputSuffix.Vertical}");
+        float moveHorizontal = Input.GetAxis(ControlPrefix + InputSuffix.Horizontal);
+        float moveVertical = Input.GetAxis(ControlPrefix + InputSuffix.Vertical);
         float moveY = 0.0F;
 
-        if (Input.GetButtonDown($"{ControlPrefix + InputSuffix.A}") && timeSinceLastBoost < boostCooldownSeconds)
+        if (Input.GetButtonDown(ControlPrefix + InputSuffix.A) && timeSinceLastBoost < boostCooldownSeconds)
         {
             timeSinceLastBoost = 0;
             moveHorizontal *= 1.5F;
