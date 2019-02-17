@@ -161,7 +161,11 @@ namespace AAGame
 
                     boardController.FinishedMiniGame(scores);
                     gameFinished = true;
-                    StopCoroutine(countdownCoroutine);
+
+                    if(countdownCoroutine != null)
+                    {
+                        StopCoroutine(countdownCoroutine);
+                    }
                 }
             }
         }
