@@ -310,7 +310,7 @@ MonoBehaviour:
     minPerGame: 0
     maxPerGame: 0
   - name: Colour Jumper
-    sceneName: ColourJumperScene
+    sceneName: ColourJumper
     icon: {fileID: 21300000, guid: 3afcc2cdf4c8f654b96a6de982b41bd6, type: 3}
     minPerGame: 5
     maxPerGame: 6
