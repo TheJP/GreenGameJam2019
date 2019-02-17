@@ -144,13 +144,12 @@ namespace Assets.Scripts.ColourJumper
         private IEnumerator GameLoop()
         {
             var round = 0;
+            var roundTime = initialRoundTime;
             while (blobs.Count > 1) // Play until only one blob is left blobbing
             {
-                var roundTime = initialRoundTime;
-
                 // Shuffle platform colours
                 yield return Shuffle();
-                cancelledPlatforms = Mathf.Max(blobs.Count, cancelledPlatforms - platformCancelPerTurn);
+                cancelledPlatforms = Mathf.Min(platforms.Length - blobs.Count, cancelledPlatforms + platformCancelPerTurn);
 
                 // Let players search colours
                 yield return LetPlayersPlay(roundTime);
