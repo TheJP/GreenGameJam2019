@@ -67,11 +67,11 @@ namespace Assets.Scripts.ColourJumper
             var xMovement = Input.GetAxis($"{Player.InputPrefix}{InputSuffix.Horizontal}");
             if (Mathf.Abs(xMovement) < 0.001)
             {
-                var breakVelocity = Mathf.Max(0f, (Mathf.Abs(velocity.x) * deacceleration * Time.deltaTime));
+                var breakVelocity = Mathf.Max(0f, (Mathf.Abs(velocity.x) * deacceleration * Time.fixedDeltaTime));
                 if (Mathf.Abs(velocity.x) < Mathf.Abs(breakVelocity)) { velocity.x = 0f; }
                 else { velocity += (Vector2.left * Mathf.Sign(velocity.x)) * breakVelocity; }
             }
-            else { velocity += (Vector2.right * xMovement) * (acceleration * Time.deltaTime); }
+            else { velocity += (Vector2.right * xMovement) * (acceleration * Time.fixedDeltaTime); }
 
             velocity.x = Mathf.Clamp(velocity.x, -maxVelocity.x, maxVelocity.x);
             velocity.y = Mathf.Clamp(velocity.y, -maxVelocity.y, maxVelocity.y);
