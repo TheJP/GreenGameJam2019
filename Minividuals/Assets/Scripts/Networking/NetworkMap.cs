@@ -97,6 +97,23 @@ namespace Networking
             }
         }
 
+        public int CountTilesOwnedBy(Player player)
+        {
+            var count = 0;
+            for(var x = 0; x < Width; ++x)
+            {
+                for(var y = 0; y < Height; ++y)
+                {
+                    if(tiles[y, x].Owner == player)
+                    {
+                        ++count;
+                    }
+                }
+            }
+
+            return count;
+        }
+
         private void TryCaptureTile(int x, int y, Player player)
         {
             if(x < 0 || x >= Width || y < 0 || y >= Height)
