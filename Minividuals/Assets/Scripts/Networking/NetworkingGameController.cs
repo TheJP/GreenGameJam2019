@@ -54,7 +54,10 @@ namespace Networking
             {
                 boardPlayers = new[]
                 {
-                    new Player(Color.green, "Joystick1_")
+                    new Player(Color.green, "Joystick1_"),
+                    new Player(Color.red, "Joystick2_"),
+                    new Player(Color.cyan, "Player1_"),
+                    new Player(Color.blue, "Player2_")
                 };
             }
             else
@@ -62,22 +65,26 @@ namespace Networking
                 boardPlayers = boardController.players.Players;
             }
 
-            var startPositions = new (Vector3 pos, Vector3 dir)[]
+            var startPositions = new (Vector3 pos, Vector3 dir, int x, int y)[]
             {
-                (map.TopLeft, Vector3.right),
-                (map.BottomRight, Vector3.left),
-                (map.BottomLeft, Vector3.right),
-                (map.TopRight, Vector3.left)
+                (map.TopLeft, Vector3.right, 0, 0),
+                (map.BottomRight, Vector3.left, map.Width, map.Height),
+                (map.BottomLeft, Vector3.right, 0, map.Height),
+                (map.TopRight, Vector3.left, map.Width, 0)
             };
 
             players = new NetworkPlayer[4];
             
             for(var i = 0; i < boardPlayers.Count; ++i)
             {
-                var player = Instantiate(playerPrefab, startPositions[i].pos, Quaternion.identity);
+                var (pos, dir, x, y) = startPositions[i];
+                var player = Instantiate(playerPrefab, pos, Quaternion.identity);
                 player.Player = boardPlayers[i];
                 player.NetworkMap = map;
-                player.Direction = startPositions[i].dir;
+                player.Direction = dir;
+                player.Location = (x, y);
+
+                players[i] = player;
             }
 
             StartCoroutine(StartCountdown());
