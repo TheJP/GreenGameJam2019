@@ -95,6 +95,7 @@ namespace Assets.Scripts.ColourJumper
         private IEnumerator KillingPlayer()
         {
             deathAnimation.gameObject.SetActive(true);
+            rigidbody2d.constraints = RigidbodyConstraints2D.FreezeAll;
             var sprites = GetComponentsInChildren<SpriteRenderer>();
             var start = Time.time;
             var duration = 1.5f;

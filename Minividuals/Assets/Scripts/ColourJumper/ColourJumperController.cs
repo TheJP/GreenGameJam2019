@@ -33,6 +33,9 @@ namespace Assets.Scripts.ColourJumper
         [Tooltip("Time by which the round time is reduced each round")]
         public float roundTimeCutoff = 2f;
 
+        [Tooltip("Amount of platforms that get deleted per round")]
+        public int platformCancelPerTurn = 3;
+
         [Tooltip("Descending list of scores that the players get")]
         public int[] playerScores = new[] { 5, 3, -1, -3 };
 
@@ -43,6 +46,7 @@ namespace Assets.Scripts.ColourJumper
         private readonly List<(Player player, int diedInRound)> lostOrder = new List<(Player, int)>();
 
         private Platform[] platforms;
+        private int cancelledPlatforms = 0;
 
         private void Awake() => boardController = FindObjectOfType<BoardController>();
 
@@ -72,17 +76,32 @@ namespace Assets.Scripts.ColourJumper
         private void ShufflePlatformColours()
         {
             Debug.Assert(blobs.Count > 0);
-            foreach (var platform in platforms)
+            Debug.Assert(cancelledPlatforms < platforms.Length);
+            do
             {
-                platform.SetColour(blobs[Random.Range(0, blobs.Count)].Player.Colour);
-            }
+                // Choose which platforms are disabled
+                bool[] cancelled = new bool[platforms.Length];
+                for (int i = 0; i < cancelledPlatforms; ++i)
+                {
+                    int cancel;
+                    do { cancel = Random.Range(0, platforms.Length); } while (cancelled[cancel]);
+                    cancelled[cancel] = true;
+                }
+
+                // Set colour and disabled state to each platform
+                for (int i = 0; i < platforms.Length; ++i)
+                {
+                    platforms[i].SetPlatformActive(!cancelled[i]);
+                    if (!cancelled[i]) { platforms[i].SetColour(blobs[Random.Range(0, blobs.Count)].Player.Colour); }
+                }
+            } while (MissingAColour());
         }
 
         private IEnumerator Shuffle()
         {
             var startShuffle = Time.time;
             displayText.text = "Shuffle..";
-            while (Time.time - startShuffle < colourShuffleTime || MissingAColour())
+            while (Time.time - startShuffle < colourShuffleTime)
             {
                 ShufflePlatformColours();
                 yield return new WaitForSeconds(shuffleWait);
@@ -131,6 +150,7 @@ namespace Assets.Scripts.ColourJumper
 
                 // Shuffle platform colours
                 yield return Shuffle();
+                cancelledPlatforms = Mathf.Max(blobs.Count, cancelledPlatforms - platformCancelPerTurn);
 
                 // Let players search colours
                 yield return LetPlayersPlay(roundTime);

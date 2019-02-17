@@ -23,6 +23,7 @@ namespace Assets.Scripts.ColourJumper
         {
             PlatformActive = active;
             xSprite.gameObject.SetActive(!active);
+            startColor = Color.white;
         }
 
         public void SetColour(Color colour)
