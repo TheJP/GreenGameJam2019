@@ -13,7 +13,7 @@ public class SumoPlayer : MonoBehaviour
     {
         if (transform.position.y < DepthToDie)
         {
-            Debug.Log($"Player number {playerNumber} died :( How sad...");
+//            Debug.Log($"Player number {playerNumber} died :( How sad...");
             SendMessageUpwards("PlayerDefeated", playerNumber);
             Destroy(gameObject);
         }
