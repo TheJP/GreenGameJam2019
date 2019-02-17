@@ -42,28 +42,34 @@ namespace MelodyMemory
         {            
             if (noteWPos == null)
             {
+                note = null;
                 sound.clip = null;
             }
             else
             {
                 note = noteWPos.Note;
 
-                Debug.Log($"old clip is {sound.clip}");
                 String audioPath = $"Sounds/MelodyMemory/{note.AudioSourceName}";
-
                 AudioClip newClip = (AudioClip)Resources.Load(audioPath, typeof(AudioClip));
-                // AudioClip newClip = Resources.Load<AudioClip>(audioPath);
-                
-                Debug.Log((newClip == null) ? "newClip is null" : $"newClip is {newClip}");
                 sound.clip = newClip;
             }
 
             
         }
 
+        /// <summary>
+        /// Enables the tile (but only if it has a note)
+        /// </summary>
+        /// <param name="listening"></param>
         public void setListening(bool listening)
         {
-            this.listening = listening;
+            // a tile without note will never listen
+            if (note != null)
+            {
+                this.listening = listening;
+                Debug.Log($"enabled listening for tile {name}");
+            }
+                
         }
         
         

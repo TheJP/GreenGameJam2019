@@ -32,6 +32,8 @@ namespace MelodyMemory
         private readonly ColorSoundTile[] tiles = new ColorSoundTile[tileCount];
 
         private List<NoteWithPosition> melody; // to be played when riddle starts
+        
+        private IEnumerator melodyCoroutine;
 
         private Riddle riddle;
 
@@ -58,8 +60,8 @@ namespace MelodyMemory
 
         public void Setup()
         {
-            ResetTileColors();
             SetListening(false);
+            ResetTileColors();
         }
 
         private void UpdateTilePositions()
@@ -103,12 +105,17 @@ namespace MelodyMemory
 
         public void AddAndPlayRiddle(Riddle riddle)
         {
+            SetListening(false);
+            if(melodyCoroutine != null)
+            {
+                StopCoroutine(melodyCoroutine);
+            }
+            
             this.riddle = riddle;
             ResetTileColors();
             UpdateTilesFromRiddle(riddle);
-
             melody = riddle.GetRiddleMelody();
-            StartCoroutine("PlayMelody");
+            StartCoroutine(melodyCoroutine = PlayMelody());
         }
 
         private void UpdateTilesFromRiddle(Riddle riddle)
@@ -121,6 +128,10 @@ namespace MelodyMemory
                     Debug.Log($"position {i}: note is {note}");
                     tiles[i].SetNote(note);                    
                 }
+                else
+                {
+                    tiles[i].SetNote(null);
+                }
             }
         }
 
@@ -128,16 +139,17 @@ namespace MelodyMemory
         IEnumerator PlayMelody()
         {
             SetListening(false);
+            yield return new WaitForSeconds(1.0f);
             Debug.Log("Playing melody");
             foreach (var noteWithPosition in melody)
             {
                 ColorSoundTile tile = tiles[noteWithPosition.Position];
                 Debug.Log($"- will blink tile {tile}");
                 tile.StartCoroutine("BlinkColor");
-                //yield return null;
                 yield return new WaitForSeconds(1.0f);
             }
             Debug.Log("finished melody");
+            // only set tiles with a note to listening
             SetListening(true);
         }
 

@@ -49,7 +49,7 @@ namespace MelodyMemory
             tiles.Setup();
             tiles.RiddleSolved += OnRiddleSolved;
             
-            startButton.activate();    // is inactive by default   
+            startButton.setActive(false);    // is inactive by default   
             startButton.ClickEvent += StartButtonOnClickEvent;
 
             riddleLength = minRiddleLength;
@@ -58,6 +58,7 @@ namespace MelodyMemory
             boardController = FindObjectOfType<BoardController>();    
             // if we have no board controller, then the minigame was started standalone
 
+            StartRiddle();
         }
         
         private void StartButtonOnClickEvent()
@@ -88,11 +89,12 @@ namespace MelodyMemory
 
         private void StartRiddle()
         {
+            startButton.setActive(false);
             Riddle riddle = new Riddle(riddleLength, Tiles.tileCount);
-            Debug.Log($"Riddle is {riddle}");
+            Debug.Log($"have new melody with length {riddleLength}");
             
             tiles.AddAndPlayRiddle(riddle);
-            startButton.activate();    // so the player can start a new game if he/she cannot solve it
+            startButton.setActive(true);    // so the player can start a new game if he/she cannot solve it
 
         }
 
@@ -102,13 +104,11 @@ namespace MelodyMemory
             riddleLength++;
             numRiddlesSolved++;
             StartCoroutine("NextRiddle");
-            
         }
         
         IEnumerator NextRiddle() 
         {
             yield return new WaitForSeconds(3.0f);
-
             StartRiddle();
         }
 
