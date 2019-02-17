@@ -14,11 +14,14 @@ namespace MelodyMemory
         public MeshRenderer colourRenderer;
 
 #pragma warning disable 649
+        
         [Tooltip("Color for tiles that are inactive")]
         [SerializeField] private Color defaultColor;
 
         [Tooltip("Default soundclip, will by dynamically replaced")]
         [SerializeField] private AudioSource sound;
+        
+
 #pragma warning restore 649
 
         private Note note;     // only set on some tiles  
@@ -27,6 +30,8 @@ namespace MelodyMemory
 
         private bool listening;    // if false, it will not react to clicks TODO isn't there something built-in for that?   
 
+        public Cursor Cursor { get; set; }
+        
         public int tileIndex { get; set; }
 
         private void Start()
@@ -75,12 +80,15 @@ namespace MelodyMemory
         
         void Update()
         {
-            if (!listening)   return;
-            
+            if (!listening)   return;            
             // no need to listen for mouse if this tile has no note!
-            if (note != null && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
+            
+            
+            // Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
+            if (note != null && Input.GetButtonDown($"{Cursor.ControlPrefix}{InputSuffix.A}"))
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = Cursor.GetRay();
+                // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hit))
                 {
                     if (hit.transform.CompareTag("Player"))

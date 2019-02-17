@@ -527,8 +527,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1247386322}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.083, y: -0.425, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.167, y: -0.784, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children: []
   m_Father: {fileID: 1520494661}
   m_RootOrder: 0
@@ -593,6 +593,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  colorRenderer: {fileID: 1247386324}
 --- !u!4 &1520494661
 Transform:
   m_ObjectHideFlags: 0
@@ -600,8 +601,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1520494659}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1247386325}
@@ -656,6 +657,7 @@ MonoBehaviour:
   tilePrefab: {fileID: 1502678204256833133, guid: 7aa71bc780bc93038a50567b6c66bded,
     type: 3}
   tilesParent: {fileID: 868954431}
+  cursor: {fileID: 1520494660}
 --- !u!114 &1756922549
 MonoBehaviour:
   m_ObjectHideFlags: 0

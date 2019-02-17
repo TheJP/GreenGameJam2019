@@ -20,10 +20,6 @@ namespace MelodyMemory
         
         private bool active = false;
 
-        void Start()
-        {
-            // myName = GetComponent<Renderer>().name;
-        }
         
         void Update()
         {
