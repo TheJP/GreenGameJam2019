@@ -36,7 +36,7 @@ public class PongMain : MonoBehaviour
         MinigameTitleScreen minigameTitleScreen = gameTitleCanvasObject.GetComponentInChildren<MinigameTitleScreen>();
         minigameTitleScreen.SetText("PONG!!!");
         minigameTitleScreen.FadeOut();
-        
+
         var playBoardObject = Instantiate(pongPlayBoardPrefab, transform);
         pongPlayboard = playBoardObject.GetComponent<PongPlayboard>();
         pongPlayboard.MaxPlayerNumber = MaxPlayerNumber;
@@ -60,8 +60,10 @@ public class PongMain : MonoBehaviour
                 foreach (var player in scores.Keys)
                 {
                     scores.TryGetValue(player, out var score);
-                    endScores.Add((boardController.players.Players[player], score));
+                    endScores.Add((boardController.players.Players[player - 1], score));
                 }
+
+                boardController.FinishedMiniGame(endScores);
             }
             else
             {
