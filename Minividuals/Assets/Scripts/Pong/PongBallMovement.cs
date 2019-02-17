@@ -12,9 +12,10 @@ public class PongBallMovement : MonoBehaviour
 
     private float verticalDirection;
     private float horizontalDirection;
+    private const float RandomFactor = 0.1F;
 
-    private const int xBorder = 4;
-    private const int zBorder = 4;
+    private const int XBorder = 4;
+    private const int ZBorder = 4;
 
     public int LastTouchedByPlayer { get; set; }
 
@@ -32,12 +33,13 @@ public class PongBallMovement : MonoBehaviour
     void Update()
     {
         Vector3 movement = new Vector3(horizontalDirection, 0.0f, verticalDirection);
+        movement = movement.normalized;
         transform.Translate(movement * Time.deltaTime * currentSpeed);
 
-        if (transform.position.x < -xBorder
-            || transform.position.x > xBorder
-            || transform.position.z < -zBorder
-            || transform.position.z > zBorder)
+        if (transform.position.x < -XBorder
+            || transform.position.x > XBorder
+            || transform.position.z < -ZBorder
+            || transform.position.z > ZBorder)
         {
 //            Debug.Log($"Yeeey :) Player {LastTouchedByPlayer} made a point. Isn't this hilarious?");
             SendMessageUpwards("PongBallDestroyed", LastTouchedByPlayer);
@@ -48,13 +50,13 @@ public class PongBallMovement : MonoBehaviour
     public void ChangeVerticalDirection()
     {
         verticalDirection *= -1;
-        verticalDirection += Random.Range(-0.3F, 0.3F);
+        verticalDirection += Random.Range(-RandomFactor, RandomFactor);
     }
 
     public void ChangeHorizontalDirection()
     {
         horizontalDirection *= -1;
-        horizontalDirection += Random.Range(-0.3F, 0.3F);
+        horizontalDirection += Random.Range(-RandomFactor, RandomFactor);
     }
 
     public void ChangeColor(Color color)

@@ -33,7 +33,7 @@ public class PongMain : MonoBehaviour
     private readonly List<int> scoreList = new List<int> {5, 3, -3, -5};
 
     private float timeSinceLastBall;
-    private const float ballRespawnTime = 20;
+    private const float BallRespawnTime = 20;
 
     private PongUi pongUi;
 
@@ -64,7 +64,7 @@ public class PongMain : MonoBehaviour
         pongUi.DisplayGameTime(Math.Ceiling(gameTime).ToString());
 
         timeSinceLastBall = timeSinceLastBall + Time.deltaTime;
-        if (timeSinceLastBall > ballRespawnTime)
+        if (timeSinceLastBall > BallRespawnTime)
         {
             ReleaseBall();
             timeSinceLastBall = 0;
