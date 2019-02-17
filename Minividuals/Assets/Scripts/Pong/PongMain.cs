@@ -14,6 +14,7 @@ public class PongMain : MonoBehaviour
     [SerializeField] private GameObject pongPlayerPrefab;
     [SerializeField] private GameObject countdownUiPrefab;
     [SerializeField] private GameObject gameTitleCanvasPrefab;
+    [SerializeField] private GameObject pongUiPrefab;
 
     //Local Settings in case no main game is running.
     [SerializeField] private Color[] playerColors;
@@ -34,6 +35,8 @@ public class PongMain : MonoBehaviour
     private float timeSinceLastBall;
     private const float ballRespawnTime = 20;
 
+    private PongUi pongUi;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,6 +49,9 @@ public class PongMain : MonoBehaviour
         pongPlayboard = playBoardObject.GetComponent<PongPlayboard>();
         pongPlayboard.MaxPlayerNumber = MaxPlayerNumber;
 
+        var pongUiObject = Instantiate(pongUiPrefab, transform);
+        pongUi = pongUiObject.GetComponent<PongUi>();
+
         boardController = GameObject.Find("BoardController")?.GetComponent<BoardController>();
         InstantiatePlayers();
 
@@ -55,7 +61,7 @@ public class PongMain : MonoBehaviour
     private void Update()
     {
         gameTime = gameTime - Time.deltaTime;
-
+        pongUi.DisplayGameTime(Math.Ceiling(gameTime).ToString());
 
         timeSinceLastBall = timeSinceLastBall + Time.deltaTime;
         if (timeSinceLastBall > ballRespawnTime)
@@ -180,6 +186,7 @@ public class PongMain : MonoBehaviour
         if (lastTouchedPlayer != -1)
         {
             scores[lastTouchedPlayer - 1]++;
+            pongUi.DisplayScores(scores);
         }
 
         ReleaseBall();
