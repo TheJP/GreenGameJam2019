@@ -33,6 +33,9 @@ namespace Assets.Scripts.ColourJumper
         [Tooltip("Time by which the round time is reduced each round")]
         public float roundTimeCutoff = 2f;
 
+        [Tooltip("Descending list of scores that the players get")]
+        public int[] playerScores = new[] { 5, 3, -1, -3 };
+
         /// <summary>Board controller used to interface with the rest of the games. May be null!</summary>
         private BoardController boardController;
 
@@ -75,48 +78,68 @@ namespace Assets.Scripts.ColourJumper
             }
         }
 
+        private IEnumerator Shuffle()
+        {
+            var startShuffle = Time.time;
+            displayText.text = "Shuffle..";
+            while (Time.time - startShuffle < colourShuffleTime || MissingAColour())
+            {
+                ShufflePlatformColours();
+                yield return new WaitForSeconds(shuffleWait);
+            }
+            displayText.text = "GO!";
+        }
+
+        private void RemoveLoosers()
+        {
+            var wrongColour = blobs.Where(blob => blob.CurrentPlatform.Colour != blob.Player.Colour).ToArray();
+            foreach (var blob in wrongColour)
+            {
+                blobs.Remove(blob);
+                lostOrder.Add(blob.Player);
+                Destroy(blob.gameObject);
+            }
+        }
+
+        private IEnumerator LetPlayersPlay(float roundTime)
+        {
+            var start = Time.time;
+            while (Time.time - start < roundTime)
+            {
+                var remaining = roundTime - (Time.time - start);
+                if (Time.time - start > 1f)
+                {
+                    if (remaining < 6f) { displayText.text = ((int)remaining).ToString(); }
+                    else { displayText.text = ""; }
+                }
+                yield return null;
+            }
+            displayText.text = "";
+        }
+
         private IEnumerator GameLoop()
         {
             while (blobs.Count > 1) // Play until only one blob is left blobbing
             {
                 var roundTime = initialRoundTime;
 
-                // Shuffle colours
-                var startShuffle = Time.time;
-                displayText.text = "Shuffle..";
-                while (Time.time - startShuffle < colourShuffleTime || MissingAColour())
-                {
-                    ShufflePlatformColours();
-                    yield return new WaitForSeconds(shuffleWait);
-                }
-                displayText.text = "GO!";
+                // Shuffle platform colours
+                yield return Shuffle();
 
                 // Let players search colours
-                var start = Time.time;
-                while (Time.time - start < roundTime)
-                {
-                    var remaining = roundTime - (Time.time - start);
-                    if (Time.time - start > 1f)
-                    {
-                        if (remaining < 6f) { displayText.text = ((int)remaining).ToString(); }
-                        else { displayText.text = ""; }
-                    }
-                    yield return null;
-                }
-                displayText.text = "";
+                yield return LetPlayersPlay(roundTime);
                 roundTime = Mathf.Min(1f, roundTime - roundTimeCutoff);
 
                 // Remove players that lost
-                var wrongColour = blobs.Where(blob => blob.CurrentPlatform.Colour != blob.Player.Colour).ToArray();
-                foreach(var blob in wrongColour)
-                {
-                    blobs.Remove(blob);
-                    lostOrder.Add(blob.Player);
-                    Destroy(blob.gameObject);
-                }
+                RemoveLoosers();
 
                 yield return new WaitForSeconds(1f);
             }
+            var winner = blobs.FirstOrDefault();
+            if (winner != null) { lostOrder.Add(winner.Player); }
+
+            lostOrder.Reverse();
+            boardController?.FinishedMiniGame(lostOrder.Zip(playerScores.Take(lostOrder.Count), (player, score) => (player, score)));
         }
     }
 }
