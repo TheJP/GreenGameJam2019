@@ -11,5 +11,13 @@ namespace Assets.Scripts.Board
 
         [Tooltip("Text that displays the score")]
         public Text score;
+
+        public void Show()
+        {
+            foreach (var child in transform)
+            {
+                (child as Transform).gameObject.SetActive(true);
+            }
+        }
     }
 }

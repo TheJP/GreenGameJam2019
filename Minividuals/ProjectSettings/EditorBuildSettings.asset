@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MeloMemo.unity
     guid: 2aa9c7a023381e937a41f7dc96d8f138
+  - enabled: 1
+    path: Assets/Scenes/Networking.unity
+    guid: 0dbe5b776c362514888788a39647a09b
   m_configObjects: {}

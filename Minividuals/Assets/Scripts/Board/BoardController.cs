@@ -154,10 +154,7 @@ namespace Assets.Scripts.Board
             scoreboard.Clear();
             scoreboard.title.text = players.ActivePlayer.Location.MiniGame.name;
             scoreboard.gameObject.SetActive(true);
-            foreach (var (player, steps) in playerScores)
-            {
-                yield return scoreboard.AddScore(player, steps);
-            }
+            yield return scoreboard.AddScores(playerScores);
             yield return new WaitUntil(AnyPlayerClicksA);
             scoreboard.gameObject.SetActive(false);
 
