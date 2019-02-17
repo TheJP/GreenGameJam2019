@@ -71,8 +71,38 @@ namespace Networking
             }
         }
 
-        public void CaptureLine(int x, int y, Player player)
+        public void CaptureLine(int x, int y, bool top, Player player)
         {
+            var line = lines[y, x];
+
+            if(top && !ReferenceEquals(line.top, null))
+            {
+                line.top.Owner = player;
+                TryCaptureTile(x, y, player);
+                TryCaptureTile(x, y - 1, player);
+            }
+            else if(!top && !ReferenceEquals(line.left, null))
+            {
+                line.left.Owner = player;
+                TryCaptureTile(x, y, player);
+                TryCaptureTile(x - 1, y, player);
+            }
+        }
+
+        private void TryCaptureTile(int x, int y, Player player)
+        {
+            if(x < 0 || x >= Width || y < 0 || y >= Height)
+            {
+                return;
+            }
+
+            if(lines[y, x].top.Owner == player
+               && lines[y, x].left.Owner == player
+               && lines[y + 1, x].top.Owner == player
+               && lines[y, x + 1].left.Owner == player)
+            {
+                tiles[y, x].Owner = player;
+            }
         }
     }
 }
