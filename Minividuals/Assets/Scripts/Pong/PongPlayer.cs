@@ -27,6 +27,7 @@ public class PongPlayer : MonoBehaviour
 
         pongBall.ChangeColor(playerColor);
         pongBall.LastTouchedByPlayer = playerNumber;
+        pongBall.IncreaseSpeed();
 
         if (PlayPosition == 0)
         {
