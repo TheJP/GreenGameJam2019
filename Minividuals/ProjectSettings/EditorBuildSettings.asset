@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ColourJumper.unity
     guid: 7c61b3153bcc64b40ae32a82556c4dcf
+  - enabled: 1
+    path: Assets/Scenes/MeloMemo.unity
+    guid: 2aa9c7a023381e937a41f7dc96d8f138
   m_configObjects: {}
