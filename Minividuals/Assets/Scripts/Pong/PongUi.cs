@@ -23,4 +23,9 @@ public class PongUi : MonoBehaviour
         position1Text.text = scores.Length >= 2 ? $"Player 2:  {scores[1]}" : "";
         position0Text.text = scores.Length >= 1 ? $"Player 1:  {scores[0]}" : "";
     }
+
+    public void DisableTimeDisplay()
+    {
+        gameTime.text = "";
+    }
 }
