@@ -71,7 +71,7 @@ namespace Assets.Scripts.ColourJumper
         }
 
         private bool MissingAColour() =>
-            blobs.Any(blob => !platforms.Any(platform => blob.Player.Colour == platform.Colour));
+            blobs.Any(blob => !platforms.Any(platform => blob.Player.Colour == platform.Colour && platform.PlatformActive));
 
         private void ShufflePlatformColours()
         {
