@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -287,28 +287,33 @@ MonoBehaviour:
   - name: Sumo Fight
     sceneName: Sumo
     icon: {fileID: 21300000, guid: 368a055f526b048edbb42f7a562818b6, type: 3}
-    minPerGame: 10
-    maxPerGame: 10
+    minPerGame: 5
+    maxPerGame: 6
   - name: Air Strike
     sceneName: AAScene
     icon: {fileID: 21300000, guid: 7c5280c659302e6c09cc92acb75e99c0, type: 3}
-    minPerGame: 10
-    maxPerGame: 10
+    minPerGame: 3
+    maxPerGame: 4
   - name: Snake
     sceneName: Snake
     icon: {fileID: 21300000, guid: 2f0db3d91e5022d0d857354d4024fa6b, type: 3}
-    minPerGame: 10
-    maxPerGame: 10
+    minPerGame: 5
+    maxPerGame: 6
   - name: Pong
     sceneName: Pong
     icon: {fileID: 21300000, guid: 0422ed70bf796342191522bc0f3310b6, type: 3}
-    minPerGame: 10
-    maxPerGame: 10
+    minPerGame: 5
+    maxPerGame: 6
   - name: Melody Memory
     sceneName: MeloMemo
     icon: {fileID: 21300000, guid: 23fd2912e3e8ab7f59193737d301200b, type: 3}
     minPerGame: 0
     maxPerGame: 0
+  - name: Colour Jumper
+    sceneName: ColourJumperScene
+    icon: {fileID: 21300000, guid: 3afcc2cdf4c8f654b96a6de982b41bd6, type: 3}
+    minPerGame: 5
+    maxPerGame: 6
 --- !u!1 &345458341
 GameObject:
   m_ObjectHideFlags: 0
