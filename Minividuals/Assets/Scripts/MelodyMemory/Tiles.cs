@@ -20,6 +20,9 @@ namespace MelodyMemory
 
         [Tooltip("GameObject in which tiles are added")] [SerializeField]
         private Transform tilesParent;
+        
+        [SerializeField] private Cursor cursor;
+        
 #pragma warning restore 649
 
 
@@ -44,6 +47,7 @@ namespace MelodyMemory
                 tiles[i] = Instantiate(tilePrefab, tilesParent);
                 tiles[i].name = $"ColorSoundTile{i}";
                 tiles[i].tileIndex = i;
+                tiles[i].Cursor = cursor;
 
                 var index = i;
                 tiles[i].TileClickEvent += () => ClickedTile(index);
