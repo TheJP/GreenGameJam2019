@@ -213,6 +213,7 @@ MonoBehaviour:
     type: 3}
   width: 10
   height: 7
+  maxGameTime: 120
 --- !u!1 &985559371
 GameObject:
   m_ObjectHideFlags: 0
