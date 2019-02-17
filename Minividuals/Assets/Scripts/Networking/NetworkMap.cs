@@ -22,24 +22,28 @@ namespace Networking
 
         private NetworkTile[,] tiles;
         private (NetworkLine top, NetworkLine left)[,] lines;
+        
+        public Vector3 TopLeft { get; private set; }
+        public Vector3 BottomLeft => TopLeft + Vector3.down * Height;
+        public Vector3 TopRight => TopLeft + Vector3.right * Width;
+        public Vector3 BottomRight => BottomLeft + Vector3.right * Width;
 
         private void Start()
         {
-            var tileDistanceX = Vector3.right;
-            var tileDistanceY = -Vector3.up;
-            var startPos = new Vector3(-Width / 2.0f + 0.5f, Height / 2.0f - 0.5f, 0);
+            TopLeft = new Vector3(-Width / 2.0f, Height / 2.0f, 0);
+            var startPos = TopLeft + Vector3.down / 2 + Vector3.right / 2;
 
             tiles = new NetworkTile[Height, Width];
             for(var h = 0; h < Height; ++h)
             {
                 for(var w = 0; w < Width; ++w)
                 {
-                    tiles[h, w] = Instantiate(networkTilePrefab, startPos + h * tileDistanceY + w * tileDistanceX,
+                    tiles[h, w] = Instantiate(networkTilePrefab, startPos + h * Vector3.down + w * Vector3.right,
                         Quaternion.identity);
                 }
             }
 
-            startPos += -Vector3.forward;
+            startPos -= Vector3.forward;
             lines = new (NetworkLine top, NetworkLine left)[Height + 1, Width + 1];
             for(var h = 0; h < Height + 1; ++h)
             {
@@ -48,27 +52,32 @@ namespace Networking
                     NetworkLine top = null;
                     NetworkLine left = null;
                     
-                    if(h < Height)
+                    if(w < Width)
                     {
                         top = Instantiate(
                             networkLinePrefab,
-                            startPos + h * tileDistanceY + w * tileDistanceX + new Vector3(-0.5f, 0),
+                            startPos + h * Vector3.down + w * Vector3.right + new Vector3(0, 0.5f),
                             Quaternion.identity);
+                        
+                        top.transform.Rotate(Vector3.forward, 90);
                     }
 
-                    if(w < Width)
+                    if(h < Height)
                     {
                         left = Instantiate(
                             networkLinePrefab,
-                            startPos + h * tileDistanceY + w * tileDistanceX + new Vector3(0, 0.5f),
+                            startPos + h * Vector3.down + w * Vector3.right + new Vector3(-0.5f, 0),
                             Quaternion.identity);
-                        
-                        left.transform.Rotate(Vector3.forward, 90);
                     }
 
                     lines[h, w] = (top, left);
                 }
             }
+        }
+
+        public Vector3 GetEdgeVector(int x, int y)
+        {
+            return TopLeft + Vector3.right * x + Vector3.down * y;
         }
 
         public void CaptureLine(int x, int y, bool top, Player player)
