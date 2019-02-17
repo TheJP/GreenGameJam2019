@@ -199,6 +199,7 @@ public class PongMain : MonoBehaviour
     {
         if (gameTime <= 0)
         {
+            pongUi.DisableTimeDisplay();
             gameTime = 999;
 
             if (boardController != null)

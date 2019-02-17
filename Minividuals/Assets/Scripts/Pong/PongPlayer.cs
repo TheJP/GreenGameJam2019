@@ -23,7 +23,10 @@ public class PongPlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        PongBallMovement pongBall = other.GetComponent<PongBallMovement>();
+        if (other == null) return;
+        
+        PongBallMovement pongBall = other?.GetComponent<PongBallMovement>();
+        if (pongBall == null) return;
 
         pongBall.ChangeColor(playerColor);
         pongBall.LastTouchedByPlayer = playerNumber;
