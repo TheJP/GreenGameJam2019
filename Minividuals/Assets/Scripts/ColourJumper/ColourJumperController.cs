@@ -40,7 +40,7 @@ namespace Assets.Scripts.ColourJumper
         private BoardController boardController;
 
         private List<ColourJumperPlayer> blobs;
-        private readonly List<Player> lostOrder = new List<Player>();
+        private readonly List<(Player player, int diedInRound)> lostOrder = new List<(Player, int)>();
 
         private Platform[] platforms;
 
@@ -90,13 +90,13 @@ namespace Assets.Scripts.ColourJumper
             displayText.text = "GO!";
         }
 
-        private void RemoveLoosers()
+        private void RemoveLoosers(int round)
         {
             var wrongColour = blobs.Where(blob => blob?.CurrentPlatform?.Colour != blob.Player.Colour).ToArray();
             foreach (var blob in wrongColour)
             {
                 blobs.Remove(blob);
-                lostOrder.Add(blob.Player);
+                lostOrder.Add((blob.Player, round));
                 blob.KillPlayer();
             }
         }
@@ -117,8 +117,14 @@ namespace Assets.Scripts.ColourJumper
             displayText.text = "";
         }
 
+        private IEnumerable<(Player player, int score)> ScorePlayers() => lostOrder.Reverse<(Player player, int diedInRound)>()
+                .Zip(playerScores.Take(lostOrder.Count), (lost, score) => (lost.player, lost.diedInRound, score))
+                .GroupBy(lost => lost.diedInRound)
+                .SelectMany(group => group.Select(lost => (lost.player, (int)group.Average(g => g.score))));
+
         private IEnumerator GameLoop()
         {
+            var round = 0;
             while (blobs.Count > 1) // Play until only one blob is left blobbing
             {
                 var roundTime = initialRoundTime;
@@ -131,15 +137,15 @@ namespace Assets.Scripts.ColourJumper
                 roundTime = Mathf.Max(1f, roundTime - roundTimeCutoff);
 
                 // Remove players that lost
-                RemoveLoosers();
+                RemoveLoosers(round);
+                round += 1;
 
                 yield return new WaitForSeconds(1f);
             }
             var winner = blobs.FirstOrDefault();
-            if (winner != null) { lostOrder.Add(winner.Player); }
+            if (winner != null) { lostOrder.Add((winner.Player, int.MaxValue)); }
 
-            lostOrder.Reverse();
-            boardController?.FinishedMiniGame(lostOrder.Zip(playerScores.Take(lostOrder.Count), (player, score) => (player, score)));
+            boardController?.FinishedMiniGame(ScorePlayers());
         }
     }
 }
