@@ -26,6 +26,6 @@ public class PongUi : MonoBehaviour
 
     public void DisableTimeDisplay()
     {
-        gameTime.text = "";
+        gameTime.enabled = false;
     }
 }
