@@ -51,10 +51,11 @@ namespace Assets.Scripts.Board
             {
                 tiles[i] = Instantiate(tilePrefab, tilesParent);
                 tiles[i].TileIndex = i;
+                tiles[i].name = $"BoardTile{i}";
             }
             UpdateTilePositions();
 
-            // Setip players
+            // Setup players
             var spacing = TileCount / players.Count;
             for(int i = 0; i < players.Count; ++i)
             {
