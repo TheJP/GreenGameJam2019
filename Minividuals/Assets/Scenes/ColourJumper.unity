@@ -238,6 +238,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnParent: {fileID: 1036183688}
+  blobPrefab: {fileID: 1825925363401610917, guid: 8897ebf27bb1bfe4c9cb80905f8586fd,
+    type: 3}
+  playerParent: {fileID: 1778932509}
 --- !u!1 &225437757
 GameObject:
   m_ObjectHideFlags: 0
@@ -1395,24 +1398,6 @@ Tilemap:
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 1
       m_ColliderType: 1
-  - first: {x: -6, y: 4, z: 0}
-    second:
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 1
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 1
-      m_ColliderType: 1
-  - first: {x: -5, y: 4, z: 0}
-    second:
-      m_TileIndex: 1
-      m_TileSpriteIndex: 1
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 1
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 1
-      m_ColliderType: 1
   - first: {x: 0, y: 4, z: 0}
     second:
       m_TileIndex: 1
@@ -1993,15 +1978,15 @@ Tilemap:
   m_TileAssetArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 170
+  - m_RefCount: 168
     m_Data: {fileID: 11400000, guid: 2b840d0640cb80849b6a15e09d052507, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 170
+  - m_RefCount: 168
     m_Data: {fileID: 21300000, guid: 31da83db40e427c49b973975304b95b9, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 170
+  - m_RefCount: 168
     m_Data:
       e00: 1
       e01: 0
@@ -2022,7 +2007,7 @@ Tilemap:
   m_TileColorArray:
   - m_RefCount: 0
     m_Data: {r: 3e-45, g: 3e-45, b: 3e-45, a: 3e-45}
-  - m_RefCount: 170
+  - m_RefCount: 168
     m_Data: {r: 0.0018856572, g: 0.7169812, b: 0, a: 1}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}

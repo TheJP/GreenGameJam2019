@@ -1,5 +1,5 @@
 ﻿using Assets.Scripts.Board;
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -18,7 +18,10 @@ public class ColourJumperPlayer : MonoBehaviour
 
     public Player Player { get; private set; }
     private Rigidbody2D rigidbody2d;
-    private bool onGround = true;
+
+    private readonly HashSet<Collider2D> groundCollisions = new HashSet<Collider2D>();
+
+    private bool OnGround => groundCollisions.Count > 0;
 
     private void Awake() => rigidbody2d = GetComponent<Rigidbody2D>();
 
@@ -28,10 +31,16 @@ public class ColourJumperPlayer : MonoBehaviour
         colourRenderer.color = player.Colour;
     }
 
-    private void Start() => Setup(new Player(Color.green, "Player1_"));
+    private void Start()
+    {
+        if (Player == null)
+        {
+            Setup(new Player(Color.green, "Player1_"));
+        }
+    }
 
-    private void OnTriggerEnter2D(Collider2D collision) => onGround = true;
-    private void OnTriggerExit2D(Collider2D collision) => onGround = false;
+    private void OnTriggerEnter2D(Collider2D collision) => groundCollisions.Add(collision);
+    private void OnTriggerExit2D(Collider2D collision) => groundCollisions.Remove(collision);
 
     private void FixedUpdate()
     {
@@ -43,7 +52,7 @@ public class ColourJumperPlayer : MonoBehaviour
 
         rigidbody2d.velocity = velocity;
 
-        if (Input.GetButtonDown($"{Player.InputPrefix}{InputSuffix.A}") && onGround)
+        if (Input.GetButtonDown($"{Player.InputPrefix}{InputSuffix.A}") && OnGround)
         {
             rigidbody2d.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
         }
