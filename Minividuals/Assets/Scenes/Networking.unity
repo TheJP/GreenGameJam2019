@@ -209,6 +209,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapPrefab: {fileID: 8307839028849356651, guid: 76689fb6d933de14c8ca6f9ecfed122e,
     type: 3}
+  playerPrefab: {fileID: 1780508958991668961, guid: 0a306e51de816244583a0a76161e0fc8,
+    type: 3}
   width: 10
   height: 7
 --- !u!1 &985559371
