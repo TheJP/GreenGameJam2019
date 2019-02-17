@@ -9,6 +9,12 @@ namespace MelodyMemory
 {
     public class StartButtonScript : MonoBehaviour
     {
+
+#pragma warning disable 649
+
+        [SerializeField] private Cursor cursor;
+
+#pragma warning restore 649
         
         public event Action ClickEvent;
         
@@ -21,13 +27,13 @@ namespace MelodyMemory
         
         void Update()
         {
-            if (active && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
-            {            
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (active && Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))
+            {
+                Ray ray = cursor.GetRay();
                 if (Physics.Raycast(ray, out var hit))
                 {
                     if (hit.transform.CompareTag("Button"))
-                    {
+                    {                        
                         // clicking deactivates the button
                         this.active = false;
                         ClickEvent?.Invoke();

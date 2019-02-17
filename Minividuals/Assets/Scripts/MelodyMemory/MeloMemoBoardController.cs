@@ -31,6 +31,8 @@ namespace MelodyMemory
         [SerializeField]
         private Transform countdownLocation;
 
+        [SerializeField] private Cursor cursor;
+
 #pragma warning restore 649
        
         private BoardController boardController;
@@ -58,6 +60,11 @@ namespace MelodyMemory
             boardController = FindObjectOfType<BoardController>();    
             // if we have no board controller, then the minigame was started standalone
 
+            if (boardController != null)
+            {
+                cursor.SetPlayer(boardController.players.ActivePlayer);
+            }
+            
             StartRiddle();
         }
         
