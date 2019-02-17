@@ -16,6 +16,8 @@ namespace Networking
         public Vector3 Direction { get; set; }
 
         public float Speed { get; set; } = 1;
+        
+        public bool Stop { get; set; }
 
         private Vector3 nextDecisionPoint;
         private float percentOfDirection;
@@ -33,6 +35,11 @@ namespace Networking
 
         private void Update()
         {
+            if(Stop)
+            {
+                return;
+            }
+            
             percentOfDirection += Time.deltaTime * Speed;
             transform.position = Vector3.Lerp(nextDecisionPoint - Direction, nextDecisionPoint, percentOfDirection);
 
