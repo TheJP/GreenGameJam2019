@@ -114,10 +114,8 @@ namespace MelodyMemory
 
         private IEnumerator StartCountdown()
         {
-            Debug.Log($"Started countdown");
             for(var i = 10; i > 0; --i)
             {
-                Debug.Log($"have prefab");
                 var countdown = Instantiate(countdownPrefab, countdownLocation);
                 countdown.TextMesh.text = $"{i:00}";
                 yield return new WaitForSeconds(1);

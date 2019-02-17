@@ -86,6 +86,8 @@ MonoBehaviour:
     type: 3}
   gameTitleCanvasPrefab: {fileID: 6960778326980830941, guid: 102d86ebd9d824a4f9a53c5bbe9113a1,
     type: 3}
+  pongUiPrefab: {fileID: 7899638090121797797, guid: 9ce7ab63cf903ef42bed46025daae574,
+    type: 3}
   playerColors:
   - {r: 0, g: 0.030314207, b: 1, a: 1}
   - {r: 1, g: 0, b: 0, a: 1}
@@ -97,4 +99,4 @@ MonoBehaviour:
   - Joystick1_
   - Joystick2_
   ballContainer: {fileID: 639856388726191393}
-  gameTime: 180
+  gameTime: 90

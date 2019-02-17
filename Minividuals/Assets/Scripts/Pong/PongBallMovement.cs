@@ -39,7 +39,7 @@ public class PongBallMovement : MonoBehaviour
             || transform.position.z < -zBorder
             || transform.position.z > zBorder)
         {
-            Debug.Log($"Yeeey :) Player {LastTouchedByPlayer} made a point. Isn't this hilarious?");
+//            Debug.Log($"Yeeey :) Player {LastTouchedByPlayer} made a point. Isn't this hilarious?");
             SendMessageUpwards("PongBallDestroyed", LastTouchedByPlayer);
             Destroy(gameObject);
         }
