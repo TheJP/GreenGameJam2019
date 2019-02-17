@@ -133,6 +133,10 @@ public class PongMain : MonoBehaviour
         playerControl.ControlPrefix = boardController != null
             ? boardController.players.Players[playerIndex].InputPrefix
             : controlPrefixes[playerIndex];
+        if (positionOnField == 2 || positionOnField == 3)
+        {
+            playerControl.InvertControls = true;
+        }
 
         playerControl.enabled = false;
     }
