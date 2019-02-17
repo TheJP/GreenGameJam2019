@@ -106,17 +106,38 @@ namespace Networking
             
             var scores = players
                 .Select(p => (p.Player, Score: map.CountTilesOwnedBy(p.Player)))
-                .OrderByDescending(s => s.Score);
+                .OrderByDescending(s => s.Score)
+                .ToList();
 
-            var maxSteps = 7;
-            var steps = scores.Select(s => (s.Player, maxSteps -= 2));
+            for(var i = 0; i < scores.Count; ++i)
+            {
+                var (player, score) = scores[i];
+                var count = 0;
+                
+                for(var j = i + 1; j < scores.Count; ++j)
+                {
+                    if(score > scores[j].Score)
+                    {
+                        ++count;
+                    }
+                }
+
+                if(count == 0 && i < scores.Count - 1)
+                {
+                    scores[i] = (player, count);
+                }
+                else
+                {
+                    scores[i] = (player, count * 2 - 1);
+                }
+            }
             
             if(ReferenceEquals(boardController, null))
             {
 #if UNITY_EDITOR
-                foreach(var step in steps)
+                foreach(var (player, score) in scores)
                 {
-                    Debug.Log($"Player: {step.Player.InputPrefix} / Score: {step.Item2}");
+                    Debug.Log($"Player: {player.InputPrefix} / Score: {score}");
                 }
                 
                 EditorApplication.isPlaying = false;
@@ -126,7 +147,7 @@ namespace Networking
             }
             else
             {
-                boardController.FinishedMiniGame(steps);
+                boardController.FinishedMiniGame(scores);
             }
         }
     }
