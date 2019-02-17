@@ -31,15 +31,22 @@ namespace Networking
         [Tooltip("The maximum time a game should take in seconds")]
         private float maxGameTime = 120;
         
+        [SerializeField]
+        private Countdown countdownPrefab;
+
+        [SerializeField]
+        [Tooltip("The position of the game countdown")]
+        private Transform countdownPosition;
+        
         #pragma warning restore 649
 
         private NetworkMap map;
 
         private IList<NetworkPlayer> players;
 
-        private float elapsedGameTime;
-
         private BoardController boardController;
+
+        private float elapsedGameTime;
         
         private void Start()
         {
@@ -73,7 +80,7 @@ namespace Networking
                 (map.TopRight, Vector3.left, map.Width, 0)
             };
 
-            players = new NetworkPlayer[4];
+            players = new List<NetworkPlayer>();
             
             for(var i = 0; i < boardPlayers.Count; ++i)
             {
@@ -84,18 +91,25 @@ namespace Networking
                 player.Direction = dir;
                 player.Location = (x, y);
 
-                players[i] = player;
+                players.Add(player);
             }
 
             StartCoroutine(StartCountdown());
         }
 
+        private void Update()
+        {
+            elapsedGameTime += Time.deltaTime;
+        }
+
         private IEnumerator StartCountdown()
         {
-            yield return new WaitForSeconds(maxGameTime - 10);
-
-            for(var i = 10; i > 0; --i)
+            while(elapsedGameTime < maxGameTime)
             {
+                var countdown = Instantiate(countdownPrefab, countdownPosition);
+                countdown.TextMesh.color = Color.black;
+                countdown.fadeoutDuration = 0.8f;
+                countdown.TextMesh.text = $"{Mathf.RoundToInt(maxGameTime - elapsedGameTime)}";
                 yield return new WaitForSeconds(1);
             }
 
@@ -106,17 +120,38 @@ namespace Networking
             
             var scores = players
                 .Select(p => (p.Player, Score: map.CountTilesOwnedBy(p.Player)))
-                .OrderByDescending(s => s.Score);
+                .OrderByDescending(s => s.Score)
+                .ToList();
 
-            var maxSteps = 7;
-            var steps = scores.Select(s => (s.Player, maxSteps -= 2));
+            for(var i = 0; i < scores.Count; ++i)
+            {
+                var (player, score) = scores[i];
+                var count = 0;
+                
+                for(var j = i + 1; j < scores.Count; ++j)
+                {
+                    if(score > scores[j].Score)
+                    {
+                        ++count;
+                    }
+                }
+
+                if(count == 0 && i < scores.Count - 1)
+                {
+                    scores[i] = (player, count);
+                }
+                else
+                {
+                    scores[i] = (player, count * 2 - 1);
+                }
+            }
             
             if(ReferenceEquals(boardController, null))
             {
 #if UNITY_EDITOR
-                foreach(var step in steps)
+                foreach(var (player, score) in scores)
                 {
-                    Debug.Log($"Player: {step.Player.InputPrefix} / Score: {step.Item2}");
+                    Debug.Log($"Player: {player.InputPrefix} / Score: {score}");
                 }
                 
                 EditorApplication.isPlaying = false;
@@ -126,7 +161,7 @@ namespace Networking
             }
             else
             {
-                boardController.FinishedMiniGame(steps);
+                boardController.FinishedMiniGame(scores);
             }
         }
     }

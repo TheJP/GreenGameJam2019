@@ -38,7 +38,7 @@ namespace Snake
             {
                 players = new[]
                 {
-                    new Player(Color.green, "Joystick1_"),
+                    new Player(Color.white, "Joystick1_"),
                     new Player(Color.red, "Joystick2_"),
                     new Player(Color.cyan, "Player1_"),
                     new Player(Color.magenta, "Player2_")
@@ -62,20 +62,26 @@ namespace Snake
             {
                 return;
             }
+            
+            var scoreGain = 0;
+            foreach(var snakePlayer in snakePlayers.OrderBy(p => p.TimeOfDeath))
+            {
+                var gain = scoreGain++;
+                snakePlayer.Score += gain;
+            }
 
             if(!ReferenceEquals(boardController, null))
             {
-                var scoreGain = 0;
-                foreach(var snakePlayer in snakePlayers.OrderBy(p => p.TimeOfDeath))
-                {
-                    snakePlayer.Score += scoreGain++;
-                }
-                
                 boardController.FinishedMiniGame(snakePlayers.Select(s => (s.Player, s.Score)));
             }
             else
             {
 #if UNITY_EDITOR
+                foreach(var snakePlayer in snakePlayers)
+                {
+                    Debug.Log($"P: {snakePlayer.InputPrefix} / S: {snakePlayer.Score}");
+                }
+                
                 EditorApplication.isPlaying = false;
 #else
                 Application.Quit();

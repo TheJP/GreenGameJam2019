@@ -117,7 +117,7 @@ namespace AAGame
             planeTransform.Translate(translateX, translateY, translateZ, Space.World);
             
             var planeForwardVector = planeTransform.forward;
-            var rollAngle = -Input.GetAxis(player.InputPrefix + "Horizontal") * Time.deltaTime * 45;
+            var rollAngle = -Input.GetAxis(player.InputPrefix + "Horizontal") * Time.fixedDeltaTime * 45;
             var currentRollAngle = Vector3.SignedAngle(Vector3.up, planeTransform.up, planeForwardVector);
             
             currentRollAngle += rollAngle;
@@ -131,10 +131,10 @@ namespace AAGame
                 rollAngle -= currentRollAngle + 90;
             }
 
-            var pitchAngle = Input.GetAxis(player.InputPrefix + "Vertical") * Time.deltaTime * 45;
+            var pitchAngle = Input.GetAxis(player.InputPrefix + "Vertical") * Time.fixedDeltaTime * 45;
 
             planeTransform.Rotate(Vector3.forward, rollAngle);
-            planeTransform.Rotate(Vector3.up, Time.deltaTime * -currentRollAngle / 10);
+            planeTransform.Rotate(Vector3.up, Time.fixedDeltaTime * -currentRollAngle / 10);
             planeTransform.Rotate(Vector3.right, pitchAngle);
 
             planeRigidBody.velocity = planeForwardVector * flySpeed;

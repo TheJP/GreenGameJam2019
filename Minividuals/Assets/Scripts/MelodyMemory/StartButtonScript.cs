@@ -37,9 +37,9 @@ namespace MelodyMemory
         
         }
 
-        public void activate()
+        public void setActive(bool active)
         {
-            this.active = true;
+            this.active = active;
         }
 
     }    
