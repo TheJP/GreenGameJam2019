@@ -16,6 +16,7 @@ namespace Assets.Scripts.Board
         public Tiles tiles;
         public PlayerController players;
         public MiniGamesController miniGames;
+        public GameInfoScreen gameInfoScreen;
         public Scoreboard scoreboard;
         public GameOver gameOver;
         public Die die;
@@ -79,9 +80,13 @@ namespace Assets.Scripts.Board
                 die.HideDie();
                 yield return player.Location.HideCloudsCoroutine();
 
-                //Play minigame
+                // Play minigame
                 if (player.Location.MiniGame != null)
                 {
+                    // Show game info
+                    yield return ShowGameInfoCoroutine();
+
+                    // Start minigame
                     isBackInMainScene = false;
                     SceneManager.LoadScene(player.Location.MiniGame.sceneName);
                     yield return new WaitUntil(() => isBackInMainScene);
@@ -99,9 +104,20 @@ namespace Assets.Scripts.Board
         }
 
         /// <summary>
+        /// Show mini game information to the upcomming game.
+        /// </summary>
+        private IEnumerator ShowGameInfoCoroutine()
+        {
+            gameInfoScreen.Clear();
+            gameInfoScreen.SetMiniGame(players.ActivePlayer.Location.MiniGame);
+            gameInfoScreen.gameObject.SetActive(true);
+            yield return new WaitUntil(AnyPlayerClicksA);
+            gameObject.gameObject.SetActive(false);
+        }
+
+        /// <summary>
         /// Game over logic.
         /// </summary>
-        /// <returns></returns>
         private IEnumerator GameOver()
         {
             var winner = players.Players.OrderByDescending(p => p.StepsProgress).First();
@@ -118,7 +134,6 @@ namespace Assets.Scripts.Board
         /// </summary>
         /// <param name="player">Player to be moved.</param>
         /// <param name="steps">Amount of steps the player should move in positive or negative direction.</param>
-        /// <returns></returns>
         public IEnumerator MovePlayerCoroutine(Player player, int steps)
         {
             player.StepsProgress += steps;
