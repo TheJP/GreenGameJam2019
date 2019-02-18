@@ -50,7 +50,7 @@ namespace Assets.Scripts.ColourJumper
             if (PlatformActive) { return; }
             if (Time.time - animationStart > animationDuration)
             {
-                targetColour = Random.ColorHSV(0f, 1f, 0f, 0.5f, 0f, 0.5f);
+                targetColour = Random.ColorHSV(0f, 1f, 0f, 0.5f, 0.5f, 1f);
                 animationDuration = Random.Range(4f, 5f);
                 animationStart = Time.time;
                 startColor = colourRenderer.color;
