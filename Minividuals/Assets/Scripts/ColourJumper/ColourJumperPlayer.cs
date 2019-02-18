@@ -29,11 +29,14 @@ namespace Assets.Scripts.ColourJumper
         public Platform CurrentPlatform { get; set; }
 
         public Player Player { get; private set; }
+
         private Rigidbody2D rigidbody2d;
 
         private readonly HashSet<Collider2D> groundCollisions = new HashSet<Collider2D>();
 
         private bool OnGround => groundCollisions.Count > 0;
+
+        private bool jumpPressed = false;
 
         private bool isDead = false;
 
@@ -58,6 +61,11 @@ namespace Assets.Scripts.ColourJumper
         private void OnTriggerEnter2D(Collider2D collision) => groundCollisions.Add(collision);
         private void OnTriggerExit2D(Collider2D collision) => groundCollisions.Remove(collision);
 
+        private void Update()
+        {
+            if (Input.GetButtonDown($"{Player.InputPrefix}{InputSuffix.A}")) { jumpPressed = true; }
+        }
+
         private void FixedUpdate()
         {
             if (isDead) { return; }
@@ -78,11 +86,11 @@ namespace Assets.Scripts.ColourJumper
 
             rigidbody2d.velocity = velocity;
 
-            if (Input.GetButtonDown($"{Player.InputPrefix}{InputSuffix.A}") && OnGround)
+            if (jumpPressed)
             {
-                rigidbody2d.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
+                if (OnGround) { rigidbody2d.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse); }
+                jumpPressed = false;
             }
-
         }
 
         public void KillPlayer()
