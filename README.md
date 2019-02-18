@@ -1,5 +1,6 @@
 # GreenGameJam2019
-Party board game with mini games
+Party board game with mini games.
+Downloads: [Minividuals Releases](https://github.com/TheJP/GreenGameJam2019/releases)
 
 ![Menu](Screenshots/MinividualsV1Menu.png)
 ![Scoreboard](Screenshots/MinividualsV1Scoreboard.png)
