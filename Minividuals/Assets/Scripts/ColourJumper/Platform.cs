@@ -29,7 +29,7 @@ namespace Assets.Scripts.ColourJumper
         public void SetColour(Color colour)
         {
             Colour = colour;
-            colourRenderer.color = Color.Lerp(colour, Color.black, 0.3f);
+            colourRenderer.color = Color.Lerp(colour, Color.black, 0.2f);
             SetPlatformActive(true);
         }
 

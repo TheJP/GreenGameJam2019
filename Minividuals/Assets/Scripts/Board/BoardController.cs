@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Menu;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -108,11 +107,10 @@ namespace Assets.Scripts.Board
         /// </summary>
         private IEnumerator ShowGameInfoCoroutine()
         {
-            gameInfoScreen.Clear();
             gameInfoScreen.SetMiniGame(players.ActivePlayer.Location.MiniGame);
             gameInfoScreen.gameObject.SetActive(true);
             yield return new WaitUntil(AnyPlayerClicksA);
-            gameObject.gameObject.SetActive(false);
+            gameInfoScreen.gameObject.SetActive(false);
         }
 
         /// <summary>

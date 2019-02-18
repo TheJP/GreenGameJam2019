@@ -24,5 +24,8 @@ namespace Assets.Scripts.Board
 
         [Tooltip("Maximal amount of this mini game per board")]
         public int maxPerGame;
+
+        [Tooltip("Prefab that can be spawned into the GameInfoScreen to show information")]
+        public RectTransform gameInfoPrefab;
     }
 }
