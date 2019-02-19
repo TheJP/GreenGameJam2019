@@ -302,7 +302,8 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 2f0db3d91e5022d0d857354d4024fa6b, type: 3}
     minPerGame: 5
     maxPerGame: 6
-    gameInfoPrefab: {fileID: 0}
+    gameInfoPrefab: {fileID: 3411448433946375692, guid: 65f1d485a7d9bc741b717fdc246a99d1,
+      type: 3}
   - name: Pong
     sceneName: Pong
     icon: {fileID: 21300000, guid: 0422ed70bf796342191522bc0f3310b6, type: 3}
@@ -1032,7 +1033,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1040930852
 RectTransform:
   m_ObjectHideFlags: 0
