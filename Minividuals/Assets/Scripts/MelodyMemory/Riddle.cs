@@ -104,7 +104,7 @@ namespace MelodyMemory
 
         public List<NoteWithPosition> GetRiddleMelody()
         {
-            return this.melodyOnBoard;
+            return melodyOnBoard;
         }
         
         
@@ -115,7 +115,7 @@ namespace MelodyMemory
         /// </summary>
         /// <param name="position">position of clicked tile</param>
         /// <returns>true if game is won</returns>
-        public bool hearTile(int position)
+        public bool HearTile(int position)
         {
             Note heardNote = notePositions[position].Note;
             Note expectedNote = randomNotes[waitingForPosition];

@@ -24,20 +24,16 @@ namespace MelodyMemory
 
 #pragma warning restore 649
 
-        private Note note;     // only set on some tiles  
-
-        private String myName;
-
-        private bool listening;    // if false, it will not react to clicks TODO isn't there something built-in for that?   
-
-        public Cursor Cursor { get; set; }
-        
+        public Cursor Cursor { get; set; }       
         public int tileIndex { get; set; }
 
+        private Note note;     // only set on some tiles  
+        private String myName;
+        private bool listening;    // if false, it will not react to clicks TODO isn't there something built-in for that?
+        
         private void Start()
         {
             myName = GetComponent<Renderer>().name;
-
             sound = GetComponent<AudioSource>();
             
             SetColor(defaultColor);
@@ -65,14 +61,15 @@ namespace MelodyMemory
         /// <summary>
         /// Enables the tile (but only if it has a note)
         /// </summary>
-        /// <param name="listening"></param>
-        public void setListening(bool listening)
+        /// <param name="listen"></param>
+        public void setListening(bool listen)
         {
             // a tile without note will never listen
             if (note != null)
             {
-                this.listening = listening;
-                Debug.Log($"enabled listening for tile {name}");
+                enabled = listen;
+                listening = listen;    // TODO check if we can remove this listening variable
+                Debug.Log($"set listening for tile {name} to {listen}");
             }
                 
         }
@@ -118,14 +115,15 @@ namespace MelodyMemory
         IEnumerator BlinkColor() 
         {
             SetColor(note.Color);
-
-            // TODO enable sound again
             sound.Play();
             yield return new WaitForSeconds(1.0f);
 
             ResetColor();
-            
-            TileClickEvent?.Invoke();
+
+            if (listening)
+            {
+                TileClickEvent?.Invoke();
+            }
         }
 
 

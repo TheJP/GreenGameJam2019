@@ -25,13 +25,6 @@ namespace MelodyMemory
         
 #pragma warning restore 649
 
-
-        /// <summary>
-        /// Event that gets fired after a player changed a tile location.
-        /// </summary>
-//        public event Action<Player> PlayerChangedLocation;
-        // TODO add event for clicking a tile? (or add this to Tile object?)
-
         private readonly ColorSoundTile[] tiles = new ColorSoundTile[tileCount];
 
         private List<NoteWithPosition> melody; // to be played when riddle starts
@@ -40,8 +33,9 @@ namespace MelodyMemory
 
         private Riddle riddle;
 
-        private void Start()
-        {            
+
+        public void Setup()
+        {
             for (int i = 0; i < tileCount; ++i)
             {
                 tiles[i] = Instantiate(tilePrefab, tilesParent);
@@ -52,45 +46,33 @@ namespace MelodyMemory
                 var index = i;
                 tiles[i].TileClickEvent += () => ClickedTile(index);
             }
+            SetListening(false);
+
+            SetTilePositions();
             
-            SetListening(false);
-
-            UpdateTilePositions();
-            tilesParent.localScale += new Vector3(0.5f, 0.5f, 0);
-            tilesParent.position += (1.0f * Vector3.right - 1.0f * Vector3.up - 0.4f * Vector3.forward);
-
-        }
-
-
-        public void Setup()
-        {
-            SetListening(false);
             ResetTileColors();
         }
 
-        private void UpdateTilePositions()
+        private void SetTilePositions()
         {
             // tiles are normalized: each has width 1, height 1 (for scaling: scale the parent...)
-
             // position 0 is width/2 minus half a tile left of the center and height/2 minus half a tile below the center 
             float hOffset = 0.5f - (float) width / 2;
             float vOffset = .5f - (float) height / 2;
-
 
             for (int i = 0; i < tileCount; ++i)
             {
                 int row = i / width;
                 int col = i % width;
-                //Debug.Log($"Tile {i}: row {row}, col {col}");
-
-                // TODO set position (inspired by Board.Tiles)
                 Vector3 newPosition = tilesParent.transform.position;
                 newPosition.x = col + hOffset;
                 newPosition.y = row + vOffset;
                 newPosition.z = 0;
                 tiles[i].transform.position = newPosition;
             }
-
+            
+            tilesParent.localScale += new Vector3(0.5f, 0.5f, 0);
+            tilesParent.position += (1.0f * Vector3.right - 1.0f * Vector3.up - 0.4f * Vector3.forward);
         }
 
         private void ResetTileColors()
@@ -98,7 +80,21 @@ namespace MelodyMemory
             for (int i = 0; i < tileCount; ++i)
                 tiles[i].ResetColor();
         }
+       
+        
+        // used during the phases of the game where the player shouldn't be able to click the tiles
+        public void DisableControl ()
+        {
+            SetListening(false);
+        }
 
+        // used during the phases of the game where the player should be able to click the tiles
+        public void EnableControl ()
+        {
+            SetListening(true);
+        }
+
+        
         // with false, tiles will not react when clicked 
         private void SetListening(bool listening)
         {
@@ -106,10 +102,10 @@ namespace MelodyMemory
                 tiles[i].setListening(listening);
         }
         
-
-        public void AddAndPlayRiddle(Riddle riddle)
+        public IEnumerator AddAndPlayRiddle(Riddle riddle)
+//        public void AddAndPlayRiddle(Riddle riddle)
         {
-            SetListening(false);
+            // SetListening(false);
             if(melodyCoroutine != null)
             {
                 StopCoroutine(melodyCoroutine);
@@ -119,7 +115,10 @@ namespace MelodyMemory
             ResetTileColors();
             UpdateTilesFromRiddle(riddle);
             melody = riddle.GetRiddleMelody();
-            StartCoroutine(melodyCoroutine = PlayMelody());
+            Debug.Log("AddAndPlayRiddle: will play melody");
+            yield return StartCoroutine(melodyCoroutine = PlayMelody());
+//            StartCoroutine(melodyCoroutine = PlayMelody());
+            Debug.Log("AddAndPlayRiddle: finished playing melody");
         }
 
         private void UpdateTilesFromRiddle(Riddle riddle)
@@ -140,11 +139,11 @@ namespace MelodyMemory
         }
 
 
-        IEnumerator PlayMelody()
+        private IEnumerator PlayMelody()
         {
             SetListening(false);
             yield return new WaitForSeconds(1.0f);
-            Debug.Log("Playing melody");
+            Debug.Log("PlayMelody: Playing melody");
             foreach (var noteWithPosition in melody)
             {
                 ColorSoundTile tile = tiles[noteWithPosition.Position];
@@ -152,15 +151,16 @@ namespace MelodyMemory
                 tile.StartCoroutine("BlinkColor");
                 yield return new WaitForSeconds(1.0f);
             }
-            Debug.Log("finished melody");
+            Debug.Log("PlayMelody: finished melody");
             // only set tiles with a note to listening
             SetListening(true);
+            Debug.Log("PlayMelody: set tiles to listening");
         }
 
         private void ClickedTile(int index)
         {
             Debug.Log($"Tiles: heard tile {index}");
-            bool gameWon = riddle.hearTile(index);
+            bool gameWon = riddle.HearTile(index);
 
             if (gameWon)
             {
