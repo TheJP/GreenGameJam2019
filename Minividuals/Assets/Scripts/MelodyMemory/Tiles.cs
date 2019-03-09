@@ -102,19 +102,19 @@ namespace MelodyMemory
                 tiles[i].setListening(listening);
         }
         
-        public IEnumerator AddAndPlayRiddle(Riddle riddle)
+        // then add or change riddle, then play the melody 
+        public IEnumerator AddAndPlayRiddle(Riddle newRiddle)
 //        public void AddAndPlayRiddle(Riddle riddle)
         {
-            // SetListening(false);
             if(melodyCoroutine != null)
             {
                 StopCoroutine(melodyCoroutine);
             }
-            
-            this.riddle = riddle;
             ResetTileColors();
-            UpdateTilesFromRiddle(riddle);
-            melody = riddle.GetRiddleMelody();
+            
+            riddle = newRiddle;
+            UpdateTilesFromRiddle(newRiddle);
+            melody = newRiddle.GetRiddleMelody();
             Debug.Log("AddAndPlayRiddle: will play melody");
             yield return StartCoroutine(melodyCoroutine = PlayMelody());
 //            StartCoroutine(melodyCoroutine = PlayMelody());
@@ -141,7 +141,6 @@ namespace MelodyMemory
 
         private IEnumerator PlayMelody()
         {
-            SetListening(false);
             yield return new WaitForSeconds(1.0f);
             Debug.Log("PlayMelody: Playing melody");
             foreach (var noteWithPosition in melody)
@@ -152,9 +151,6 @@ namespace MelodyMemory
                 yield return new WaitForSeconds(1.0f);
             }
             Debug.Log("PlayMelody: finished melody");
-            // only set tiles with a note to listening
-            SetListening(true);
-            Debug.Log("PlayMelody: set tiles to listening");
         }
 
         private void ClickedTile(int index)

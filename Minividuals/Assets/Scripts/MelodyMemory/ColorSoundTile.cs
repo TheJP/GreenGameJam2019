@@ -59,16 +59,20 @@ namespace MelodyMemory
         }
 
         /// <summary>
-        /// Enables the tile (but only if it has a note)
+        /// Disables the tile, or enables it (but only if it has a note)
         /// </summary>
         /// <param name="listen"></param>
         public void setListening(bool listen)
         {
-            // a tile without note will never listen
-            if (note != null)
+            if (!listen)
             {
-                enabled = listen;
-                listening = listen;    // TODO check if we can remove this listening variable
+                enabled = false;
+                listening = false;    // TODO check if we can remove this listening variable
+            }
+            else if (note != null)    // a tile without note will never listen
+            {
+                enabled = true;
+                listening = true;    // TODO check if we can remove this listening variable
                 Debug.Log($"set listening for tile {name} to {listen}");
             }
                 

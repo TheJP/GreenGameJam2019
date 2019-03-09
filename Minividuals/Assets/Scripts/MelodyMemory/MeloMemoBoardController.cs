@@ -24,7 +24,7 @@ namespace MelodyMemory
         [SerializeField] private int minRiddleLength;
 
         [SerializeField] private Tiles tiles;
-        [SerializeField] private StartButtonScript startButton;
+        [SerializeField] private RestartButtonScript startButton;
         
         [SerializeField]
         private Countdown countdownPrefab;
@@ -35,9 +35,9 @@ namespace MelodyMemory
         [SerializeField] private Cursor cursor;
         
         [Tooltip("The delay between the start of RoundStarting and RoundPlaying phases")]
-        [SerializeField] private float startDelay = 3f; 
+        [SerializeField] private float startDelay = .5f; 
         [Tooltip("The delay between the end of RoundPlaying and RoundEnding phases")]
-        [SerializeField] private float endDelay = 3f;
+        [SerializeField] private float endDelay = 1f;
 
 #pragma warning restore 649
        
@@ -68,7 +68,7 @@ namespace MelodyMemory
             tiles.Setup();
             tiles.RiddleSolved += OnRiddleSolved;
             // startButton.setActive(false);    // is inactive by default   
-            startButton.ClickEvent += StartButtonOnClickEvent;
+            startButton.ClickEvent += RestartButtonOnClickEvent;
 
             riddleLength = minRiddleLength;
             numRiddlesSolved = 0;
@@ -81,14 +81,15 @@ namespace MelodyMemory
                 cursor.SetPlayer(boardController.players.ActivePlayer);
             }
             
-            // Once the tanks have been created and the camera is using them as targets, start the game.
+            // when everything has been set up, start the game.
             StartCoroutine (GameLoop ());
         }
         
         // This is called from start and will run each phase of the game one after another
         private IEnumerator GameLoop ()
         {
-            // Start off by running the 'RoundStarting' coroutine but don't return until it's finished.
+            Debug.Log("GameLoop: started");
+            // Start off by running the 'RoundStarting' coroutine but don't return until it's finished
             yield return StartCoroutine (RoundStarting ());
 
             // Once the 'RoundStarting' coroutine is finished, run the 'RoundPlaying' coroutine but don't return until it's finished.
@@ -104,15 +105,18 @@ namespace MelodyMemory
                 // Note that this coroutine doesn't yield.  This means that the current version of the GameLoop will end.
                 StartCoroutine (GameLoop ());
             }
+            Debug.Log("GameLoop: finished");
         }
 
 
         private IEnumerator RoundStarting()
         {
+            Debug.Log("RoundStarting: started");
             // to start the round, make sure the tiles cannot be clicked and init a new riddle
             DisableControls ();
             yield return StartCoroutine(InitRiddle ());
 
+            Debug.Log("RoundStarting: finished");
             // Wait for the specified length of time until yielding control back to the game loop.
             yield return startWait;
             
@@ -120,7 +124,8 @@ namespace MelodyMemory
 
         private IEnumerator RoundPlaying()
         {
-            // As soon as the round begins playing let the players control the tiles
+            Debug.Log("RoundPlaying: started");
+            // As soon as the round begins playing let the players control the cursor and tiles
             EnableControls();
 
             // while riddle is not solved and player does not want to have a new riddle...
@@ -128,21 +133,25 @@ namespace MelodyMemory
             {
                 // ... return on the next frame.
                 yield return null;
-            }            
+            }
+            Debug.Log("RoundPlaying: finished");
         }
 
         private IEnumerator RoundEnding()
         {
+            Debug.Log("RoundEnding: started");
             // stop tiles from reacting
             DisableControls ();
 
             if (restartPressed)
             {
+                Debug.Log("RoundEnding: because restart pressed");
                 // round ended because player wants a new riddle
                 restartPressed = false;
             }
             else if (riddleSolved)
             {
+                Debug.Log("RoundEnding: because riddle solved");
                 // round ended because player has solved the riddle
                 // increment the difficulty (riddle length), increment the score
                 riddleSolved = false;
@@ -151,15 +160,16 @@ namespace MelodyMemory
             }
             else
             {
-                Debug.Log($"NOT restart pressed and NOT riddle solved - why are we here???");
+                Debug.Log($"RoundEnding: NOT restart pressed and NOT riddle solved - why are we here???");
             }
 
+            Debug.Log("RoundEnding: finished");
             // Wait for the specified length of time until yielding control back to the game loop.
             yield return endWait;
         }
 
 
-        private void StartButtonOnClickEvent()
+        private void RestartButtonOnClickEvent()
         {
             restartPressed = true;
         }
@@ -234,14 +244,18 @@ namespace MelodyMemory
         private void EnableControls()
         {
             tiles.EnableControl();
+            
             startButton.enabled = true;
             cursor.enabled = true;
+            cursor.Show();
         }
         
         private void DisableControls()
         {
             startButton.enabled = false;
             cursor.enabled = false;
+            cursor.Hide();
+            
             tiles.DisableControl();
         }
         

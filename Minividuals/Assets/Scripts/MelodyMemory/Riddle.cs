@@ -52,7 +52,7 @@ namespace MelodyMemory
                 if (!rNotes.Contains(randomNote))
                     rNotes.Add(randomNote);
             }
-            Debug.Log($"random notes initialized");
+            Debug.Log($"InitRandomNotes: random notes initialized");
             return rNotes;
         }
 
@@ -62,7 +62,7 @@ namespace MelodyMemory
         /// </summary>
         private void SetToPositions()
         {
-            Debug.Log(($"Setting melody to board (length {length}:"));
+            Debug.Log(($"SetToPositions: Setting melody to board (length {length}):"));
             
             melodyOnBoard = new List<NoteWithPosition>();
             foreach (var note in randomNotes)
@@ -79,7 +79,7 @@ namespace MelodyMemory
             
             // and also sort the melody for the solution
             randomNotes.Sort();
-            Debug.Log($"sorted notes:");
+            Debug.Log($"SetToPositions: sorted notes:");
             foreach (var note in randomNotes)
             {
                 Debug.Log($"- note {note}");

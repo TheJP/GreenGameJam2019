@@ -36,4 +36,15 @@ public class Cursor : MonoBehaviour
         ControlPrefix = player.InputPrefix;
         colorRenderer.color = player.Colour;
     }
+
+    public void Show()
+    {
+        colorRenderer.enabled = true;
+    }
+    
+    public void Hide()
+    {
+        colorRenderer.enabled = false;
+    }
+
 }

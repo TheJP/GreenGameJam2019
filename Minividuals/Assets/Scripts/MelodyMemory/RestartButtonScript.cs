@@ -7,7 +7,7 @@ using UnityEngine.Serialization;
 
 namespace MelodyMemory
 {
-    public class StartButtonScript : MonoBehaviour
+    public class RestartButtonScript : MonoBehaviour
     {
 
 #pragma warning disable 649
