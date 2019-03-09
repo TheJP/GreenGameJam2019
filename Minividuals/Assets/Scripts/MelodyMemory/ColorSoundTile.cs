@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Experimental.UIElements;
 
@@ -24,12 +25,13 @@ namespace MelodyMemory
 
 #pragma warning restore 649
 
-        public Cursor Cursor { get; set; }       
+        public Cursor cursor { get; set; }       
         public int tileIndex { get; set; }
 
-        private Note note;     // only set on some tiles  
+        private Note note;           // only set on some tiles  
         private String myName;
-        private bool listening;    // if false, it will not react to clicks TODO isn't there something built-in for that?
+        private bool listening;      // if false, it will not react to clicks and to the sound being played
+        private float blinkDuration = 1.0f;     // sounds have length 1 second, best to change tile color for the same duration
         
         private void Start()
         {
@@ -67,13 +69,12 @@ namespace MelodyMemory
             if (!listen)
             {
                 enabled = false;
-                listening = false;    // TODO check if we can remove this listening variable
+                listening = false;
             }
             else if (note != null)    // a tile without note will never listen
             {
                 enabled = true;
-                listening = true;    // TODO check if we can remove this listening variable
-                Debug.Log($"set listening for tile {name} to {listen}");
+                listening = true;
             }
                 
         }
@@ -85,11 +86,12 @@ namespace MelodyMemory
             // no need to listen for mouse if this tile has no note!
             
             
-            // Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
-            if (note != null && Input.GetButtonDown($"{Cursor.ControlPrefix}{InputSuffix.A}"))
+            // change here (button and ray) and in RestartButtonScript to play with mouse instead of controller
+            if (note != null && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
+//            if (note != null && Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))
             {
-                Ray ray = Cursor.GetRay();
-                // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+//                Ray ray = cursor.GetRay();
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hit))
                 {
                     if (hit.transform.CompareTag("Player"))
@@ -120,14 +122,13 @@ namespace MelodyMemory
         {
             SetColor(note.Color);
             sound.Play();
-            yield return new WaitForSeconds(1.0f);
-
-            ResetColor();
-
             if (listening)
             {
                 TileClickEvent?.Invoke();
             }
+
+            yield return new WaitForSeconds(blinkDuration);
+            ResetColor();
         }
 
 

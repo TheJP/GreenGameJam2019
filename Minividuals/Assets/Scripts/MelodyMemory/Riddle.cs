@@ -67,14 +67,11 @@ namespace MelodyMemory
             melodyOnBoard = new List<NoteWithPosition>();
             foreach (var note in randomNotes)
             {
-                int pos = UnityEngine.Random.Range(0, numPositions - 1);
-                if (!notePositions.ContainsKey(pos))
-                {
-                    NoteWithPosition newNote = new NoteWithPosition(note, pos);
-                    notePositions.Add(pos, newNote);
-                    melodyOnBoard.Add(newNote);
-                    Debug.Log(($"- added to melody: {newNote}"));
-                }
+                int pos = GetFreePosition();
+                NoteWithPosition newNote = new NoteWithPosition(note, pos);
+                notePositions.Add(pos, newNote);
+                melodyOnBoard.Add(newNote);
+                Debug.Log(($"- added to melody: {newNote}"));
             }
             
             // and also sort the melody for the solution
@@ -87,18 +84,23 @@ namespace MelodyMemory
             waitingForPosition = 0;    // index into sortedNotes - we expect the first one now
 
         }
+
+        // get a position on the board where there is not yet a note 
+        private int GetFreePosition()
+        {
+            int pos;
+            do
+            {
+                pos = UnityEngine.Random.Range(0, numPositions - 1);
+            } 
+            while (notePositions.ContainsKey(pos));
+            return pos;
+        }
         
         public NoteWithPosition GetNoteAtPosition(int position)
         {
-            NoteWithPosition note = null;
-            if (notePositions.TryGetValue(position, out note))
-            {
-                Console.WriteLine($"no note at position {position}");
-            }
-            else
-            {
-                Console.WriteLine($"note at position {position}: {note}");
-            }
+            NoteWithPosition note;
+            notePositions.TryGetValue(position, out note);
             return note;
         }
 

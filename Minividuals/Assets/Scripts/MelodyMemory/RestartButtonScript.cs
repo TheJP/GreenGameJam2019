@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.UIElements;
-using UnityEngine.Serialization;
 
 namespace MelodyMemory
 {
@@ -13,35 +10,52 @@ namespace MelodyMemory
 #pragma warning disable 649
 
         [SerializeField] private Cursor cursor;
+        
+        [SerializeField] private GameObject restartIconObject;
 
 #pragma warning restore 649
         
         public event Action ClickEvent;
-        
-        private bool active = false;
 
+        private SpriteRenderer iconRenderer;
+        
+
+        public void Setup()
+        {
+            iconRenderer = restartIconObject.GetComponentInChildren<SpriteRenderer>();            
+        }
         
         void Update()
         {
-            if (active && Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))
-            {
-                Ray ray = cursor.GetRay();
+            // change here (button and ray) and in ColorSoundTile to play with mouse instead of controller
+            if (isActiveAndEnabled && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
+//            if (isActiveAndEnabled && Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))
+            {   
+                // change here to play with mouse instead of controller
+//                Ray ray = cursor.GetRay();
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hit))
                 {
                     if (hit.transform.CompareTag("Button"))
                     {                        
                         // clicking deactivates the button
-                        this.active = false;
                         ClickEvent?.Invoke();
                     }
                 }
             }
         
         }
-
-        public void setActive(bool active)
+        
+        public void Show()
         {
-            this.active = active;
+            if (iconRenderer != null)
+                iconRenderer.color = Color.white;
+        }
+    
+        public void Hide()
+        {
+            if (iconRenderer != null)
+                iconRenderer.color = Color.grey;
         }
 
     }    

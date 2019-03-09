@@ -26,13 +26,14 @@ namespace MelodyMemory
 #pragma warning restore 649
 
         private readonly ColorSoundTile[] tiles = new ColorSoundTile[tileCount];
-
-        private List<NoteWithPosition> melody; // to be played when riddle starts
-        
-        private IEnumerator melodyCoroutine;
-
+            
         private Riddle riddle;
-
+        
+        private List<NoteWithPosition> melody; // to be played when riddle starts
+        private IEnumerator melodyCoroutine;
+        private float melodySpeed = 1.1f;    // sounds have length 1 second, best if melody speed is around that
+        private float endWaitDuration = 0.5f;     // how long to wait before showing "riddle solved" 
+        
 
         public void Setup()
         {
@@ -41,7 +42,7 @@ namespace MelodyMemory
                 tiles[i] = Instantiate(tilePrefab, tilesParent);
                 tiles[i].name = $"ColorSoundTile{i}";
                 tiles[i].tileIndex = i;
-                tiles[i].Cursor = cursor;
+                tiles[i].cursor = cursor;
 
                 var index = i;
                 tiles[i].TileClickEvent += () => ClickedTile(index);
@@ -80,7 +81,12 @@ namespace MelodyMemory
             for (int i = 0; i < tileCount; ++i)
                 tiles[i].ResetColor();
         }
-       
+
+        public void SetTileColors(Color color)
+        {
+            for (int i = 0; i < tileCount; ++i)
+                tiles[i].SetColor(color);
+        }
         
         // used during the phases of the game where the player shouldn't be able to click the tiles
         public void DisableControl ()
@@ -104,20 +110,18 @@ namespace MelodyMemory
         
         // then add or change riddle, then play the melody 
         public IEnumerator AddAndPlayRiddle(Riddle newRiddle)
-//        public void AddAndPlayRiddle(Riddle riddle)
         {
             if(melodyCoroutine != null)
             {
                 StopCoroutine(melodyCoroutine);
             }
             ResetTileColors();
-            
-            riddle = newRiddle;
+
+            riddle = newRiddle;            
             UpdateTilesFromRiddle(newRiddle);
             melody = newRiddle.GetRiddleMelody();
             Debug.Log("AddAndPlayRiddle: will play melody");
             yield return StartCoroutine(melodyCoroutine = PlayMelody());
-//            StartCoroutine(melodyCoroutine = PlayMelody());
             Debug.Log("AddAndPlayRiddle: finished playing melody");
         }
 
@@ -141,16 +145,13 @@ namespace MelodyMemory
 
         private IEnumerator PlayMelody()
         {
-            yield return new WaitForSeconds(1.0f);
-            Debug.Log("PlayMelody: Playing melody");
+            yield return new WaitForSeconds(0.2f);
             foreach (var noteWithPosition in melody)
             {
                 ColorSoundTile tile = tiles[noteWithPosition.Position];
-                Debug.Log($"- will blink tile {tile}");
                 tile.StartCoroutine("BlinkColor");
-                yield return new WaitForSeconds(1.0f);
+                yield return new WaitForSeconds(melodySpeed);
             }
-            Debug.Log("PlayMelody: finished melody");
         }
 
         private void ClickedTile(int index)
@@ -161,14 +162,27 @@ namespace MelodyMemory
             if (gameWon)
             {
                 SetListening(false);
-                ShowRiddleSolved();
+//                ShowRiddleSolved();
+                StartCoroutine (ShowRiddleSolved());
                 RiddleSolved?.Invoke();
             }
             
         }
 
-        private void ShowRiddleSolved()
+        
+        private IEnumerator ShowRiddleSolved()
+//        private void ShowRiddleSolved()
         {
+            yield return new WaitForSeconds(endWaitDuration);        // TODO or just wait until sound is finished? how?
+            
+            ResetTileColors();
+            for (int i = 0; i < 5; i++)
+            {
+                DisplayCheckerboard(Color.black, Color.white);
+                yield return new WaitForSeconds(0.1f);
+                DisplayCheckerboard(Color.white, Color.black);
+                yield return new WaitForSeconds(0.1f);
+            }
             DisplayCheckerboard(Color.black, Color.white);
         }
 

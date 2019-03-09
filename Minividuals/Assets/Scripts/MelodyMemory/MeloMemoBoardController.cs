@@ -24,7 +24,7 @@ namespace MelodyMemory
         [SerializeField] private int minRiddleLength;
 
         [SerializeField] private Tiles tiles;
-        [SerializeField] private RestartButtonScript startButton;
+        [SerializeField] private RestartButtonScript restartButton;
         
         [SerializeField]
         private Countdown countdownPrefab;
@@ -34,18 +34,18 @@ namespace MelodyMemory
 
         [SerializeField] private Cursor cursor;
         
-        [Tooltip("The delay between the start of RoundStarting and RoundPlaying phases")]
-        [SerializeField] private float startDelay = .5f; 
-        [Tooltip("The delay between the end of RoundPlaying and RoundEnding phases")]
-        [SerializeField] private float endDelay = 1f;
-
 #pragma warning restore 649
        
+        // The delay between the start of RoundStarting and RoundPlaying phases
+        private float startDelay = 1.0f; 
+        // The delay between the end of RoundPlaying and RoundEnding phases (allow enough time to play "riddle solved animation")
+        private float endDelay = 2.0f;
+
         private BoardController boardController;
-        private bool gameFinished;
+        private bool gameFinished;        // game finished because time is up
         private bool restartPressed;      // player wishes to restart the a riddle (of same length)
         private bool riddleSolved;        // player has solved the current riddle 
-        private float gameTime;
+        private float gameTime;           // time the game is running (counted in Update)
         private IEnumerator countdownCoroutine;
         
         private int numRiddlesSolved;
@@ -67,8 +67,8 @@ namespace MelodyMemory
             
             tiles.Setup();
             tiles.RiddleSolved += OnRiddleSolved;
-            // startButton.setActive(false);    // is inactive by default   
-            startButton.ClickEvent += RestartButtonOnClickEvent;
+            restartButton.Setup();
+            restartButton.ClickEvent += RestartButtonOnClickEvent;
 
             riddleLength = minRiddleLength;
             numRiddlesSolved = 0;
@@ -117,8 +117,10 @@ namespace MelodyMemory
             yield return StartCoroutine(InitRiddle ());
 
             Debug.Log("RoundStarting: finished");
-            // Wait for the specified length of time until yielding control back to the game loop.
-            yield return startWait;
+            
+            // Wait for the specified length of time (here 0) until yielding control back to the game loop.
+//            yield return ...
+            yield return null;
             
         }
 
@@ -129,7 +131,7 @@ namespace MelodyMemory
             EnableControls();
 
             // while riddle is not solved and player does not want to have a new riddle...
-            while (!riddleSolved && !restartPressed)
+            while (!riddleSolved && !restartPressed && !gameFinished)
             {
                 // ... return on the next frame.
                 yield return null;
@@ -145,8 +147,9 @@ namespace MelodyMemory
 
             if (restartPressed)
             {
-                Debug.Log("RoundEnding: because restart pressed");
                 // round ended because player wants a new riddle
+                Debug.Log("RoundEnding: because restart pressed");
+                tiles.SetTileColors(Color.black);
                 restartPressed = false;
             }
             else if (riddleSolved)
@@ -158,9 +161,14 @@ namespace MelodyMemory
                 riddleLength++;
                 numRiddlesSolved++;                
             }
+            else if (gameFinished)
+            {
+                tiles.SetTileColors(Color.white);
+                DisableControls ();
+            }
             else
             {
-                Debug.Log($"RoundEnding: NOT restart pressed and NOT riddle solved - why are we here???");
+                Debug.Log($"RoundEnding: NOT restart pressed, NOT riddle solved, NOT game finished - why are we here???");
             }
 
             Debug.Log("RoundEnding: finished");
@@ -238,24 +246,23 @@ namespace MelodyMemory
 
             }
             gameFinished = true;
-
         }
 
         private void EnableControls()
         {
-            tiles.EnableControl();
-            
-            startButton.enabled = true;
-            cursor.enabled = true;
+            restartButton.enabled = true;
+            restartButton.Show();
             cursor.Show();
+            cursor.enabled = true;
+            tiles.EnableControl();
         }
         
         private void DisableControls()
         {
-            startButton.enabled = false;
-            cursor.enabled = false;
+            restartButton.enabled = false;
+            restartButton.Hide();
             cursor.Hide();
-            
+            cursor.enabled = false;            
             tiles.DisableControl();
         }
         
