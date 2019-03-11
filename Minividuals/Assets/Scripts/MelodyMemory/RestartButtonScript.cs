@@ -28,20 +28,21 @@ namespace MelodyMemory
         
         void Update()
         {
-//            Debug.Log($"cursor: {cursor}");
+            if (!isActiveAndEnabled) return;
+            
+            // TODO why are we here even if MeoMemoBoardController.DisableControls sets restartButton.enabled = false; ??
+//            Debug.Log($"RestartButtonScript: isActiveAndEnabled: {isActiveAndEnabled} and enabled: {enabled}");
             
             // change here (button and ray) and in ColorSoundTile to play with mouse instead of controller
-            if (isActiveAndEnabled && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
-//            if (isActiveAndEnabled && Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))
+//            if (Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
+            if (Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))
             {   
-                // change here to play with mouse instead of controller
-//                Ray ray = cursor.GetRay();
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+//                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = cursor.GetRay();
                 if (Physics.Raycast(ray, out var hit))
                 {
                     if (hit.transform.CompareTag("Button"))
-                    {                        
-                        // clicking deactivates the button
+                    {
                         ClickEvent?.Invoke();
                     }
                 }

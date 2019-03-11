@@ -89,7 +89,6 @@ namespace MelodyMemory
         // This is called from start and will run each phase of the game one after another
         private IEnumerator GameLoop ()
         {
-            Debug.Log("GameLoop: started");
             // Start off by running the 'RoundStarting' coroutine but don't return until it's finished
             yield return StartCoroutine (RoundStarting ());
 
@@ -106,7 +105,6 @@ namespace MelodyMemory
                 // Note that this coroutine doesn't yield.  This means that the current version of the GameLoop will end.
                 StartCoroutine (GameLoop ());
             }
-            Debug.Log("GameLoop: finished");
         }
 
 
@@ -141,7 +139,6 @@ namespace MelodyMemory
 
         private IEnumerator RoundEnding()
         {
-            Debug.Log("RoundEnding: started");
             // stop tiles from reacting
             DisableControls ();
 
@@ -163,6 +160,7 @@ namespace MelodyMemory
             }
             else if (gameFinished)
             {
+                Debug.Log("RoundEnding: because game finished (time is up)");
                 tiles.SetTileColors(Color.white);
                 DisableControls ();
             }
@@ -249,8 +247,8 @@ namespace MelodyMemory
         {
             restartButton.enabled = true;
             restartButton.Show();
-            cursor.Show();
             cursor.enabled = true;
+            cursor.Show();
             tiles.EnableControl();
         }
         
@@ -258,8 +256,8 @@ namespace MelodyMemory
         {
             restartButton.enabled = false;
             restartButton.Hide();
-            cursor.Hide();
             cursor.enabled = false;            
+            cursor.Hide();
             tiles.DisableControl();
         }
         

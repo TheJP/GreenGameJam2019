@@ -81,15 +81,14 @@ namespace MelodyMemory
         
         void Update()
         {
-            if (!listening)   return;            
-            // no need to listen for mouse if this tile has no note!
+            if (!listening)   return;            // no need to listen for mouse if this tile has no note!
             
             // change here (button and ray) and in RestartButtonScript to play with mouse instead of controller
-            if (note != null && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
-//            if (note != null && Input.GetButtonDown($"{Cursor.ControlPrefix}{InputSuffix.A}"))
+//            if (note != null && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
+            if (note != null && Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))
             {
-//                Ray ray = Cursor.GetRay();
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+//                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = cursor.GetRay();
                 if (Physics.Raycast(ray, out var hit))
                 {
                     if (hit.transform.CompareTag("Player"))
@@ -97,7 +96,6 @@ namespace MelodyMemory
                         GameObject obj = hit.collider.gameObject;
                         if (obj.name.Equals(myName))
                         {
-                            // Debug.Log($"Clicked tile {obj.name}, I am {myName}");
                             StartCoroutine("BlinkColor");
                         }
                     }

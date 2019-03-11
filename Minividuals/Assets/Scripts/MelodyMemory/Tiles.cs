@@ -105,7 +105,11 @@ namespace MelodyMemory
         private void SetListening(bool listening)
         {
             for (int i = 0; i < tileCount; ++i)
+            {
                 tiles[i].setListening(listening);
+                tiles[i].enabled = listening;
+            }
+                
         }
         
         // then add or change riddle, then play the melody 

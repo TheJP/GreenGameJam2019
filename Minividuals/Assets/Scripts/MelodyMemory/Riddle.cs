@@ -25,8 +25,6 @@ namespace MelodyMemory
         private int waitingForPosition = 0;    // index into randomNotes (after it has been sorted)
         
         
-        // objListOrder.Sort((x, y) => x.OrderDate.CompareTo(y.OrderDate));
-    
         /// <summary>
         /// 
         /// </summary>
@@ -37,10 +35,8 @@ namespace MelodyMemory
             length = len;
             numPositions = numTiles;
             randomNotes = InitRandomNotes(length);
-            Debug.Log($"random notes initialized, riddle is : {this.ToString()}");
-            
+            Debug.Log($"random notes initialized, riddle is: {ToString()}");
             SetToPositions();
-            Debug.Log($"random notes positioned, riddle is : {this.ToString()}");
         }
 
         private List<Note> InitRandomNotes(int length)
@@ -52,7 +48,6 @@ namespace MelodyMemory
                 if (!rNotes.Contains(randomNote))
                     rNotes.Add(randomNote);
             }
-            Debug.Log($"InitRandomNotes: random notes initialized");
             return rNotes;
         }
 
@@ -76,11 +71,8 @@ namespace MelodyMemory
             
             // and also sort the melody for the solution
             randomNotes.Sort();
-            Debug.Log($"SetToPositions: sorted notes:");
-            foreach (var note in randomNotes)
-            {
-                Debug.Log($"- note {note}");
-            }
+            Debug.Log($"SetToPositions: sorted notes are {randomNotes.Select(x => x.ToString()).Aggregate((x, y) => $"{x}, {y}")}");
+            
             waitingForPosition = 0;    // index into sortedNotes - we expect the first one now
 
         }
@@ -128,7 +120,7 @@ namespace MelodyMemory
             }
             else
             {
-                Debug.Log($"that was a wrong note {heardNote}, resetting expected pos to 0");
+                Debug.Log($"heard wrong note {heardNote}, resetting expected pos to 0");
                 waitingForPosition = 0;
             }
             return (waitingForPosition == length);
@@ -139,13 +131,7 @@ namespace MelodyMemory
         
         public override string ToString()
         {
-            String s = $"Riddle ({length}):";
-            foreach (var note in randomNotes)
-            {
-                String noteString = $", {note}";
-                s = s + noteString;
-            }
-            return s;
+            return $"Riddle ({length}): {randomNotes.Select(x => x.ToString()).Aggregate((x, y) => $"{x}, {y}")}";
         }
     }
 }

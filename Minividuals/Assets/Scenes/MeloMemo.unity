@@ -112,6 +112,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &170146768 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6275130327813715368, guid: f8802e9eaa02d7422beee47caeedef80,
+    type: 3}
+  m_PrefabInstance: {fileID: 6275130327255937606}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &316322010
 GameObject:
   m_ObjectHideFlags: 0
@@ -271,7 +277,6 @@ GameObject:
   - component: {fileID: 989836789}
   - component: {fileID: 989836788}
   - component: {fileID: 989836787}
-  - component: {fileID: 989836791}
   - component: {fileID: 989836792}
   m_Layer: 0
   m_Name: Background
@@ -352,20 +357,6 @@ Transform:
   m_Father: {fileID: 709002593}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &989836791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 989836786}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 524849f2912c7236cbfe633f06cc17fc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
-  restartIconObject: {fileID: 0}
 --- !u!82 &989836792
 AudioSource:
   m_ObjectHideFlags: 0
@@ -705,7 +696,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursor: {fileID: 1520494660}
-  restartIconObject: {fileID: 637552355}
+  restartIconObject: {fileID: 170146768}
 --- !u!1 &1896638342
 GameObject:
   m_ObjectHideFlags: 0
@@ -870,31 +861,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.4
       objectReference: {fileID: 0}
-    - target: {fileID: 6275130327813715380, guid: f8802e9eaa02d7422beee47caeedef80,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6275130327813715383, guid: f8802e9eaa02d7422beee47caeedef80,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6275130327813715383, guid: f8802e9eaa02d7422beee47caeedef80,
-        type: 3}
-      propertyPath: cursor
-      value: 
-      objectReference: {fileID: 1520494660}
-    - target: {fileID: 6275130327813715383, guid: f8802e9eaa02d7422beee47caeedef80,
-        type: 3}
-      propertyPath: iconRenderer
-      value: 
-      objectReference: {fileID: 1150719325}
-    - target: {fileID: 6275130327813715383, guid: f8802e9eaa02d7422beee47caeedef80,
-        type: 3}
-      propertyPath: buttonGameObject
-      value: 
-      objectReference: {fileID: 637552355}
     - target: {fileID: 6275130327813715382, guid: f8802e9eaa02d7422beee47caeedef80,
         type: 3}
       propertyPath: m_Enabled
@@ -920,5 +886,30 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6275130327813715380, guid: f8802e9eaa02d7422beee47caeedef80,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6275130327813715383, guid: f8802e9eaa02d7422beee47caeedef80,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6275130327813715383, guid: f8802e9eaa02d7422beee47caeedef80,
+        type: 3}
+      propertyPath: cursor
+      value: 
+      objectReference: {fileID: 1520494660}
+    - target: {fileID: 6275130327813715383, guid: f8802e9eaa02d7422beee47caeedef80,
+        type: 3}
+      propertyPath: iconRenderer
+      value: 
+      objectReference: {fileID: 1150719325}
+    - target: {fileID: 6275130327813715383, guid: f8802e9eaa02d7422beee47caeedef80,
+        type: 3}
+      propertyPath: buttonGameObject
+      value: 
+      objectReference: {fileID: 637552355}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f8802e9eaa02d7422beee47caeedef80, type: 3}
