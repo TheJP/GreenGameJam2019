@@ -23,10 +23,13 @@ namespace MelodyMemory
         public void Setup()
         {
             iconRenderer = restartIconObject.GetComponentInChildren<SpriteRenderer>();            
+            Debug.Log($"RestartButtonScript.Setup: cursor is {cursor}");
         }
         
         void Update()
         {
+//            Debug.Log($"cursor: {cursor}");
+            
             // change here (button and ray) and in ColorSoundTile to play with mouse instead of controller
             if (isActiveAndEnabled && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
 //            if (isActiveAndEnabled && Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))

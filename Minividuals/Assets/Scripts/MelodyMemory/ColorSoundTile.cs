@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Experimental.UIElements;
@@ -85,12 +84,11 @@ namespace MelodyMemory
             if (!listening)   return;            
             // no need to listen for mouse if this tile has no note!
             
-            
             // change here (button and ray) and in RestartButtonScript to play with mouse instead of controller
             if (note != null && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
-//            if (note != null && Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))
+//            if (note != null && Input.GetButtonDown($"{Cursor.ControlPrefix}{InputSuffix.A}"))
             {
-//                Ray ray = cursor.GetRay();
+//                Ray ray = Cursor.GetRay();
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 if (Physics.Raycast(ray, out var hit))
                 {
@@ -118,6 +116,7 @@ namespace MelodyMemory
             colourRenderer.material.color = color;
         }
     
+        // show note color for the specified duration and play the note 
         IEnumerator BlinkColor() 
         {
             SetColor(note.Color);

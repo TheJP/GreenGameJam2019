@@ -162,7 +162,6 @@ namespace MelodyMemory
             if (gameWon)
             {
                 SetListening(false);
-//                ShowRiddleSolved();
                 StartCoroutine (ShowRiddleSolved());
                 RiddleSolved?.Invoke();
             }
@@ -171,9 +170,8 @@ namespace MelodyMemory
 
         
         private IEnumerator ShowRiddleSolved()
-//        private void ShowRiddleSolved()
         {
-            yield return new WaitForSeconds(endWaitDuration);        // TODO or just wait until sound is finished? how?
+            yield return new WaitForSeconds(endWaitDuration);        // LATER or just wait until sound is finished? how?
             
             ResetTileColors();
             for (int i = 0; i < 5; i++)

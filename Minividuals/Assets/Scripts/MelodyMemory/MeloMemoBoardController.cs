@@ -67,6 +67,7 @@ namespace MelodyMemory
             
             tiles.Setup();
             tiles.RiddleSolved += OnRiddleSolved;
+            Debug.Log($"BoardController.Start: cursor is {cursor}");
             restartButton.Setup();
             restartButton.ClickEvent += RestartButtonOnClickEvent;
 
@@ -119,7 +120,6 @@ namespace MelodyMemory
             Debug.Log("RoundStarting: finished");
             
             // Wait for the specified length of time (here 0) until yielding control back to the game loop.
-//            yield return ...
             yield return null;
             
         }
@@ -171,7 +171,7 @@ namespace MelodyMemory
                 Debug.Log($"RoundEnding: NOT restart pressed, NOT riddle solved, NOT game finished - why are we here???");
             }
 
-            Debug.Log("RoundEnding: finished");
+            Debug.Log("RoundEnding: finished - wait for specified time (endWait)");
             // Wait for the specified length of time until yielding control back to the game loop.
             yield return endWait;
         }
@@ -205,11 +205,8 @@ namespace MelodyMemory
 
         private IEnumerator InitRiddle()
         {
-            Riddle riddle = new Riddle(riddleLength, Tiles.tileCount);
-            Debug.Log($"InitRiddle: have new melody with length {riddleLength}");
-            
+            Riddle riddle = new Riddle(riddleLength, Tiles.tileCount);            
             yield return tiles.AddAndPlayRiddle(riddle);
-            Debug.Log("InitRiddle: finished play melody");
         }
 
         private void OnRiddleSolved()
