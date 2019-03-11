@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.Experimental.UIElements;
 
@@ -24,20 +24,17 @@ namespace MelodyMemory
 
 #pragma warning restore 649
 
-        private Note note;     // only set on some tiles  
-
-        private String myName;
-
-        private bool listening;    // if false, it will not react to clicks TODO isn't there something built-in for that?   
-
-        public Cursor Cursor { get; set; }
-        
+        public Cursor cursor { get; set; }       
         public int tileIndex { get; set; }
 
+        private Note note;           // only set on some tiles  
+        private String myName;
+        private bool listening;      // if false, it will not react to clicks and to the sound being played
+        private float blinkDuration = 1.0f;     // sounds have length 1 second, best to change tile color for the same duration
+        
         private void Start()
         {
             myName = GetComponent<Renderer>().name;
-
             sound = GetComponent<AudioSource>();
             
             SetColor(defaultColor);
@@ -63,16 +60,20 @@ namespace MelodyMemory
         }
 
         /// <summary>
-        /// Enables the tile (but only if it has a note)
+        /// Disables the tile, or enables it (but only if it has a note)
         /// </summary>
-        /// <param name="listening"></param>
-        public void setListening(bool listening)
+        /// <param name="listen"></param>
+        public void setListening(bool listen)
         {
-            // a tile without note will never listen
-            if (note != null)
+            if (!listen)
             {
-                this.listening = listening;
-                Debug.Log($"enabled listening for tile {name}");
+                enabled = false;
+                listening = false;
+            }
+            else if (note != null)    // a tile without note will never listen
+            {
+                enabled = true;
+                listening = true;
             }
                 
         }
@@ -80,15 +81,14 @@ namespace MelodyMemory
         
         void Update()
         {
-            if (!listening)   return;            
-            // no need to listen for mouse if this tile has no note!
+            if (!listening)   return;            // no need to listen for mouse if this tile has no note!
             
-            
-            // Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
-            if (note != null && Input.GetButtonDown($"{Cursor.ControlPrefix}{InputSuffix.A}"))
+            // change here (button and ray) and in RestartButtonScript to play with mouse instead of controller
+//            if (note != null && Input.GetMouseButtonUp((int) MouseButton.LeftMouse))
+            if (note != null && Input.GetButtonDown($"{cursor.ControlPrefix}{InputSuffix.A}"))
             {
-                Ray ray = Cursor.GetRay();
-                // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+//                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = cursor.GetRay();
                 if (Physics.Raycast(ray, out var hit))
                 {
                     if (hit.transform.CompareTag("Player"))
@@ -96,7 +96,6 @@ namespace MelodyMemory
                         GameObject obj = hit.collider.gameObject;
                         if (obj.name.Equals(myName))
                         {
-                            // Debug.Log($"Clicked tile {obj.name}, I am {myName}");
                             StartCoroutine("BlinkColor");
                         }
                     }
@@ -115,17 +114,18 @@ namespace MelodyMemory
             colourRenderer.material.color = color;
         }
     
+        // show note color for the specified duration and play the note 
         IEnumerator BlinkColor() 
         {
             SetColor(note.Color);
-
-            // TODO enable sound again
             sound.Play();
-            yield return new WaitForSeconds(1.0f);
+            if (listening)
+            {
+                TileClickEvent?.Invoke();
+            }
 
+            yield return new WaitForSeconds(blinkDuration);
             ResetColor();
-            
-            TileClickEvent?.Invoke();
         }
 
 

@@ -25,72 +25,55 @@ namespace MelodyMemory
         
 #pragma warning restore 649
 
-
-        /// <summary>
-        /// Event that gets fired after a player changed a tile location.
-        /// </summary>
-//        public event Action<Player> PlayerChangedLocation;
-        // TODO add event for clicking a tile? (or add this to Tile object?)
-
         private readonly ColorSoundTile[] tiles = new ColorSoundTile[tileCount];
-
-        private List<NoteWithPosition> melody; // to be played when riddle starts
-        
-        private IEnumerator melodyCoroutine;
-
+            
         private Riddle riddle;
+        
+        private List<NoteWithPosition> melody; // to be played when riddle starts
+        private IEnumerator melodyCoroutine;
+        private float melodySpeed = 1.1f;    // sounds have length 1 second, best if melody speed is around that
+        private float endWaitDuration = 0.5f;     // how long to wait before showing "riddle solved" 
+        
 
-        private void Start()
-        {            
+        public void Setup()
+        {
             for (int i = 0; i < tileCount; ++i)
             {
                 tiles[i] = Instantiate(tilePrefab, tilesParent);
                 tiles[i].name = $"ColorSoundTile{i}";
                 tiles[i].tileIndex = i;
-                tiles[i].Cursor = cursor;
+                tiles[i].cursor = cursor;
 
                 var index = i;
                 tiles[i].TileClickEvent += () => ClickedTile(index);
             }
+            SetListening(false);
+
+            SetTilePositions();
             
-            SetListening(false);
-
-            UpdateTilePositions();
-            tilesParent.localScale += new Vector3(0.5f, 0.5f, 0);
-            tilesParent.position += (1.0f * Vector3.right - 1.0f * Vector3.up - 0.4f * Vector3.forward);
-
-        }
-
-
-        public void Setup()
-        {
-            SetListening(false);
             ResetTileColors();
         }
 
-        private void UpdateTilePositions()
+        private void SetTilePositions()
         {
             // tiles are normalized: each has width 1, height 1 (for scaling: scale the parent...)
-
             // position 0 is width/2 minus half a tile left of the center and height/2 minus half a tile below the center 
             float hOffset = 0.5f - (float) width / 2;
             float vOffset = .5f - (float) height / 2;
-
 
             for (int i = 0; i < tileCount; ++i)
             {
                 int row = i / width;
                 int col = i % width;
-                //Debug.Log($"Tile {i}: row {row}, col {col}");
-
-                // TODO set position (inspired by Board.Tiles)
                 Vector3 newPosition = tilesParent.transform.position;
                 newPosition.x = col + hOffset;
                 newPosition.y = row + vOffset;
                 newPosition.z = 0;
                 tiles[i].transform.position = newPosition;
             }
-
+            
+            tilesParent.localScale += new Vector3(0.5f, 0.5f, 0);
+            tilesParent.position += (1.0f * Vector3.right - 1.0f * Vector3.up - 0.4f * Vector3.forward);
         }
 
         private void ResetTileColors()
@@ -99,27 +82,51 @@ namespace MelodyMemory
                 tiles[i].ResetColor();
         }
 
+        public void SetTileColors(Color color)
+        {
+            for (int i = 0; i < tileCount; ++i)
+                tiles[i].SetColor(color);
+        }
+        
+        // used during the phases of the game where the player shouldn't be able to click the tiles
+        public void DisableControl ()
+        {
+            SetListening(false);
+        }
+
+        // used during the phases of the game where the player should be able to click the tiles
+        public void EnableControl ()
+        {
+            SetListening(true);
+        }
+
+        
         // with false, tiles will not react when clicked 
         private void SetListening(bool listening)
         {
             for (int i = 0; i < tileCount; ++i)
+            {
                 tiles[i].setListening(listening);
+                tiles[i].enabled = listening;
+            }
+                
         }
         
-
-        public void AddAndPlayRiddle(Riddle riddle)
+        // then add or change riddle, then play the melody 
+        public IEnumerator AddAndPlayRiddle(Riddle newRiddle)
         {
-            SetListening(false);
             if(melodyCoroutine != null)
             {
                 StopCoroutine(melodyCoroutine);
             }
-            
-            this.riddle = riddle;
             ResetTileColors();
-            UpdateTilesFromRiddle(riddle);
-            melody = riddle.GetRiddleMelody();
-            StartCoroutine(melodyCoroutine = PlayMelody());
+
+            riddle = newRiddle;            
+            UpdateTilesFromRiddle(newRiddle);
+            melody = newRiddle.GetRiddleMelody();
+            Debug.Log("AddAndPlayRiddle: will play melody");
+            yield return StartCoroutine(melodyCoroutine = PlayMelody());
+            Debug.Log("AddAndPlayRiddle: finished playing melody");
         }
 
         private void UpdateTilesFromRiddle(Riddle riddle)
@@ -140,39 +147,44 @@ namespace MelodyMemory
         }
 
 
-        IEnumerator PlayMelody()
+        private IEnumerator PlayMelody()
         {
-            SetListening(false);
-            yield return new WaitForSeconds(1.0f);
-            Debug.Log("Playing melody");
+            yield return new WaitForSeconds(0.2f);
             foreach (var noteWithPosition in melody)
             {
                 ColorSoundTile tile = tiles[noteWithPosition.Position];
-                Debug.Log($"- will blink tile {tile}");
                 tile.StartCoroutine("BlinkColor");
-                yield return new WaitForSeconds(1.0f);
+                yield return new WaitForSeconds(melodySpeed);
             }
-            Debug.Log("finished melody");
-            // only set tiles with a note to listening
-            SetListening(true);
         }
 
         private void ClickedTile(int index)
         {
             Debug.Log($"Tiles: heard tile {index}");
-            bool gameWon = riddle.hearTile(index);
+            bool gameWon = riddle.HearTile(index);
 
             if (gameWon)
             {
                 SetListening(false);
-                ShowRiddleSolved();
+                StartCoroutine (ShowRiddleSolved());
                 RiddleSolved?.Invoke();
             }
             
         }
 
-        private void ShowRiddleSolved()
+        
+        private IEnumerator ShowRiddleSolved()
         {
+            yield return new WaitForSeconds(endWaitDuration);        // LATER or just wait until sound is finished? how?
+            
+            ResetTileColors();
+            for (int i = 0; i < 5; i++)
+            {
+                DisplayCheckerboard(Color.black, Color.white);
+                yield return new WaitForSeconds(0.1f);
+                DisplayCheckerboard(Color.white, Color.black);
+                yield return new WaitForSeconds(0.1f);
+            }
             DisplayCheckerboard(Color.black, Color.white);
         }
 

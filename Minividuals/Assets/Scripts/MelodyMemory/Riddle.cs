@@ -25,8 +25,6 @@ namespace MelodyMemory
         private int waitingForPosition = 0;    // index into randomNotes (after it has been sorted)
         
         
-        // objListOrder.Sort((x, y) => x.OrderDate.CompareTo(y.OrderDate));
-    
         /// <summary>
         /// 
         /// </summary>
@@ -37,10 +35,8 @@ namespace MelodyMemory
             length = len;
             numPositions = numTiles;
             randomNotes = InitRandomNotes(length);
-            Debug.Log($"random notes initialized, riddle is : {this.ToString()}");
-            
+            Debug.Log($"random notes initialized, riddle is: {ToString()}");
             SetToPositions();
-            Debug.Log($"random notes positioned, riddle is : {this.ToString()}");
         }
 
         private List<Note> InitRandomNotes(int length)
@@ -52,7 +48,6 @@ namespace MelodyMemory
                 if (!rNotes.Contains(randomNote))
                     rNotes.Add(randomNote);
             }
-            Debug.Log($"random notes initialized");
             return rNotes;
         }
 
@@ -62,49 +57,48 @@ namespace MelodyMemory
         /// </summary>
         private void SetToPositions()
         {
-            Debug.Log(($"Setting melody to board (length {length}:"));
+            Debug.Log(($"SetToPositions: Setting melody to board (length {length}):"));
             
             melodyOnBoard = new List<NoteWithPosition>();
             foreach (var note in randomNotes)
             {
-                int pos = UnityEngine.Random.Range(0, numPositions - 1);
-                if (!notePositions.ContainsKey(pos))
-                {
-                    NoteWithPosition newNote = new NoteWithPosition(note, pos);
-                    notePositions.Add(pos, newNote);
-                    melodyOnBoard.Add(newNote);
-                    Debug.Log(($"- added to melody: {newNote}"));
-                }
+                int pos = GetFreePosition();
+                NoteWithPosition newNote = new NoteWithPosition(note, pos);
+                notePositions.Add(pos, newNote);
+                melodyOnBoard.Add(newNote);
+                Debug.Log(($"- added to melody: {newNote}"));
             }
             
             // and also sort the melody for the solution
             randomNotes.Sort();
-            Debug.Log($"sorted notes:");
-            foreach (var note in randomNotes)
-            {
-                Debug.Log($"- note {note}");
-            }
+            Debug.Log($"SetToPositions: sorted notes are {randomNotes.Select(x => x.ToString()).Aggregate((x, y) => $"{x}, {y}")}");
+            
             waitingForPosition = 0;    // index into sortedNotes - we expect the first one now
 
+        }
+
+        // get a position on the board where there is not yet a note 
+        private int GetFreePosition()
+        {
+            int pos;
+            do
+            {
+                pos = UnityEngine.Random.Range(0, numPositions - 1);
+            } 
+            while (notePositions.ContainsKey(pos));
+            return pos;
         }
         
         public NoteWithPosition GetNoteAtPosition(int position)
         {
-            NoteWithPosition note = null;
-            if (notePositions.TryGetValue(position, out note))
-            {
-                Console.WriteLine($"no note at position {position}");
-            }
-            else
-            {
-                Console.WriteLine($"note at position {position}: {note}");
-            }
+            NoteWithPosition note;
+            notePositions.TryGetValue(position, out note);
             return note;
         }
 
         public List<NoteWithPosition> GetRiddleMelody()
         {
-            return this.melodyOnBoard;
+            return melodyOnBoard;
         }
         
         
@@ -115,7 +109,7 @@ namespace MelodyMemory
         /// </summary>
         /// <param name="position">position of clicked tile</param>
         /// <returns>true if game is won</returns>
-        public bool hearTile(int position)
+        public bool HearTile(int position)
         {
             Note heardNote = notePositions[position].Note;
             Note expectedNote = randomNotes[waitingForPosition];
@@ -126,7 +120,7 @@ namespace MelodyMemory
             }
             else
             {
-                Debug.Log($"that was a wrong note {heardNote}, resetting expected pos to 0");
+                Debug.Log($"heard wrong note {heardNote}, resetting expected pos to 0");
                 waitingForPosition = 0;
             }
             return (waitingForPosition == length);
@@ -137,13 +131,7 @@ namespace MelodyMemory
         
         public override string ToString()
         {
-            String s = $"Riddle ({length}):";
-            foreach (var note in randomNotes)
-            {
-                String noteString = $", {note}";
-                s = s + noteString;
-            }
-            return s;
+            return $"Riddle ({length}): {randomNotes.Select(x => x.ToString()).Aggregate((x, y) => $"{x}, {y}")}";
         }
     }
 }
