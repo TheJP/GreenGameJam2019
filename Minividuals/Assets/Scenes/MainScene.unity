@@ -316,7 +316,8 @@ MonoBehaviour:
     icon: {fileID: 21300000, guid: 23fd2912e3e8ab7f59193737d301200b, type: 3}
     minPerGame: 4
     maxPerGame: 5
-    gameInfoPrefab: {fileID: 0}
+    gameInfoPrefab: {fileID: 3758051046684928095, guid: 6a34c459cd78a4a99b80cfd573caf679,
+      type: 3}
   - name: Colour Jumper
     sceneName: ColourJumper
     icon: {fileID: 21300000, guid: 7147a9fa12a5dfc4e95c9f0a72a4598b, type: 3}

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Assets.Scripts.Board;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Debug = UnityEngine.Debug;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -103,20 +100,23 @@ namespace MelodyMemory
             {
                 // if time is not up, restart this coroutine so the loop continues.
                 // Note that this coroutine doesn't yield.  This means that the current version of the GameLoop will end.
-                StartCoroutine (GameLoop ());
+                if (!gameFinished)
+                {
+                    Debug.Log($"Start game loop again (already solved {numRiddlesSolved} riddles, gameFinished is {gameFinished})");
+                    StartCoroutine (GameLoop ());
+                }
             }
         }
 
 
         private IEnumerator RoundStarting()
-        {
+        {            
             Debug.Log("RoundStarting: started");
             // to start the round, make sure the tiles cannot be clicked and init a new riddle
             DisableControls ();
             yield return StartCoroutine(InitRiddle ());
 
             Debug.Log("RoundStarting: finished");
-            
             // Wait for the specified length of time (here 0) until yielding control back to the game loop.
             yield return null;
             
@@ -182,11 +182,7 @@ namespace MelodyMemory
 
         private void Update()
         {
-            if(gameFinished)
-            {
-                Debug.Log("Game finished");
-                return;
-            }
+            if(gameFinished) return;
 
             if(countdownCoroutine == null)
             {
